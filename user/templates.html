@@ -1,0 +1,1301 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Content Creator</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+            rel="stylesheet"
+        />
+        <link rel="stylesheet" href="/css/responsive.css" />
+        <link rel="stylesheet" href="/scripts/toast/toast.css" />
+		<script src="/scripts/toast/toast.js"></script>
+        <style>
+            @font-face {
+                font-family: "Inter Display";
+                src: url("/fonts/InterDisplay-Light.ttf") format("truetype");
+                font-weight: 300;
+                font-style: normal;
+            }
+
+            @font-face {
+                font-family: "Inter Display";
+                src: url("/fonts/InterDisplay-LightItalic.ttf") format("truetype");
+                font-weight: 300;
+                font-style: italic;
+            }
+
+            @font-face {
+                font-family: "Inter Display";
+                src: url("/fonts/InterDisplay-Regular.ttf") format("truetype");
+                font-weight: 400;
+                font-style: normal;
+            }
+
+            @font-face {
+                font-family: "Inter Display";
+                src: url("/fonts/InterDisplay-Italic.ttf") format("truetype");
+                font-weight: 400;
+                font-style: italic;
+            }
+
+            @font-face {
+                font-family: "Inter Display";
+                src: url("/fonts/InterDisplay-Medium.ttf") format("truetype");
+                font-weight: 500;
+                font-style: normal;
+            }
+
+            @font-face {
+                font-family: "Inter Display";
+                src: url("/fonts/InterDisplay-MediumItalic.ttf") format("truetype");
+                font-weight: 500;
+                font-style: italic;
+            }
+
+            @font-face {
+                font-family: "Inter Display";
+                src: url("/fonts/InterDisplay-SemiBold.ttf") format("truetype");
+                font-weight: 600;
+                font-style: normal;
+            }
+
+            @font-face {
+                font-family: "Inter Display";
+                src: url("/fonts/InterDisplay-SemiBoldItalic.ttf") format("truetype");
+                font-weight: 600;
+                font-style: italic;
+            }
+
+            @font-face {
+                font-family: "Inter Display";
+                src: url("/fonts/InterDisplay-Bold.ttf") format("truetype");
+                font-weight: 700;
+                font-style: normal;
+            }
+
+            @font-face {
+                font-family: "Inter Display";
+                src: url("/fonts/InterDisplay-BoldItalic.ttf") format("truetype");
+                font-weight: 700;
+                font-style: italic;
+            }
+
+            @font-face {
+                font-family: "Inter Display";
+                src: url("/fonts/InterDisplay-ExtraBold.ttf") format("truetype");
+                font-weight: 800;
+                font-style: normal;
+            }
+
+            @font-face {
+                font-family: "Inter Display";
+                src: url("/fonts/InterDisplay-ExtraBoldItalic.ttf") format("truetype");
+                font-weight: 800;
+                font-style: italic;
+            }
+        </style>
+        <style>
+            body {
+                color: #374151;
+                font-family: "Inter Display";
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 1.5;
+                /* 171.429% */
+                margin: 0px;
+            }
+
+            .cms-content {
+                display: flex;
+                align-items: flex-start;
+                width: 100%;
+            }
+* { font-family: "Inter Display"; }
+
+            input,
+            textarea,
+            select {
+                font-family: "Inter Display", sans-serif;
+                /* Thay "Inter Display" bằng tên font cụ thể */
+            }
+
+            /* Áp dụng cho placeholder */
+            input::placeholder,
+            textarea::placeholder,
+            select::placeholder {
+                font-family: "Inter Display", sans-serif;
+                /* Đặt cùng font */
+            }
+
+            /* Các selector placeholder cho trình duyệt cũ */
+            input::-webkit-input-placeholder,
+            textarea::-webkit-input-placeholder,
+            select::-webkit-input-placeholder {
+                font-family: "Inter Display", sans-serif;
+            }
+
+            input:-moz-placeholder,
+            textarea:-moz-placeholder,
+            select:-moz-placeholder {
+                font-family: "Inter Display", sans-serif;
+                opacity: 1;
+                /* Để đảm bảo font hiển thị rõ ràng trong Firefox */
+            }
+
+            input::-moz-placeholder,
+            textarea::-moz-placeholder,
+            select::-moz-placeholder {
+                font-family: "Inter Display", sans-serif;
+                opacity: 1;
+            }
+
+            input:-ms-input-placeholder,
+            textarea:-ms-input-placeholder,
+            select:-ms-input-placeholder {
+                font-family: "Inter Display", sans-serif;
+            }
+
+            input::-ms-input-placeholder,
+            textarea::-ms-ms-input-placeholder,
+            select::-ms-ms-input-placeholder {
+                font-family: "Inter Display", sans-serif;
+            }
+
+            .sidebar-placeholder {
+                width: 239px;
+                height: 100%;
+            }
+
+            .sidebar {
+                width: 239px;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                background-color: #fff;
+                position: fixed;
+            }
+
+            .btn-icon {
+                display: flex;
+                gap: 5px;
+                align-items: center;
+            }
+
+            .sidebar__header {
+                height: 75px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border-bottom: 1px solid #f0eeee;
+                background-color: #fff;
+            }
+
+            .sidebar__logo {
+                padding: 30px;
+            }
+
+            .sidebar__logo-text {
+                font-size: 22px;
+                font-weight: 600;
+                color: #030924;
+            }
+
+            .sidebar__primary-action {
+                padding: 16px;
+            }
+
+            .btn {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 10px 24px;
+                border-radius: 6px;
+                font-weight: 600;
+                font-size: 14px;
+                text-align: center;
+            }
+
+            .btn--primary {
+                background-color: #3e61ff;
+                color: #fff;
+                border: none;
+                cursor: pointer;
+                width: 100%;
+                letter-spacing: -0.21px;
+            }
+
+            .sidebar__section {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+                padding: 8px 0;
+            }
+
+            .sidebar__section-title {
+                font-size: 11px;
+                font-weight: 500;
+                color: #7d8faa;
+                padding: 8px 16px;
+            }
+
+            .sidebar__menu-item {
+                text-decoration: none;
+                font-size: 14px;
+                font-weight: 500;
+                color: #374151;
+                padding: 8px 16px;
+                border-radius: 8px;
+                cursor: pointer;
+            }
+
+            .sidebar__menu-item:hover {
+                color: #3e61ff;
+            }
+
+            .badge {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                padding: 2px 6px;
+                border-radius: 4px;
+                font-size: 11px;
+                font-weight: 500;
+            }
+
+            .badge--beta {
+                background-color: #ffeaea;
+                color: #dd4444;
+                margin-left: 6px;
+            }
+
+            .sidebar__divider {
+                height: 1px;
+                background-color: #f0eeee;
+                margin: 12px 0;
+            }
+
+            .sidebar__user-avatar {
+                border-radius: 50px;
+                width: 36px;
+                height: 36px;
+                background: var(--Light-Theme-Gray-Light-Grey, #dfe5ef);
+                border-radius: 50%;
+            }
+            .sidebar__user-avatar img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;   /* ảnh luôn đầy đủ khung */
+            }
+            .sidebar__user-info {
+                background-color: #fff;
+                padding: 16px;
+                margin-top: auto;
+                display: flex;
+                gap: 10px;
+                align-items: center;
+            }
+
+            .sidebar__user-details {
+                display: flex;
+                flex-direction: column;
+            }
+
+            .sidebar__user-name {
+                font-size: 14px;
+                font-weight: 600;
+                color: #2a3547;
+            }
+
+            .sidebar__user-plan {
+                font-size: 12px;
+                color: #868eab;
+            }
+            .logout-icon{
+                margin-left: auto;
+                display: flex;
+            }
+            .logout-icon > img {
+                width: 20px;
+                cursor: pointer;
+            }
+            
+        </style>
+        <!-- Side Bar -->
+        <style>
+            .content-wrapper {
+                background-color: #f9fbff;
+                border-left: 1px solid #f0eeee;
+                display: flex;
+                min-width: 335px;
+                padding: 0px 16px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+                flex: 1 0 0;
+                align-self: stretch;
+                min-height: 100vh;
+            }
+            #formWrapper {
+                display: flex;
+                min-width: 335px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+                flex: 1 0 0;
+                align-self: stretch;
+            }
+            .tab-bar {
+                display: flex;
+                gap: 16px;
+                border-bottom: 1px solid #e4e4e4;
+                width: 100%;
+            }
+
+            .tab {
+                font-size: 14px;
+                font-weight: 500;
+                text-align: center;
+                color: #666;
+                padding: 5px 12px;
+                cursor: pointer;
+            }
+
+            .tab--active {
+                color: #3e61ff;
+                border-bottom: 1px solid #3e61ff;
+            }
+
+            .form-group {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                width: 100%;
+            }
+
+            .form-row {
+                display: flex;
+                gap: 16px;
+                width: 100%;
+            }
+
+            .form-label {
+                font-size: 14px;
+                font-weight: 500;
+                color: #333;
+            }
+
+            .select-box,
+            .input-box {
+                display: flex;
+                align-items: center;
+                position: relative;
+                justify-content: space-between;
+                font-size: 14px;
+            }
+
+            .select-placeholder,
+            .input-placeholder {
+                font-size: 14px;
+                color: #666;
+                flex-grow: 1;
+            }
+
+            .textarea-placeholder {
+                font-size: 14px;
+                color: #666;
+            }
+
+            .icon-placeholder {
+                width: 20px;
+                height: 20px;
+                background: gray;
+            }
+
+            .footer-actions__left {
+                display: flex;
+                align-items: center;
+            }
+
+            .btn-text {
+                font-size: 14px;
+                font-weight: 500;
+                cursor: pointer;
+            }
+
+            .btn-clear {
+                color: #888;
+            }
+
+            .footer-actions__right {
+                display: flex;
+                gap: 16px;
+            }
+
+            .btn-outline {
+                padding: 10px 24px;
+                border: 1px solid #e4e4e4;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: 500;
+                cursor: pointer;
+                color: #000;
+            }
+
+            .btn-primary {
+                background: linear-gradient(to bottom, #fd3de3, #c845b7);
+                color: #fff;
+                padding: 10px 24px;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: 500;
+                cursor: pointer;
+                display: flex;
+                gap: 10px;
+                align-items: center;
+            }
+
+            .btn-primary.disabled {
+                opacity: 0.6;
+            }
+
+            .select-wrapper {
+                position: relative;
+                display: inline-block;
+                width: 100%;
+            }
+
+            .custom-select {
+                width: 100%;
+                padding: 10px 35px 10px 10px;
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                appearance: none;
+                background-color: #fff;
+                font-size: 14px;
+            }
+
+            .select-icon {
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                pointer-events: none;
+                transform: translateY(-50%);
+                display: flex;
+            }
+
+            .textarea {
+                height: 100px;
+                background-color: #fff;
+                padding: 12px;
+                border: 1px solid #e4e4e4;
+                border-radius: 10px;
+                resize: none;
+                width: calc(100% - 27px);
+            }
+
+            input::placeholder {
+                color: #666;
+                /* màu placeholder */
+            }
+
+            .input-number {
+                height: 38px;
+                background-color: #fff;
+                padding: 0px 50px 0px 12px;
+                border: 1px solid #e4e4e4;
+                border-radius: 10px;
+            }
+
+            .input-suffix {
+                font-size: 14px;
+                color: #292d32;
+                flex-shrink: 0;
+                position: absolute;
+                right: 12px;
+            }
+
+            input {
+                color: #3e61ff;
+                border: none;
+                width: 100%;
+                font-size: 14px;
+            }
+
+            /* Nếu người dùng đã chọn một option có value khác rỗng */
+            select {
+                color: #666;
+                /* màu placeholder */
+            }
+
+            select:valid {
+                /*color: #3E61FF;*/
+                /* áp dụng cho text trong dropdown */
+            }
+
+            input[type="number"]::-webkit-inner-spin-button,
+            input[type="number"]::-webkit-outer-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+
+            /* Firefox */
+            input[type="number"] {
+                -moz-appearance: textfield;
+            }
+
+            .smart-paragraph-container {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                gap: 14px;
+                /* tương đương 3.5 * 4px */
+                background-color: white;
+                padding: 16px;
+                border-bottom: 1px solid #f0eeee;
+                margin-left: -16px;
+                position: sticky;
+                top: 0px;
+                z-index: 10;
+            }
+
+            .smart-paragraph-icon-wrapper {
+                width: 42px;
+                height: 42px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: #ffe8fc;
+                border-radius: 8px;
+            }
+
+            .smart-paragraph-icon {
+                width: 20px;
+                height: 20px;
+                /* Bạn có thể chèn SVG hoặc icon font ở đây */
+            }
+
+            .smart-paragraph-content {
+                display: flex;
+                flex-direction: column;
+                gap: 7px;
+                flex-grow: 1;
+                line-height: 1.2;
+            }
+
+            .smart-paragraph-title {
+                font-weight: bold;
+                font-size: 16px;
+                color: #000000;
+            }
+
+            .smart-paragraph-description {
+                font-weight: normal;
+                font-size: 14px;
+                color: #6b7280;
+                /* tương đương text-gray-500 */
+            }
+        </style>
+        <style>
+            .template-search {
+                width: 374px;
+                height: 41px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                background-color: #ffffff;
+                padding: 0 12px;
+                border-radius: 10px;
+                border: 1px solid #dde8ff;
+                box-sizing: border-box;
+            }
+
+            .template-search__icon {
+                width: 16px;
+                height: 16px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .template-search__svg {
+                width: 100%;
+                height: 100%;
+                fill: #666666;
+            }
+
+            .template-search__input {
+                flex: 1;
+                border: none;
+                outline: none;
+                background: transparent;
+                font-size: 14px;
+                font-weight: 400;
+                color: #666666;
+                min-width: 0; /* tránh tràn layout trong flex */
+            }
+
+            .template-search__input::placeholder {
+                color: #666666;
+                opacity: 1;
+            }
+        </style>
+        <style>
+            .templates-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+                gap: 12px;
+                width: 100%;
+            }
+            /* Card theo mẫu */
+            .template-card {
+                display: flex;
+                flex-direction: column;
+                gap: 14px;
+                flex-grow: 1;
+                background-color: #ffffff;
+                padding: 16px;
+                border-radius: 10px;
+                border: 1px solid #dde8ff;
+                box-sizing: border-box;
+            }
+
+            .template-card__title {
+                font-size: 18px;
+                line-height: 24px;
+                font-weight: 600;
+                color: #000000;
+                margin: 0;
+
+                display: -webkit-box;
+                -webkit-line-clamp: 1; /* clamp 1 dòng */
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                text-overflow: ellipsis;
+
+                min-height: 24px; /* giữ layout đều nhau */
+                max-height: 24px; /* không vượt quá 1 dòng */
+            }
+
+            /* Desc: tối đa 2 dòng + ellipsis + min-height */
+            .template-card__desc {
+                font-size: 14px;
+                line-height: 20px;
+                font-weight: 400;
+                color: #666666;
+                margin: 0;
+
+                display: -webkit-box;
+                -webkit-line-clamp: 2; /* clamp 2 dòng */
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                text-overflow: ellipsis;
+
+                min-height: 40px; /* 2 dòng * 20px */
+                max-height: 40px;
+            }
+
+            /* Fallback cơ bản cho trình duyệt không hỗ trợ line-clamp */
+            @supports not (-webkit-line-clamp: 1) {
+                .template-card__title {
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    height: 24px;
+                }
+                .template-card__desc {
+                    max-height: 40px;
+                    overflow: hidden;
+                }
+            }
+
+            .template-card__badge {
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                gap: 10px;
+                background: #f8fafc; /* tương đương bg-slate-50 */
+                padding: 4px;
+                border-radius: 3px;
+                font-weight: 500;
+                font-size: 13px;
+                color: #111111;
+                width: fit-content;
+            }
+
+            .template-card__divider {
+                height: 1px;
+                background: #dde8ff;
+                width: 100%;
+            }
+
+            .template-card__group {
+                display: flex;
+                flex-direction: column;
+                gap: 10px; /* ~2.5 */
+                width: 100%;
+            }
+
+            .template-card__row {
+                display: flex;
+                align-items: center;
+                gap: 14px; /* ~3.5 */
+                width: 100%;
+            }
+
+            .template-card__label {
+                font-weight: 500;
+                font-size: 14px;
+                color: #666666;
+                white-space: nowrap;
+            }
+
+            .template-card__chip {
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                gap: 10px;
+                background: #f8fafc;
+                padding: 4px;
+                border-radius: 3px;
+                font-weight: 500;
+                font-size: 14px;
+                color: #111111;
+                width: fit-content;
+            }
+
+            .template-card__footer {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                width: 100%;
+            }
+
+            .template-card__meta {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .template-card__meta .template-card__author {
+                font-weight: 500;
+                font-size: 13px;
+                color: #666666;
+            }
+
+            .template-card__meta .template-card__date {
+                font-weight: 400;
+                font-size: 13px;
+                color: #666666;
+            }
+
+            .template-card__btn {
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                gap: 5px;
+                background: #3e61ff;
+                padding: 10px 24px; /* py-2.5 px-6 */
+                border-radius: 6px;
+                border: none;
+                cursor: pointer;
+                font-weight: 600;
+                font-size: 14px;
+                color: #ffffff;
+            }
+
+            /* Trạng thái */
+            .templates-list-loading,
+            .templates-list-error,
+            .templates-list-empty {
+                border: 1px dashed #dde8ff;
+                border-radius: 10px;
+                padding: 12px;
+                background: #fff;
+                color: #666666;
+                font-size: 14px;
+            }
+        </style>
+        <script>
+            (function () {
+                // ====== Cấu hình nhanh ======
+                const API_BASE = "https://wttbe.metapress.ai/"; // đổi theo môi trường của bạn
+                const LOGIN_PAGE = "/login.html"; // đường dẫn trang đăng nhập
+                const REQUIRE_AUTH = true; // trang này bắt buộc đăng nhập
+                // Những API không chen Bearer / không redirect (login, register...)
+                const SKIP_PATHS = ["/api/login", "/api/register", "/api/password/forgot"];
+
+                // ====== Tiện ích ======
+                const nativeFetch = window.fetch.bind(window);
+                const isLoginPage = () => location.pathname.endsWith(LOGIN_PAGE);
+                const getToken = () => {
+                    try {
+                        return localStorage.getItem("auth_token") || "";
+                    } catch {
+                        return "";
+                    }
+                };
+                const clearToken = () => {
+                    try {
+                        localStorage.removeItem("auth_token");
+                    } catch {}
+                };
+
+                function urlToAbsolute(u) {
+                    try {
+                        return new URL(u, location.origin);
+                    } catch {
+                        return null;
+                    }
+                }
+                function apiOrigin() {
+                    try {
+                        return new URL(API_BASE).origin;
+                    } catch {
+                        return location.origin;
+                    }
+                }
+                function isSameApi(u) {
+                    const abs = urlToAbsolute(u);
+                    return abs && abs.origin === apiOrigin();
+                }
+                function shouldSkip(u) {
+                    const abs = urlToAbsolute(u) || new URL(API_BASE);
+                    return SKIP_PATHS.some((p) => abs.pathname.endsWith(p));
+                }
+
+                // ====== Guard ngay khi vào trang ======
+                if (REQUIRE_AUTH && !isLoginPage()) {
+                    const token = getToken();
+                    if (!token) {
+                        // Không có token -> về login luôn
+                        location.href = LOGIN_PAGE;
+                    }
+                }
+
+                // ====== Patch fetch ======
+                window.fetch = async (input, init = {}) => {
+                    const url = typeof input === "string" ? input : input.url;
+                    const token = getToken();
+
+                    // Nếu gọi vào API của mình và không thuộc danh sách bỏ qua
+                    if (isSameApi(url) && !shouldSkip(url)) {
+                        // Không có token -> về login luôn và chặn request
+                        if (!token && !isLoginPage()) {
+                            location.href = LOGIN_PAGE;
+                            // Trả về Response 401 giả để code phía dưới không bị lỗi
+                            return new Response(null, { status: 401, statusText: "Unauthorized (No token)" });
+                        }
+                    }
+
+                    // Gắn Bearer nếu có token và chưa set thủ công
+                    const headers = new Headers(init.headers || (typeof input !== "string" ? input.headers : undefined));
+                    if (token && !headers.has("Authorization") && isSameApi(url) && !shouldSkip(url)) {
+                        headers.set("Authorization", `Bearer ${token}`);
+                    }
+
+                    const res = await nativeFetch(input, { ...init, headers });
+
+                    // Token hết hạn / không hợp lệ -> xoá token + về login
+                    if ([401, 403, 419].includes(res.status)) {
+                        clearToken();
+                        if (!isLoginPage()) location.href = LOGIN_PAGE;
+                    }
+                    return res;
+                };
+
+                // Đồng bộ logout giữa các tab
+                window.addEventListener("storage", (e) => {
+                    if (e.key === "auth_token" && !e.newValue && !isLoginPage()) {
+                        location.href = LOGIN_PAGE;
+                    }
+                });
+            })();
+        </script>
+    </head>
+    <body>
+        <div class="cms-content">
+            <div class="sidebar-placeholder"></div>
+            <div class="sidebar">
+                <!-- Header -->
+                <div class="sidebar__header">
+                    <div class="sidebar__logo">
+                        <img src="/images/logo.svg" onerror="this.onerror=null; this.src='/images/logo.png';" alt="Logo" onclick="window.location.href='./';">
+                    </div>
+                </div>
+                <!-- Primary Action -->
+                <div class="sidebar__primary-action">
+                    <button class="btn btn--primary btn-icon" type="button" onclick="window.location.href='content.html'">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M21 22H3c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h18c.41 0 .75.34.75.75s-.34.75-.75.75ZM19.02 3.482c-1.94-1.94-3.84-1.99-5.83 0l-1.21 1.21c-.1.1-.14.26-.1.4a8.129 8.129 0 0 0 5.53 5.53.4.4 0 0 0 .41-.1l1.2-1.21c.99-.98 1.47-1.93 1.47-2.89.01-.99-.47-1.95-1.47-2.94ZM15.61 11.53c-.29-.14-.57-.28-.84-.44a8.8 8.8 0 0 1-.64-.42c-.17-.11-.37-.27-.56-.43a1.22 1.22 0 0 1-.17-.15c-.33-.28-.7-.64-1.03-1.04-.03-.02-.08-.09-.15-.18-.1-.12-.27-.32-.42-.55a5.49 5.49 0 0 1-.39-.59c-.16-.27-.3-.54-.44-.82a6.88 6.88 0 0 1-.061-.135c-.148-.333-.583-.43-.84-.173L4.34 12.331c-.13.13-.25.38-.28.55l-.54 3.83c-.1.68.09 1.32.51 1.75.36.35.86.54 1.4.54.12 0 .24-.01.36-.03l3.84-.54c.18-.03.43-.15.55-.28l5.722-5.721c.26-.26.161-.705-.176-.85a26.852 26.852 0 0 1-.116-.05Z" fill="#ffffff"></path></svg>
+                        <span> Nội dung </span>
+                    </button>
+                </div>
+                <!-- Menu Section -->
+                <div class="sidebar__section">
+                    <div class="sidebar__section-title">Danh mục</div>
+                    <a class="sidebar__menu-item" href="dashboard.html">Dashboard</a>
+                    <a class="sidebar__menu-item" href="templates.html">Bộ Taxonomy</a>
+                    <!--<a class="sidebar__menu-item" href="chat.html">
+							Chat <span class="badge badge--beta">Beta</span>
+						</a>-->
+                    <!-- <a class="sidebar__menu-item" href="settings.html">Cài đặt</a> -->
+                </div>
+                <div class="sidebar__divider"></div>
+                <!-- History Section -->
+				<div class="sidebar__section" id="chat-history">
+					<div class="sidebar__section-title">LỊCH SỬ</div>
+				</div> 
+                <!--User Info -->
+                <div class="sidebar__user-info">
+                    <div class="sidebar__user-avatar"><img src="https://cdn-icons-png.flaticon.com/128/149/149071.png"></div>
+                    <div class="sidebar__user-details">
+                        <span class="sidebar__user-name" id="userName">Loading...</span>
+                        <span class="sidebar__user-plan"></span>
+                    </div>
+                    <div class="logout-icon">
+                        <img id="sidebarLogout" src="/images/logout.svg">
+                    </div>
+                </div>
+            </div>
+            <div class="content-wrapper">
+                <div class="smart-paragraph-container">
+                    <div class="smart-paragraph-icon-wrapper">
+                        <div class="smart-paragraph-icon">
+                            <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M16.25 6.75L15.0083 7.99167L12.5083 5.49167L13.75 4.25C14.1 3.9 14.55 3.73333 15 3.73333C15.45 3.73333 15.9 3.9 16.25 4.25C16.9417 4.94167 16.9417 6.05833 16.25 6.75Z"
+                                    fill="url(#paint0_linear_6_1026)"
+                                />
+                                <path d="M14.425 8.58333L5.41667 17.5833C4.725 18.275 3.60834 18.275 2.91667 17.5833C2.225 16.8917 2.225 15.775 2.91667 15.0833L11.925 6.08333L14.425 8.58333Z" fill="url(#paint1_linear_6_1026)" />
+                                <path
+                                    d="M8.29167 3.41667L8.63334 2.25833C8.66667 2.15 8.63334 2.03333 8.55834 1.95C8.48334 1.86667 8.35 1.83333 8.24167 1.86667L7.08334 2.20833L5.925 1.86667C5.81667 1.83333 5.7 1.86667 5.61667 1.94167C5.53334 2.025 5.50834 2.14167 5.54167 2.25L5.875 3.41667L5.53334 4.575C5.5 4.68333 5.53334 4.8 5.60834 4.88333C5.69167 4.96667 5.80834 4.99167 5.91667 4.95833L7.08334 4.625L8.24167 4.96667C8.275 4.975 8.3 4.98333 8.33334 4.98333C8.41667 4.98333 8.49167 4.95 8.55834 4.89167C8.64167 4.80833 8.66667 4.69167 8.63334 4.58333L8.29167 3.41667Z"
+                                    fill="url(#paint2_linear_6_1026)"
+                                />
+                                <path
+                                    d="M4.95833 8.41667L5.29999 7.25833C5.33333 7.15 5.29999 7.03333 5.22499 6.95C5.14166 6.86667 5.02499 6.84167 4.91666 6.875L3.74999 7.20833L2.59166 6.86667C2.48333 6.83333 2.36666 6.86667 2.28333 6.94167C2.19999 7.025 2.17499 7.14167 2.20833 7.25L2.54166 8.41667L2.19999 9.575C2.16666 9.68333 2.19999 9.8 2.27499 9.88333C2.35833 9.96667 2.47499 9.99167 2.58333 9.95833L3.74166 9.61667L4.89999 9.95833C4.92499 9.96667 4.95833 9.96667 4.99166 9.96667C5.07499 9.96667 5.14999 9.93333 5.21666 9.875C5.29999 9.79167 5.32499 9.675 5.29166 9.56667L4.95833 8.41667Z"
+                                    fill="url(#paint3_linear_6_1026)"
+                                />
+                                <path
+                                    d="M17.4583 12.5833L17.8 11.425C17.8333 11.3167 17.8 11.2 17.725 11.1167C17.6417 11.0333 17.525 11.0083 17.4167 11.0417L16.2583 11.3833L15.1 11.0417C14.9917 11.0083 14.875 11.0417 14.7917 11.1167C14.7083 11.2 14.6833 11.3167 14.7167 11.425L15.0583 12.5833L14.7167 13.7417C14.6833 13.85 14.7167 13.9667 14.7917 14.05C14.875 14.1333 14.9917 14.1583 15.1 14.125L16.2583 13.7833L17.4167 14.125C17.4417 14.1333 17.475 14.1333 17.5083 14.1333C17.5917 14.1333 17.6667 14.1 17.7333 14.0417C17.8167 13.9583 17.8417 13.8417 17.8083 13.7333L17.4583 12.5833Z"
+                                    fill="url(#paint4_linear_6_1026)"
+                                />
+                                <defs>
+                                    <linearGradient id="paint0_linear_6_1026" x1="14.6385" y1="3.73333" x2="14.6385" y2="7.99167" gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#E91FCF" />
+                                        <stop offset="1" stop-color="#FF8CF0" />
+                                    </linearGradient>
+                                    <linearGradient id="paint1_linear_6_1026" x1="8.41146" y1="6.08333" x2="8.41146" y2="18.1021" gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#E91FCF" />
+                                        <stop offset="1" stop-color="#FF8CF0" />
+                                    </linearGradient>
+                                    <linearGradient id="paint2_linear_6_1026" x1="7.08402" y1="1.85375" x2="7.08402" y2="4.98333" gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#E91FCF" />
+                                        <stop offset="1" stop-color="#FF8CF0" />
+                                    </linearGradient>
+                                    <linearGradient id="paint3_linear_6_1026" x1="3.74999" y1="6.85374" x2="3.74999" y2="9.97262" gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#E91FCF" />
+                                        <stop offset="1" stop-color="#FF8CF0" />
+                                    </linearGradient>
+                                    <linearGradient id="paint4_linear_6_1026" x1="16.2625" y1="11.0274" x2="16.2625" y2="14.1393" gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#E91FCF" />
+                                        <stop offset="1" stop-color="#FF8CF0" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="smart-paragraph-content">
+                        <span class="smart-paragraph-title">Templates</span>
+                        <span class="smart-paragraph-description">Sử dụng để tạo nội dung theo đúng tuyến bài</span>
+                    </div>
+                </div>
+                <div class="template-search" role="search">
+                    <span class="template-search__icon" aria-hidden="true">
+                        <!-- optional: simple search icon -->
+                        <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path
+                                d="M7.66671 14.5C11.1645 14.5 14 11.6645 14 8.16667C14 4.66887 11.1645 1.83334 7.66671 1.83334C4.1689 1.83334 1.33337 4.66887 1.33337 8.16667C1.33337 11.6645 4.1689 14.5 7.66671 14.5Z"
+                                stroke="#666666"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                            />
+                            <path d="M14.6667 15.1667L13.3334 13.8333" stroke="#666666" stroke-linecap="round" stroke-linejoin="round" />
+                        </svg>
+                    </span>
+                    <input type="text" class="template-search__input" placeholder="Tìm kiếm theo tên template..." aria-label="Tìm kiếm theo tên template" />
+                </div>
+                <div id="templatesList" class="templates-grid"></div>
+            </div>
+        </div>
+    </body>
+    <script src="/scripts/menu-mobile.js"></script>
+    <script>
+        const API_URL = "https://wttbe.metapress.ai/api/template/list";
+        const listEl = document.getElementById("templatesList");
+
+        let _allTemplates = [];
+        let _currentQuery = "";
+
+        function setLoading() {
+            listEl.innerHTML = '<div class="templates-list-loading">Đang tải danh sách template...</div>';
+        }
+        function setError(msg = "Không thể lấy dữ liệu") {
+            listEl.innerHTML = `<div class="templates-list-error">${msg}</div>`;
+        }
+        function extractTemplates(payload) {
+            if (Array.isArray(payload)) return payload;
+            if (payload?.templates && Array.isArray(payload.templates)) return payload.templates;
+            if (payload?.data) {
+                if (Array.isArray(payload.data)) return payload.data;
+                if (Array.isArray(payload.data.templates)) return payload.data.templates;
+            }
+            return [];
+        }
+        function formatDate(input) {
+            if (!input) return "";
+            const d = new Date(input);
+            if (isNaN(d)) return String(input);
+            return d.toLocaleDateString("vi-VN");
+        }
+
+        // ====== SEARCH (không dấu, không phân biệt hoa/thường) ======
+        function normalizeVN(s) {
+            return (s || "")
+                .toString()
+                .normalize("NFD")
+                .replace(/[\u0300-\u036f]/g, "") // bỏ dấu tổ hợp
+                .replace(/đ/g, "d")
+                .replace(/Đ/g, "D")
+                .toLowerCase()
+                .trim();
+        }
+
+        function filterByName(items, query) {
+            if (!query) return items;
+            const q = normalizeVN(query);
+            return items.filter((t) => {
+                const name = normalizeVN(t?.name || t?.id || "");
+                return name.includes(q);
+            });
+        }
+
+        function debounce(fn, delay = 150) {
+            let t;
+            return (...args) => {
+                clearTimeout(t);
+                t = setTimeout(() => fn(...args), delay);
+            };
+        }
+
+        function bindSearch() {
+            const input = document.getElementById("searchTemplates") || document.querySelector(".template-search__input"); // dùng input đã có nếu bạn đặt class này
+
+            if (!input) return;
+
+            const onSearch = debounce((e) => {
+                _currentQuery = e.target.value || "";
+                const result = filterByName(_allTemplates, _currentQuery);
+                if (result.length) {
+                    renderTemplates(result);
+                } else {
+                    listEl.innerHTML = '<div class="templates-list-empty">Không tìm thấy template phù hợp.</div>';
+                }
+            }, 150);
+
+            input.addEventListener("input", onSearch);
+        }
+        // ====== END SEARCH ======
+
+        function createTemplateCard(tpl) {
+            const { id, name, description, usage_count, usage, type, articleType, post_type, tone, structure, articleStructure, author, created_at, updated_at, date } = tpl || {};
+
+            const title = name || id || "Không tên";
+            const desc = description || "";
+            const uses = usage_count ?? usage;
+            const kind = type || articleType || post_type;
+            const toneVal = tone;
+            const struct = structure || articleStructure;
+            const authorVal = author || "Admin";
+            const dateVal = formatDate(updated_at || created_at || date);
+
+            const card = document.createElement("div");
+            card.className = "template-card";
+            card.setAttribute("data-id", id || "");
+
+            const h = document.createElement("h3");
+            h.className = "template-card__title";
+            h.textContent = title;
+            card.appendChild(h);
+
+            if (desc) {
+                const p = document.createElement("p");
+                p.className = "template-card__desc";
+                p.textContent = desc;
+                card.appendChild(p);
+            }
+
+            if (typeof uses !== "undefined") {
+                const badge = document.createElement("div");
+                badge.className = "template-card__badge";
+                badge.textContent = `${uses} lượt sử dụng`;
+                card.appendChild(badge);
+            }
+
+            card.appendChild(Object.assign(document.createElement("div"), { className: "template-card__divider" }));
+
+            const group = document.createElement("div");
+            group.className = "template-card__group";
+
+            if (kind) {
+                const row = document.createElement("div");
+                row.className = "template-card__row";
+                const label = Object.assign(document.createElement("span"), { className: "template-card__label", textContent: "Dạng bài viết:" });
+                const chip = Object.assign(document.createElement("div"), { className: "template-card__chip" });
+                chip.textContent = kind;
+                row.append(label, chip);
+                group.appendChild(row);
+            }
+
+            if (toneVal) {
+                const row = document.createElement("div");
+                row.className = "template-card__row";
+                const label = Object.assign(document.createElement("span"), { className: "template-card__label", textContent: "Tone" });
+                const chip = Object.assign(document.createElement("div"), { className: "template-card__chip" });
+                chip.textContent = toneVal;
+                row.append(label, chip);
+                group.appendChild(row);
+            }
+
+            if (struct) {
+                const row = document.createElement("div");
+                row.className = "template-card__row";
+                const label = Object.assign(document.createElement("span"), { className: "template-card__label", textContent: "Cấu trúc" });
+                const chip = Object.assign(document.createElement("div"), { className: "template-card__chip" });
+                chip.textContent = struct;
+                row.append(label, chip);
+                group.appendChild(row);
+            }
+
+            if (group.childElementCount > 0) {
+                card.appendChild(group);
+                card.appendChild(Object.assign(document.createElement("div"), { className: "template-card__divider" }));
+            }
+
+            const footer = document.createElement("div");
+            footer.className = "template-card__footer";
+
+            const meta = document.createElement("div");
+            meta.className = "template-card__meta";
+
+            const authorEl = document.createElement("span");
+            authorEl.className = "template-card__author";
+            authorEl.textContent = `Tác giả: ${authorVal}`;
+            meta.appendChild(authorEl);
+
+            if (dateVal) {
+                const dateEl = document.createElement("span");
+                dateEl.className = "template-card__date";
+                dateEl.textContent = dateVal;
+                meta.appendChild(dateEl);
+            }
+
+            const btn = document.createElement("button");
+            btn.className = "template-card__btn";
+            btn.type = "button";
+            btn.textContent = "Sử dụng";
+            btn.addEventListener("click", () => goToContent(tpl));
+            footer.append(meta, btn);
+            card.appendChild(footer);
+
+            return card;
+        }
+
+        function renderTemplates(items) {
+            if (!items?.length) {
+                listEl.innerHTML = '<div class="templates-list-empty">Chưa có template nào.</div>';
+                return;
+            }
+            const frag = document.createDocumentFragment();
+            items.forEach((t) => frag.appendChild(createTemplateCard(t)));
+            listEl.innerHTML = "";
+            listEl.appendChild(frag);
+        }
+
+        function goToContent(tpl) {
+            const params = new URLSearchParams({
+                id: tpl?.id || "",
+            });
+            window.location.href = `content.html?${params.toString()}`;
+        }
+
+        async function init() {
+            setLoading();
+            try {
+                const res = await fetch(API_URL);
+                if (!res.ok) throw new Error("Không kết nối được");
+                const data = await res.json();
+                const templates = extractTemplates(data);
+
+                _allTemplates = templates.slice(); // lưu bản gốc
+                bindSearch(); // gắn sự kiện search
+                renderTemplates(filterByName(_allTemplates, _currentQuery)); // render lần đầu
+            } catch (e) {
+                console.error(e);
+                setError("Không thể lấy dữ liệu. Vui lòng thử lại.");
+            }
+        }
+        init();
+    </script>
+    <script>
+        const getUser = () => {
+            const user = localStorage.getItem('auth_user');
+            return JSON.parse(user);
+		};
+        const userAuth = getUser();
+        if(userAuth.name){
+            document.getElementById('userName').textContent = userAuth.name;
+        }
+    </script>
+    <script>
+        (function () {
+            const API_BASE = "https://wttbe.metapress.ai/"; // đổi theo môi trường của bạn
+            const LOGIN_PAGE = "/login.html";
+            document.getElementById("sidebarLogout")?.addEventListener("click", function (e) {
+                e.preventDefault();
+
+                // Lấy token hiện tại (nếu có)
+                let token = "";
+                try {
+                    token = localStorage.getItem("auth_token") || "";
+                } catch {}
+
+                // (Tùy chọn) Gọi API logout để revoke token ở server, nếu bạn có route /api/logout
+                if (token) {
+                    fetch(API_BASE + "/api/logout", {
+                        method: "POST",
+                        headers: {
+                            Accept: "application/json",
+                            Authorization: "Bearer " + token,
+                        },
+                    }).catch(() => {
+                        /* bỏ qua lỗi */
+                    });
+                }
+
+                // Xóa token local và chuyển về login
+                try {
+                    localStorage.removeItem("auth_token");
+                    localStorage.removeItem("auth_user");
+                } catch {}
+
+                location.href = LOGIN_PAGE;
+            });
+        })();
+    </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</html>

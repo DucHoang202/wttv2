@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EAV Manager – Attribute Sets & Attributes</title>
+  <style>
+    :root{
+      --bg:#ffffff; --card:#f9f9f9; --muted:#e5e7eb; --text:#111827; --text-dim:#6b7280; --accent:#2563eb; --danger:#ef4444; --ok:#16a34a;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0;font:14px/1.45 system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";background:var(--bg);color:var(--text)}
+    .app{display:grid;grid-template-rows:auto 1fr;min-height:100%}
+    .topbar{display:flex;align-items:center;gap:8px;padding:12px 16px;border-bottom:1px solid var(--muted);background:#f8fafc}
+    .topbar h1{font-size:16px;margin:0;margin-right:auto;color:#0f172a;font-weight:600}
+    .btn{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border:1px solid #cbd5e1;background:#fff;color:#0f172a;border-radius:8px;cursor:pointer}
+    .btn:hover{background:#f1f5f9}
+    .btn.primary{border-color:#1d4ed8;background:#2563eb;color:#fff}
+    .btn.primary:hover{background:#1d4ed8}
+    .btn.danger{border-color:#dc2626;background:#ef4444;color:#fff}
+    .layout{display:grid;grid-template-columns:320px 1fr}
+    .sidebar{border-right:1px solid var(--muted);background:#fff}
+    .pane{padding:16px}
+    .search{width:100%;padding:8px 10px;border-radius:8px;border:1px solid #cbd5e1;background:#fff;color:#0f172a}
+    .tabs{display:flex;margin:0 0 8px 0;border-bottom:1px solid var(--muted)}
+    .tab{padding:10px 12px;margin-right:4px;cursor:pointer;border-bottom:2px solid transparent;color:var(--text-dim)}
+    .tab.active{color:#0f172a;border-color:var(--accent)}
+    .list{padding:0;margin:0;list-style:none}
+    .item{padding:10px 12px;border-radius:10px;display:flex;align-items:center;justify-content:space-between;gap:8px;margin:6px 0;border:1px solid #e5e7eb;background:#fff}
+    .item .title{font-weight:600}
+    .item .muted{color:var(--text-dim);font-size:12px}
+    .form{display:grid;gap:12px;max-width:1000px}
+    .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    label{display:grid;gap:6px}
+    .input,.select,.textarea{padding:9px 11px;border-radius:10px;border:1px solid #cbd5e1;background:#fff;color:#0f172a}
+    .textarea{min-height:76px;resize:vertical}
+    .hint{font-size:12px;color:var(--text-dim)}
+    .row{display:flex;gap:8px;align-items:center}
+    .card{border:1px solid #e5e7eb;background:var(--card);border-radius:12px;padding:12px}
+    .small{font-size:12px;color:var(--text-dim)}
+    .drag-list{display:flex;gap:12px}
+    .bucket{flex:1}
+    .bucket h4{margin:6px 0 8px 0}
+    .pill{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border:1px dashed #cbd5e1;border-radius:10px;margin:6px 0;background:#fff}
+    .pill .grab{cursor:grab;opacity:.7}
+    .ghost{opacity:.4}
+    .footer{display:flex;justify-content:flex-end;gap:8px}
+    .empty{color:var(--text-dim);border:1px dashed #cbd5e1;border-radius:12px;padding:12px;text-align:center;background:#fff}
+    .nowrap{white-space:nowrap}
+    .hidden{display:none}
+    .toast{position:fixed;right:16px;bottom:16px;background:#0f172a;color:#fff;padding:8px 12px;border-radius:8px;opacity:.95}
+    pre{white-space:pre-wrap;word-break:break-word}
+    table{width:100%;border-collapse:collapse}
+    th,td{border:1px solid #e5e7eb;padding:8px}
+    th{background:#f1f5f9;text-align:left}
+    .table-actions{display:flex;gap:8px;margin-top: 6px;}
+    .attr-btn-wrapper{display: flex; gap: 8px;}
+    details > *{
+      margin-bottom: 10px;
+    }
+    .cursor-pointer{
+      cursor: pointer;
+    }
+    #status {
+      position: fixed;
+      top: 30px;
+      right: 30px;
+      min-width: 200px;
+      max-width: 400px;
+      padding: 12px 20px;
+      color: #fff;
+      border-radius: 6px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+      font-size: 14px;
+      z-index: 9999;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(20px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+    }
+
+    /* Trạng thái toast hiển thị */
+    #status.show {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    /* Các loại trạng thái */
+    #status.success {
+      background-color: #28a745; /* xanh lá */
+    }
+    #status.warning {
+      background-color: #ffc107; /* vàng */
+      color: #000;
+    }
+    #status.error {
+      background-color: #dc3545; /* đỏ */
+    }
+
+
+  </style>
+  
+</head>
+<body>
+  <div class="app">
+    <div id="status">Cập nhật Schema thành công</div>
+    <div class="topbar">
+      <div class="logo">
+       <img src="/images/logo.svg">
+      </div>
+      <span style="flex:1"></span>
+      <button class="btn primary" id="btnNewAttr">+ Thêm Thuộc tính</button>
+      <button class="btn" id="btnNewSet">+ Thêm bộ thuộc tính</button>
+    </div>
+    <div class="layout">
+      <aside class="sidebar">
+        <div class="tabs">
+          <div class="tab active" data-tab="sets">Bộ thuộc tính</div>
+          <div class="tab" data-tab="attrs">Thuộc tính</div>
+        </div>
+        <div class="pane" id="pane-sets">
+          <input class="search" id="searchSet" placeholder="Tìm bộ thuộc tính…" />
+          <ul class="list" id="listSets"></ul>
+          <div class="empty" id="emptySets">Chưa có bộ thuộc tính nào.</div>
+        </div>
+        <div class="pane hidden" id="pane-attrs">
+          <input class="search" id="searchAttr" placeholder="Tìm thuộc tính…" />
+          <ul class="list" id="listAttrs"></ul>
+          <div class="empty" id="emptyAttrs">Chưa có thuộc tính nào.</div>
+        </div>
+      </aside>
+      <main class="pane">
+        <div id="editorArea">
+          <div class="empty">Chọn 1 mục ở bên trái hoặc tạo mới bằng nút phía trên.</div>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script>
+    /*********************************
+     * Constants & Utilities
+     *********************************/
+    const API_URL = 'https://wttbe.metapress.ai/api/'
+    const STORAGE_KEY = 'eav_manager_v1';
+    const TYPES = ['text','textarea','number','date','boolean','select','multiselect'];
+    const CHOICE_TYPES = new Set(['select','multiselect']);
+    const uid = () => Math.random().toString(36).slice(2, 9);
+    const by = (id) => document.getElementById(id);
+    const el = (tag, attrs = {}, children = []) => {
+      const n = document.createElement(tag);
+      for (const k in attrs) {
+        if (k === 'class') n.className = attrs[k];
+        else if (k === 'text') n.textContent = attrs[k];
+        else if (k.startsWith('on')) n.addEventListener(k.slice(2), attrs[k]);
+        else n.setAttribute(k, attrs[k]);
+      }
+      children.forEach((c) => n.append(c));
+      return n;
+    };
+    const DEFAULT_PROMPT_EDITOR = `HƯỚNG DẪN THỰC HIỆN
+Đọc và phân tích kỹ thông tin bối cảnh
+Xác định góc độ phân tích phù hợp với loại bài và giọng văn yêu cầu
+Lập dàn ý theo đúng cấu trúc được chỉ định
+Viết bài đảm bảo đúng độ dài, phong cách và giọng văn theo thông số
+Kiểm tra lại tính chính xác về mặt thông tin và ngữ pháp
+Hãy canh lượng token để viết chuẩn chỉnh tránh việc viết nội dung bị cắt chữ
+Lưu ý cuối: Hãy tạo ra một bài viết chất lượng cao phù hợp với các thông số đã được thiết lập`;
+
+    /*********************************
+     * State & Persistence
+     *********************************/
+    const DefaultState = {
+      attributes: [
+        { id: uid(), code: 'title', label: 'Tiêu đề', type: 'text', required: true, defaultValue: '', options: [], validation:{regex:'',message:''}, meta:{ description:'Tiêu đề bài viết', min:0, max:120 }, visibility:null },
+        { id: uid(), code: 'category', label: 'Chuyên mục', type: 'select', required: true, defaultValue: '', options: [{label:'Tech',value:'tech'},{label:'Biz',value:'biz'},{label:'Life',value:'life'}], validation:{regex:'',message:''}, meta:{}, visibility:null },
+        { id: uid(), code: 'tags', label: 'Thẻ', type: 'multiselect', required: false, defaultValue: ['ai','cloud'], options: [{label:'AI',value:'ai'},{label:'Cloud',value:'cloud'},{label:'DevOps',value:'devops'}], validation:{regex:'',message:''}, meta:{}, visibility:null },
+        { id: uid(), code: 'is_featured', label: 'Nổi bật', type: 'boolean', required: false, defaultValue: false, options: [], validation:{regex:'',message:''}, meta:{}, visibility:null },
+      ],
+      attributeSets: [ { id: uid(), name: 'Bài viết', description: 'Schema bài viết chuẩn', attributes: [] } ]
+    };
+    let state;
+    async function load() {
+      
+      try {
+        const res = await fetch('https://wttbe.metapress.ai/api/eav/schema', {
+          method: 'GET',
+          headers: {
+            'Accept': 'application/json',
+          },
+          // GET không có body
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+
+        const json = await res.json();
+        
+        
+        // API có thể trả thẳng state, hoặc { state }, hoặc { data: state } / { data: { state } }
+        let remote = (json.schema);
+        if (typeof remote === 'string') {
+          try { remote = JSON.parse(remote); } catch (_) {}
+        }
+        if (remote && Array.isArray(remote.attributes) && Array.isArray(remote.attributeSets)) {
+          normalizeAllOptions(remote);
+          // Cập nhật LOCALSTORAGE với dữ liệu mới nhất từ API
+          try { localStorage.setItem(STORAGE_KEY, JSON.stringify(remote)); } catch (_) {}
+        }
+        else{
+          showToast('Tải dữ liệu từ Wttstudio thất bại', type = 'erro', duration = 2000);
+        }
+      }
+      catch (err) {
+        showToast('Tải dữ liệu từ Wttstudio thất bại', type = 'error', duration = 2000);
+      }
+      const raw = localStorage.getItem(STORAGE_KEY);
+      let st;
+      try {
+        st = raw ? JSON.parse(raw) : structuredClone(DefaultState);
+      } catch (_) {
+        st = structuredClone(DefaultState);
+      }
+
+      normalizeAllOptions(st);
+      return st;
+}
+    async function save(){ 
+      const json = JSON.stringify(state);
+      localStorage.setItem(STORAGE_KEY, json);
+      // 2. Gửi lên server wttstudio
+      try {
+        const res = await fetch('https://wttbe.metapress.ai/api/eav/schema', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+          },
+          body: json,
+        });
+        if (!res.ok) {
+          showToast('Gửi dữ liệu lên Wttstudio thất bại', type = 'error', duration = 2000)
+        }
+        else{
+          showToast('Đã lưu dữ liệu lên Wttstudio thành công', type = 'success', duration = 2000)
+        }
+      }
+      catch (err) {
+        showToast('Gửi dữ liệu lên Wttstudio thất bại', type = 'error', duration = 2000)
+      }
+      
+    }
+    // ---- Normalizers ----
+    function normalizeAllOptions(st){
+      st.attributes.forEach((a) => {
+        if (CHOICE_TYPES.has(a.type)) {
+          a.options = normalizeOptions(a.options);
+          if (a.type === 'multiselect') {
+            if (Array.isArray(a.defaultValue)) {/* ok */}
+            else if (typeof a.defaultValue === 'string') { a.defaultValue = a.defaultValue.split(',').map((s) => s.trim()).filter(Boolean); }
+            else if (a.defaultValue == null) { a.defaultValue = []; }
+          }
+        }
+      });
+    }
+    function normalizeOptions(options){
+      if (!Array.isArray(options) || options.length === 0) return [];
+      if (typeof options[0] === 'string') return options.map((s) => ({ label: s, value: s }));
+      if (options[0] && typeof options[0] === 'object' && 'value' in options[0])
+        return options.map((o) => ({ label: String(o.label ?? o.value), value: String(o.value) }));
+      return [];
+    }
+
+    /*********************************
+     * Reusable tiny components
+     *********************************/
+    function labelInput(label, id, value = '', hint = '', type = 'text'){
+      return el('label', {}, [ el('span', { text: label }), el('input', { id, class: 'input', value, type }), hint ? el('span', { class: 'hint', text: hint }) : '' ]);
+    }
+    function labelTextarea(label, id, value = ''){
+      return el('label', {}, [ el('span', { text: label }), el('textarea', { id, class: 'textarea' }, [document.createTextNode(value)]) ]);
+    }
+    function labelSelect(label, id, options, value, onchange){
+      const sel = el('select', { id, class: 'select' });
+      options.forEach((o) => sel.append(el('option', { value: o, text: o })));
+      sel.value = value;
+      if (onchange) sel.addEventListener('change', onchange);
+      return el('label', {}, [ el('span', { text: label }), sel ]);
+    }
+    function labelCheckbox(label, id, checked){
+      const box = el('input', { id, type: 'checkbox' }); box.checked = !!checked;
+      return el('label', {}, [ el('span', { text: label }), el('div', { class: 'row' }, [ box, el('span', { class: 'small', text: 'Đánh dấu nếu bắt buộc người dùng nhập trường này' }) ]) ]);
+    }
+
+    // Simple rule builder (placeholder, non-breaking)
+    function ruleBuilder(rule){
+      const current = rule || { attrCode:'', op:'eq', value:'' };
+      const wrap = el('div',{class:'card'});
+      wrap.append(
+        el('div',{class:'grid-2'},[
+          labelInput('Hiển thị khi (code thuộc tính)','vis-attr', current.attrCode),
+          labelSelect('Loại so sánh', 'vis-op', ['Bằng','Khác','Nằm trong danh sách','Không nằm trong danh sách','Lớn hơn','Nhỏ hơn'
+          ], current.op)
+        ]),
+        labelInput('Giá trị so sánh','vis-val', current.value, '∈ / ∉: cách nhau bằng dấu phẩy')
+      );
+      return wrap;
+    }
+
+    // Editor for label/value options — always mounted (so tests that set .value programmatically still find DOM)
+    function optionsEditor(optPairs, onChange){
+      const wrap = el('div', {});
+      const table = el('table', {});
+      const thead = el('thead', {}, [ el('tr', {}, [ el('th', { text: 'Label' }), el('th', { text: 'Value' }), el('th', { text: ' ' }) ]) ]);
+      const tbody = el('tbody', { id: 'opt-rows' });
+      table.append(thead, tbody);
+      wrap.append(table);
+      const btnRow = el('div', { class: 'table-actions' }, [ el('button', { class: 'btn', text: '+ Thêm dòng', onclick: () => addRow('', '') }) ]);
+      wrap.append(btnRow, el('div', { class: 'hint', text: 'Giá trị (value) dùng để lưu, label chỉ để hiển thị.' }));
+
+      function addRow(label = '', value = ''){
+        const tr = el('tr', { class: 'opt-row' });
+        const td1 = el('td', {}, [ el('input', { class: 'input opt-label', value: label, placeholder: 'Nhãn hiển thị' }) ]);
+        const td2 = el('td', {}, [ el('input', { class: 'input opt-value', value: value, placeholder: 'Giá trị lưu' }) ]);
+        const td3 = el('td', {}, [ el('button', { class: 'btn danger', text: 'Xóa', onclick: () => { tr.remove(); onChange && onChange(); } }) ]);
+        tr.append(td1, td2, td3); tbody.append(tr);
+      }
+
+      (optPairs || []).forEach((p) => addRow(p.label, p.value));
+      if (tbody.children.length === 0) addRow('', '');
+
+      wrap.getOptions = () => Array.from(tbody.querySelectorAll('.opt-row')).map((r) => ({
+        label: r.querySelector('.opt-label').value.trim(),
+        value: r.querySelector('.opt-value').value.trim(),
+      })).filter((p) => p.label && p.value);
+
+      wrap.addEventListener('input', () => onChange && onChange());
+      return wrap;
+    }
+
+    /*********************************
+     * Sidebar rendering
+     *********************************/
+    function renderLists(){
+      // Sets
+      const qSet = by('searchSet').value.trim().toLowerCase();
+      const ulS = by('listSets'); ulS.innerHTML = '';
+      const sets = state.attributeSets.filter((s) => !qSet || s.name.toLowerCase().includes(qSet));
+      by('emptySets').style.display = sets.length ? 'none' : 'block';
+      sets.forEach((s) => {
+        const li = el('li', { class: 'item' }, [
+          el('div', { onclick: () => openSetEditor(s.id),class:'cursor-pointer' }, [ el('div', { class: 'title', text: s.name }), el('div', { class: 'muted', text: (s.attributes.length || 0) + ' thuộc tính' }) ]),
+          el('div', { class: 'attr-btn-wrapper' }, [ el('button', { class: 'btn', text: 'Sửa', onclick: () => openSetEditor(s.id) })/*, el('button', { class: 'btn danger', text: 'Xóa', onclick: () => deleteSet(s.id) })*/ ])
+        ]);
+        ulS.append(li);
+      });
+
+      // Attributes
+      const qAttr = by('searchAttr').value.trim().toLowerCase();
+      const ulA = by('listAttrs'); ulA.innerHTML = '';
+      const attrs = state.attributes.filter((a) => !qAttr || a.label.toLowerCase().includes(qAttr) || a.code.toLowerCase().includes(qAttr));
+      by('emptyAttrs').style.display = attrs.length ? 'none' : 'block';
+      attrs.forEach((a) => {
+        const li = el('li', { class: 'item' }, [
+          el('div', {  onclick: () => openAttrEditor(a.id),class:'cursor-pointer' }, [ el('div', { class: 'title', text: `${a.label} (${a.code})` }), el('div', { class: 'muted', text: `Loại: ${a.type}${a.required ? ' · Bắt buộc' : ''}` }) ]),
+          el('div', { class: 'attr-btn-wrapper' }, [ el('button', { class: 'btn', text: 'Sửa', onclick: () => openAttrEditor(a.id) }),/* el('button', { class: 'btn danger', text: 'Xóa', onclick: () => deleteAttr(a.id) })*/ ])
+        ]);
+        ulA.append(li);
+      });
+    }
+
+    /*********************************
+     * Attribute Editor
+     *********************************/
+    function openAttrEditor(id){
+      const src = id ? state.attributes.find((x) => x.id === id) : { id: uid(), code: '', label: '', type: 'text', required: false, defaultValue: '', options: [], validation: { regex: '', message: '' }, meta: {}, visibility: null };
+      const attr = { ...src };
+      if (CHOICE_TYPES.has(attr.type)) attr.options = normalizeOptions(attr.options);
+      const isNew = !id;
+
+      const form = el('div', { class: 'form' }, [
+        el('h2', { text: (isNew ? 'Tạo' : 'Sửa') + ' thuộc tính' }),
+        el('div', { class: 'grid-2' }, [ labelInput('Mã (code)', 'attr-code', attr.code), labelInput('Nhãn hiển thị', 'attr-label', attr.label) ]),
+        el('div', { class: 'grid-2' }, [ labelSelect('Kiểu dữ liệu', 'attr-type', TYPES, attr.type, onTypeChange), labelCheckbox('Bắt buộc', 'attr-req', attr.required) ]),
+        el('div', { id: 'box-number', class: attr.type === 'number' ? '' : 'hidden' }, [ el('div', { class: 'grid-2' }, [ labelInput('Giá trị nhỏ nhất (min)', 'attr-min', attr.meta.min ?? '', 'Để trống nếu không giới hạn', 'number'), labelInput('Giá trị lớn nhất (max)', 'attr-max', attr.meta.max ?? '', 'Để trống nếu không giới hạn', 'number') ]) ]),
+        el('div', { id: 'box-options', class: CHOICE_TYPES.has(attr.type) ? '' : 'hidden' }),
+        el('div', { id: 'box-default' }),
+        el('div', {}, [ el('details', {}, [ el('summary', { text: 'Ràng buộc & hiển thị có điều kiện' }), el('div', { class: 'grid-2' }, [ labelInput('Regex validate', 'attr-regex', attr.validation?.regex || '', 'VD: ^[a-z0-9\\-]{3,}$'), labelInput('Thông báo lỗi', 'attr-msg', attr.validation?.message || '', 'VD: Lỗi sai định dạng') ]), ruleBuilder(attr.visibility) ]) ]),
+        
+        el('div', {}, [ labelTextarea('Mô tả', 'attr-desc', attr.meta?.description || '') ]),
+        el('div', { class: 'footer' }, [ el('button', { class: 'btn', text: 'Hủy', onclick: () => backToBlank() }), el('button', { class: 'btn primary', text: isNew ? 'Tạo thuộc tính' : 'Lưu thay đổi', onclick: () => saveAttr(attr.id, isNew) }) ])
+      ]);
+
+      by('editorArea').innerHTML = ''; by('editorArea').append(form);
+
+      // Always mount options editor (even when hidden) so tests can find DOM without dispatching change events
+      let optEditor = null;
+      function mountOptionsEditorAlways(){
+        const box = by('box-options'); box.innerHTML = '';
+        optEditor = optionsEditor(normalizeOptions(attr.options || []), updateDefaultFromOptions);
+        box.append(el('label', {}, [ el('span', { text: 'Tùy chọn (label/value)' }), optEditor ]));
+      }
+      function renderDefaultUI(){
+        const type = by('attr-type').value; const box = by('box-default'); box.innerHTML = '';
+        if (type === 'boolean') {
+          const s = el('select', { id: 'attr-default-bool', class: 'select' });
+          s.append(el('option', { value: '', text: '(Không đặt mặc định)' })); s.append(el('option', { value: 'true', text: 'true' })); s.append(el('option', { value: 'false', text: 'false' }));
+          s.value = String(attr.defaultValue); box.append(el('label', {}, [ el('span', { text: 'Giá trị mặc định' }), s ]));
+        } else if (type === 'select') {
+          const pairs = optEditor ? optEditor.getOptions() : normalizeOptions(attr.options);
+          const s = el('select', { id: 'attr-default-select', class: 'select' });
+          s.append(el('option', { value: '', text: '(Không đặt mặc định)' })); pairs.forEach((p) => s.append(el('option', { value: p.value, text: `${p.label} (${p.value})` })));
+          if (typeof attr.defaultValue === 'string') s.value = attr.defaultValue;
+          box.append(el('label', {}, [ el('span', { text: 'Giá trị mặc định' }), s ]));
+        } else if (type === 'multiselect') {
+          const inp = el('input', { id: 'attr-default', class: 'input', value: Array.isArray(attr.defaultValue) ? attr.defaultValue.join(',') : (attr.defaultValue || ''), placeholder: 'CSV của value (vd: ai,cloud)' });
+          box.append(el('label', {}, [ el('span', { text: 'Giá trị mặc định' }), inp, el('div', { class: 'hint', text: 'Nhập danh sách value, phân tách bằng dấu phẩy. Sẽ lưu dạng mảng.' }) ]));
+        } else {
+          box.append(labelInput('Giá trị mặc định', 'attr-default', attr.defaultValue ?? ''));
+        }
+      }
+      function updateDefaultFromOptions(){ if (by('attr-type').value === 'select') renderDefaultUI(); }
+      function onTypeChange(){
+        const val = by('attr-type').value;
+        by('box-options').classList.toggle('hidden', !CHOICE_TYPES.has(val));
+        by('box-number').classList.toggle('hidden', val !== 'number');
+        renderDefaultUI();
+      }
+
+      // initial mount
+      mountOptionsEditorAlways();
+      renderDefaultUI();
+    }
+
+    function saveAttr(existingId, isNew){
+      const code = by('attr-code').value.trim();
+      const label = by('attr-label').value.trim();
+      const type = by('attr-type').value;
+      const required = by('attr-req').checked;
+
+      // type-aware default
+      let def = '';
+      if (type === 'select') def = by('attr-default-select')?.value || '';
+      else if (type === 'boolean') def = (by('attr-default-bool')?.value || '') === 'true';
+      else if (type === 'multiselect') def = (by('attr-default')?.value || '').split(',').map((s) => s.trim()).filter(Boolean);
+      else def = by('attr-default')?.value || '';
+
+      const regex = by('attr-regex')?.value?.trim() || '';
+      const msg = by('attr-msg')?.value?.trim() || '';
+      const desc = by('attr-desc')?.value?.trim() || '';
+      const min = by('attr-min')?.value; const max = by('attr-max')?.value;
+
+      // collect options (if any)
+      let opts = [];
+      if (CHOICE_TYPES.has(type)) {
+        const rows = by('opt-rows') ? Array.from(by('opt-rows').querySelectorAll('.opt-row')) : [];
+        opts = rows.map((r) => ({ label: r.querySelector('.opt-label').value.trim(), value: r.querySelector('.opt-value').value.trim() })).filter((p) => p.label && p.value);
+        if (opts.length === 0) return alert('Cần ít nhất 1 dòng label/value cho ' + type);
+        const values = opts.map((o) => o.value);
+        if (new Set(values).size !== values.length) return alert('Value bị trùng, vui lòng đảm bảo mỗi value là duy nhất.');
+        if (type === 'select' && def && !values.includes(def)) return alert('Giá trị mặc định không nằm trong danh sách value.');
+        if (type === 'multiselect' && Array.isArray(def) && def.some((v) => !values.includes(v))) return alert('Một số giá trị mặc định không có trong danh sách value.');
+      }
+
+      if (!code || !/^[a-z0-9_\-]+$/.test(code)) return alert('Mã (code) chỉ gồm a-z 0-9 _ -');
+      if (!label) return alert('Nhập nhãn hiển thị');
+      if (isNew && state.attributes.some((a) => a.code === code)) return alert('Code đã tồn tại');
+
+      const rec = {
+        id: existingId || uid(), code, label, type, required,
+        defaultValue: def,
+        options: CHOICE_TYPES.has(type) ? opts : [],
+        validation: { regex, message: msg },
+        meta: { description: desc, min: min ? Number(min) : undefined, max: max ? Number(max) : undefined },
+        visibility: null,
+      };
+
+      if (isNew) { state.attributes.push(rec);showToast('Đã tạo thuộc tính thành công');}
+      else { const i = state.attributes.findIndex((x) => x.id === existingId); state.attributes[i] = rec;showToast('Đã lưu thuộc tính thành công'); }
+      save(); renderLists(); openAttrEditor(rec.id);
+    }
+
+    function deleteAttr(id){
+      if (!confirm('Xóa thuộc tính này?')) return;
+      state.attributeSets.forEach((s) => (s.attributes = s.attributes.filter((aid) => aid !== id)));
+      state.attributes = state.attributes.filter((a) => a.id !== id);
+      save(); renderLists(); backToBlank();
+    }
+
+    /*********************************
+     * Attribute Set Editor
+     *********************************/
+    function openSetEditor(id){
+      const existing = id ? state.attributeSets.find((x) => x.id === id) : null;
+      const current = existing ? { ...existing } : { id: uid(), name: '', description: '', attributes: [] };
+      const isNew = !existing;
+      const form = el('div', { class: 'form' }, [
+        el('h2', { text: (isNew ? 'Tạo' : 'Sửa') + ' bộ thuộc tính' }),
+        labelInput('Tên bộ thuộc tính', 'set-name', current.name),
+        labelTextarea('Mô tả', 'set-desc', current.description || ''),
+        el('div', { class: 'card' }, [ el('h3', { text: 'Thành phần & Thứ tự' }), assigner(current) ]),
+        labelTextarea('Prompt Editor', 'set-prompt', current.prompt_editor || DEFAULT_PROMPT_EDITOR),
+        el('details', {}, [ el('summary', { text: 'Xem câu lệnh AI (preview)' }), el('pre', { id: 'schema-json', class: 'card' }) ]),
+        el('div', { class: 'footer' }, [
+          el('button', { class: 'btn', text: 'Hủy', onclick: () => backToBlank() }),
+          el('button', { class: 'btn', text: '⬇ Export', onclick: () => exportSet(current) }),
+          el('button', { class: 'btn', text: '⬆ Import', onclick: () => triggerImportSet(current.id) }),
+          el('input', { type: 'file', id: 'importSetFile', accept: 'application/json', style: 'display:none' }),
+          el('button', { class: 'btn primary', text: isNew ? 'Tạo bộ thuộc tính' : 'Lưu thay đổi', onclick: () => saveSet(current, isNew) })
+        ])
+      ]);
+      by('editorArea').innerHTML = '';by('editorArea').append(form);
+      const promptBox = by('set-prompt');
+      refreshSchema();
+      if (promptBox) {
+        promptBox.addEventListener('input', () => {
+          current.prompt_editor = promptBox.value; 
+          refreshSchema();
+        });
+      }
+      function assigner(current){
+        const wrap = el('div', { class: 'drag-list' });
+
+        const left = el('div', { class: 'bucket' }); 
+        const right = el('div', { class: 'bucket' });
+        left.append(el('h4', { text: 'Kho thuộc tính' }));
+        right.append(el('h4', { text: 'Trong bộ (kéo để sắp xếp)' }));
+
+        const poolBox = el('div', { class: 'card' });
+        const setBox  = el('div', { class: 'card' });
+
+        function pill(a, origin){
+          const p = el('div', { class: 'pill', draggable: 'true', 'data-id': a.id }, [
+            el('span', { class: 'grab', text: '⠿' }),
+            el('span', { text: `${a.label} (${a.code})` }),
+            el('span', { class: 'small', text: a.type })
+          ]);
+          p.addEventListener('dragstart', (e) => {
+            e.dataTransfer.setData('text/eav', JSON.stringify({ id: a.id, from: origin }));
+            e.dataTransfer.effectAllowed = 'move';
+            p.classList.add('ghost');
+          });
+          p.addEventListener('dragend', () => p.classList.remove('ghost'));
+          return p;
+        }
+
+        function renderPool(){
+          poolBox.innerHTML = '';
+          const inSet = new Set(current.attributes);
+          const list = state.attributes.filter((a) => !inSet.has(a.id));
+          if (!list.length) {
+            poolBox.append(el('div', { class: 'empty', text: 'Không có thuộc tính phù hợp' }));
+            return;
+          }
+          list.forEach((a) => poolBox.append(pill(a, 'pool')));
+        }
+
+        function renderSetBox(){
+          setBox.innerHTML = '';
+          if (!current.attributes.length) {
+            setBox.append(el('div', { class: 'empty', text: 'Chưa thêm thuộc tính nào' }));
+            return;
+          }
+          current.attributes
+            .map((id) => state.attributes.find((a) => a.id === id))
+            .forEach((a) => {
+              if (!a) return;
+              const row = pill(a, 'set');
+              const removeBtn = el('button', { class: 'btn danger small nowrap', text: 'Bỏ khỏi bộ' });
+              removeBtn.addEventListener('click', () => {
+                current.attributes = current.attributes.filter((x) => x !== a.id);
+                renderPool(); renderSetBox(); refreshSchema();
+              });
+              row.append(removeBtn);
+              setBox.append(row);
+            });
+        }
+
+        function getDropIndex(container, clientY){
+          const items = Array.from(container.querySelectorAll('.pill'));
+          for (let i = 0; i < items.length; i++){
+            const r = items[i].getBoundingClientRect();
+            const mid = r.top + r.height / 2;
+            if (clientY < mid) return i;
+          }
+          return items.length;
+        }
+
+        setBox.addEventListener('dragover', (e) => { 
+          e.preventDefault(); 
+          e.dataTransfer.dropEffect = 'move'; 
+        });
+
+        setBox.addEventListener('drop', (e) => {
+          e.preventDefault();
+          const idx = getDropIndex(setBox, e.clientY);
+
+          let payload = { id: e.dataTransfer.getData('text/plain'), from: 'pool' };
+          const custom = e.dataTransfer.getData('text/eav');
+          if (custom) { try { payload = JSON.parse(custom); } catch(_){} }
+
+          const { id, from } = payload;
+          if (!id) return;
+
+          const arr = current.attributes;
+          const oldPos = arr.indexOf(id);
+
+          if (from === 'set' && oldPos !== -1){
+            // reorder trong cùng cột
+            arr.splice(oldPos, 1);
+            const insertAt = oldPos < idx ? idx - 1 : idx;
+            arr.splice(insertAt, 0, id);
+          } else {
+            // kéo từ kho sang cột phải
+            if (!arr.includes(id)) arr.splice(idx, 0, id);
+          }
+
+          renderPool(); renderSetBox(); refreshSchema();
+        });
+
+        left.append(poolBox);
+        right.append(setBox);
+        wrap.append(left, right);
+
+        renderPool(); 
+        renderSetBox();
+        return wrap;
+      }
+      function refreshSchema(){ 
+        const schema = buildJsonSchema(current); 
+        const pre = by('schema-json'); 
+        const promptText = current.prompt_editor && current.prompt_editor.trim()
+        ? current.prompt_editor.trim()
+        : DEFAULT_PROMPT_EDITOR;
+
+        const example = `Viết một bài báo theo các thông số sau:
+        Thông số kỹ thuật:
+        ${schema}
+        Yêu cầu về chất lượng:
+        Đảm bảo logic mạch lạc, liền mạch
+        Tránh bias cá nhân, ưu tiên tính khách quan
+        Có tham chiếu hoặc ám chỉ đến các nguồn đáng tin cậy
+        THÔNG TIN BỐI CẢNH
+        Lưu ý: Phần thông tin dưới đây chỉ là tài liệu tham khảo để hiểu sâu hơn về chủ đề. Không sao chép trực tiếp mà hãy phân tích và tái cấu trúc thông tin một cách sáng tạo.
+        Chủ đề và bối cảnh:
+        {Thông tin chủ đề và chi tiết}
+         ${promptText}`;
+        
+
+        if (pre) pre.textContent = example; 
+      }
+    }
+    /*********************************
+     * Import / Export for one Set
+     *********************************/
+    function exportSet(set) {
+      // Tìm attributes thuộc set này
+      const attrs = state.attributes.filter(a => set.attributes.includes(a.id));
+      const json = JSON.stringify({ set, attributes: attrs }, null, 2);
+
+      const blob = new Blob([json], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `${set.name.replace(/\s+/g,'_')}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+
+      showToast(`Đã export bộ ${set.name}`, "success");
+    }
+
+    function triggerImportSet(setId) {
+      const input = by("importSetFile");
+      input.onchange = (e) => {
+        if (e.target.files.length > 0) {
+          importSet(e.target.files[0]);
+          e.target.value = "";
+        }
+      };
+      input.click();
+    }
+
+    function importSet(file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        try {
+          const imported = JSON.parse(e.target.result);
+          if (!imported.set || !imported.attributes) {
+            return showToast("File JSON không hợp lệ", "error");
+          }
+
+          // Clone để không sửa trực tiếp
+          let newSet = structuredClone(imported.set);
+          let newAttrs = structuredClone(imported.attributes);
+
+          // Map cũ → mới cho attribute id
+          const idMap = {};
+
+          newAttrs.forEach(attr => {
+            let baseId = attr.id;
+            let newId = baseId;
+            let counter = 1;
+            // Nếu id đã tồn tại trong state → thêm hậu tố _1,_2,...
+            while (state.attributes.some(a => a.id === newId) || idMap[newId]) {
+              newId = `${baseId}_${counter++}`;
+            }
+            idMap[baseId] = newId;
+            attr.id = newId;
+          });
+
+          // Cập nhật id attribute trong set.attributes
+          newSet.attributes = newSet.attributes.map(oldId => idMap[oldId] || oldId);
+
+          // Đổi id cho set nếu trùng
+          let baseSetId = newSet.id;
+          let newSetId = baseSetId;
+          let setCounter = 1;
+          while (state.attributeSets.some(s => s.id === newSetId)) {
+            newSetId = `${baseSetId}_${setCounter++}`;
+          }
+          newSet.id = newSetId;
+
+          // Thêm vào state
+          state.attributes.push(...newAttrs);
+          state.attributeSets.push(newSet);
+
+          save();
+          renderLists();
+          openSetEditor(newSet.id);
+
+          showToast(`Đã import thành công bộ mới: ${newSet.name}`, "success");
+        } catch (err) {
+          console.error(err);
+          showToast("Lỗi khi đọc file JSON", "error");
+        }
+      };
+      reader.readAsText(file);
+    }
+
+
+    function buildJsonSchema(set){
+        let str = '';
+        for (const code of set.attributes) {
+          const a = state.attributes.find((x) => x.code === code || x.id === code);
+          if (!a) continue;
+          if (a.code === 'chu_de') continue;
+          console.log(a);
+          let displayValue = '';
+
+          switch (a.type) {
+            case 'text':
+            case 'textarea':
+            case 'number':
+            case 'date':
+            case 'boolean':
+              displayValue = a.value && a.value !== '' ? a.value : 'Hãy chọn phù hợp';
+              break;
+
+            case 'select': {
+              const pairs = normalizeOptions(a.options || []);
+              const found = pairs.find((o) => o.value === a.value);
+              if (found) {
+                displayValue = found.label;
+              } else if (pairs.length > 0) {
+                displayValue = pairs[0].label; // lấy option đầu tiên
+              } else {
+                displayValue = 'Hãy chọn phù hợp';
+              }
+              break;
+            }
+
+            case 'multiselect': {
+              const pairs = normalizeOptions(a.options || []);
+              if (Array.isArray(a.value) && a.value.length) {
+                const labels = a.value
+                  .map((val) => {
+                    const found = pairs.find((o) => o.value === val);
+                    return found ? found.label : null;
+                  })
+                  .filter(Boolean);
+                displayValue = labels.join(', ');
+              } else if (pairs.length > 0) {
+                displayValue = pairs[0].label; // lấy option đầu tiên
+              } else {
+                displayValue = 'Hãy chọn phù hợp';
+              }
+              break;
+            }
+          }
+          str += `${a.label}: ${displayValue}\n`;
+        }
+        return str.trim();
+    }
+
+    function saveSet(current, isNew){
+      const name = by('set-name').value.trim();
+      const description = by('set-desc').value.trim();
+      let prompt_editor = by('set-prompt')?.value.trim();
+      if (!prompt_editor) {
+        prompt_editor = DEFAULT_PROMPT_EDITOR;
+      }
+      current.prompt_editor = prompt_editor;
+
+      if (!name) return alert('Nhập tên bộ thuộc tính');
+      if (isNew && state.attributeSets.some((s) => s.name.toLowerCase() === name.toLowerCase()))
+        return alert('Tên bộ đã tồn tại');
+
+      current.name = name;
+      current.description = description;
+
+      if (isNew) {
+        state.attributeSets.push(current);
+        save();
+        renderLists();
+        showToast('Đã tạo bộ thuộc tính');
+      } else {
+        const i = state.attributeSets.findIndex((s) => s.id === current.id);
+        if (i >= 0) state.attributeSets[i] = current;
+        else state.attributeSets.push(current);
+      }
+
+      save();
+      renderLists();
+      openSetEditor(current.id);
+    }
+
+    function deleteSet(id){
+      if (!confirm('Xóa bộ thuộc tính này?')) return;
+      state.attributeSets = state.attributeSets.filter((s) => s.id !== id);
+      save(); renderLists(); backToBlank();
+    }
+
+    function backToBlank(){ by('editorArea').innerHTML = '<div class="empty">Chọn 1 mục ở bên trái hoặc tạo mới bằng nút phía trên.</div>'; }
+
+    /*********************************
+     * Init &  Reload Function
+     *********************************/
+    async function init() {
+      state = await load();
+      renderLists();
+    }
+    async function reload(){
+      state = await load();
+      renderLists();
+    }
+
+    /*********************************
+     * Toast Function
+     *********************************/
+    function showToast(message, type = 'success', duration = 3000) {
+      const el = document.getElementById('status');
+
+      // Xóa class cũ (success, warning, error)
+      el.classList.remove('success', 'warning', 'error');
+
+      // Gán nội dung + class loại
+      el.textContent = message;
+      el.classList.add('show', type);
+
+      // Tự ẩn sau duration
+      setTimeout(() => {
+        el.classList.remove('show', type);
+      }, duration);
+    }
+
+    // Tabs & top buttons
+    document.querySelectorAll('.tab').forEach((t) => t.addEventListener('click',  async () => {
+      await reload();
+      document.querySelectorAll('.tab').forEach((x) => x.classList.remove('active'));
+      t.classList.add('active');
+      const key = t.dataset.tab;
+      by('pane-sets').classList.toggle('hidden', key !== 'sets');
+      by('pane-attrs').classList.toggle('hidden', key !== 'attrs');
+    }));
+
+    by('btnNewAttr').addEventListener('click', () => openAttrEditor(null));
+    by('btnNewSet').addEventListener('click', () => openSetEditor(null));
+    by('searchSet').addEventListener('input', renderLists);
+    by('searchAttr').addEventListener('input', renderLists);
+    
+    // Boot
+    init();
+    
+
+    /*********************************
+     * Tests (kept, plus extra)
+     *********************************/
+    
+  </script>
+</body>
+</html>

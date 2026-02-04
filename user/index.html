@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Content Creator</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="/css/modal-form.css" />
+        <link rel="stylesheet" href="/scripts/simple-modal/simple-modal.css" />
+        <link rel="stylesheet" href="/css/responsive.css" />
+        <link rel="stylesheet" href="/css/font.css" />
+		<link rel="stylesheet" href="/css/style.css" />
+        <link rel="stylesheet" href="/scripts/toast/toast.css" />
+		<script src="/scripts/toast/toast.js"></script>
+        
+        <!-- Side Bar -->
+        <style>
+            .content-wrapper {
+                background-color: #f9fbff;
+                border-left: 1px solid #f0eeee;
+                display: flex;
+                min-width: 335px;
+                padding: 0px 16px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+                flex: 1 0 0;
+                align-self: stretch;
+                min-height: 100vh;
+            }
+            #formWrapper {
+                display: flex;
+                min-width: 335px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+                flex: 1 0 0;
+                align-self: stretch;
+            }
+            .tab-bar {
+                display: flex;
+                gap: 16px;
+                border-bottom: 1px solid #e4e4e4;
+                width: 100%;
+            }
+
+            .tab {
+                font-size: 14px;
+                font-weight: 500;
+                text-align: center;
+                color: #666;
+                padding: 5px 12px;
+                cursor: pointer;
+            }
+
+            .tab--active {
+                color: #3e61ff;
+                border-bottom: 1px solid #3e61ff;
+            }
+
+            .form-group {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                width: 100%;
+            }
+
+            .form-row {
+                display: flex;
+                gap: 16px;
+                width: 100%;
+            }
+
+            .form-label {
+                font-size: 14px;
+                font-weight: 500;
+                color: #333;
+            }
+
+            .select-box,
+            .input-box {
+                display: flex;
+                align-items: center;
+                position: relative;
+                justify-content: space-between;
+                font-size: 14px;
+            }
+
+            .select-placeholder,
+            .input-placeholder {
+                font-size: 14px;
+                color: #666;
+                flex-grow: 1;
+            }
+
+            .textarea-placeholder {
+                font-size: 14px;
+                color: #666;
+            }
+
+            .icon-placeholder {
+                width: 20px;
+                height: 20px;
+                background: gray;
+            }
+
+            .footer-actions__left {
+                display: flex;
+                align-items: center;
+            }
+
+            .btn-text {
+                font-size: 14px;
+                font-weight: 500;
+                cursor: pointer;
+            }
+
+            .btn-clear {
+                color: #888;
+            }
+
+            .footer-actions__right {
+                display: flex;
+                gap: 16px;
+            }
+
+            .btn-outline {
+                padding: 10px 24px;
+                border: 1px solid #e4e4e4;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: 500;
+                cursor: pointer;
+                color: #000;
+            }
+
+            .btn-primary {
+                background: linear-gradient(to bottom, #fd3de3, #c845b7);
+                color: #fff;
+                padding: 10px 24px;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: 500;
+                cursor: pointer;
+                display: flex;
+                gap: 10px;
+                align-items: center;
+            }
+
+            .btn-primary.disabled {
+                opacity: 0.6;
+            }
+
+            .select-wrapper {
+                position: relative;
+                display: inline-block;
+                width: 100%;
+            }
+
+            .custom-select {
+                width: 100%;
+                padding: 10px 35px 10px 10px;
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                appearance: none;
+                background-color: #fff;
+                font-size: 14px;
+            }
+
+            .select-icon {
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                pointer-events: none;
+                transform: translateY(-50%);
+                display: flex;
+            }
+
+            .textarea {
+                height: 100px;
+                background-color: #fff;
+                padding: 12px;
+                border: 1px solid #e4e4e4;
+                border-radius: 10px;
+                resize: none;
+                width: calc(100% - 27px);
+            }
+
+            input::placeholder {
+                color: #666;
+                /* màu placeholder */
+            }
+
+            .input-number {
+                height: 38px;
+                background-color: #fff;
+                padding: 0px 50px 0px 12px;
+                border: 1px solid #e4e4e4;
+                border-radius: 10px;
+            }
+
+            .input-suffix {
+                font-size: 14px;
+                color: #292d32;
+                flex-shrink: 0;
+                position: absolute;
+                right: 12px;
+            }
+
+            input {
+                color: #3e61ff;
+                border: none;
+                width: 100%;
+                font-size: 14px;
+            }
+
+            /* Nếu người dùng đã chọn một option có value khác rỗng */
+            select {
+                color: #666;
+                /* màu placeholder */
+            }
+
+            select:valid {
+                /*color: #3E61FF;*/
+                /* áp dụng cho text trong dropdown */
+            }
+
+            input[type="number"]::-webkit-inner-spin-button,
+            input[type="number"]::-webkit-outer-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+
+            /* Firefox */
+            input[type="number"] {
+                -moz-appearance: textfield;
+            }
+
+            .smart-paragraph-container {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                gap: 14px;
+                /* tương đương 3.5 * 4px */
+                background-color: white;
+                padding: 16px;
+                border-bottom: 1px solid #f0eeee;
+                margin-left: -16px;
+                position: sticky;
+                top: 0px;
+                z-index: 10;
+            }
+
+            .smart-paragraph-icon-wrapper {
+                width: 42px;
+                height: 42px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: #ffe8fc;
+                border-radius: 8px;
+            }
+
+            .smart-paragraph-icon {
+                width: 20px;
+                height: 20px;
+                /* Bạn có thể chèn SVG hoặc icon font ở đây */
+            }
+
+            .smart-paragraph-content {
+                display: flex;
+                flex-direction: column;
+                gap: 7px;
+                flex-grow: 1;
+                line-height: 1.2;
+            }
+
+            .smart-paragraph-title {
+                font-weight: bold;
+                font-size: 16px;
+                color: #000000;
+            }
+
+            .smart-paragraph-description {
+                font-weight: normal;
+                font-size: 14px;
+                color: #6b7280;
+                /* tương đương text-gray-500 */
+            }
+        </style>
+        <script src="/scripts/simple-modal/simple-modal.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+        <style>
+            :root {
+                --brand: #3e61ff;
+                --ink: #111827;
+                --muted: #6b7280;
+                --line: #e5e7eb;
+                --bg: #f8fafc;
+                --card: #fff;
+            }
+            .content-wrapper {
+                padding-bottom: 40px;
+            }
+            .content-wrapper > section + section {
+                margin-top: 16px;
+                width: 100%;
+                box-sizing: border-box;
+            }
+            .grid {
+                display: grid;
+                gap: 12px;
+                width: 100%;
+            }
+            .grid--kpis {
+                grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            }
+            .grid--two {
+                grid-template-columns: 2fr 1fr;
+            }
+            @media (max-width: 1000px) {
+                .grid--two {
+                    grid-template-columns: 1fr;
+                }
+            }
+            .card {
+                background: var(--card);
+                border: 1px solid var(--line);
+                border-radius: 12px;
+                padding: 16px;
+            }
+            .row {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            .grow {
+                flex: 1;
+            }
+            .mono {
+                font-variant-numeric: tabular-nums;
+            }
+            .title {
+                margin: 0 0 8px;
+                font-size: 18px;
+                font-weight: 600;
+            }
+            .kpi {
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+            .kpi__title {
+                font-size: 13px;
+                color: var(--muted);
+                font-weight: 600;
+            }
+            .kpi__value {
+                font-size: 26px;
+                font-weight: 600;
+                letter-spacing: -0.3px;
+            }
+            .kpi__delta {
+                font-size: 12px;
+                color: var(--muted);
+            }
+            .chart-wrap {
+                height: 420px;
+            }
+            .chart-wrap-sm {
+                height: 320px;
+            }
+            .muted {
+                color: var(--muted);
+            }
+
+            /* Month picker */
+            .monthpicker {
+                position: relative;
+            }
+            .month-btn {
+                height: 36px;
+                border: 1px solid var(--line);
+                border-radius: 8px;
+                background: #fff;
+                padding: 0 12px;
+                cursor: pointer;
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+            }
+            .month-panel {
+                position: absolute;
+                right: 0;
+                margin-top: 6px;
+                background: #fff;
+                border: 1px solid var(--line);
+                border-radius: 12px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+                padding: 8px;
+                z-index: 50;
+                width: 260px;
+            }
+            .mp-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 6px 8px;
+            }
+            .mp-year {
+                font-weight: 600;
+            }
+            .mp-nav {
+                border: 1px solid var(--line);
+                background: #f8fafc;
+                border-radius: 8px;
+                height: 28px;
+                width: 28px;
+                cursor: pointer;
+            }
+            .mp-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 6px;
+                padding: 6px;
+            }
+            .mp-month {
+                padding: 8px;
+                border: 1px solid var(--line);
+                border-radius: 8px;
+                background: #fff;
+                cursor: pointer;
+            }
+            .mp-month:hover {
+                background: #f3f4f6;
+            }
+            .mp-month.selected {
+                background: #eef2ff;
+                border-color: #c7d2fe;
+                font-weight: 700;
+            }
+
+            /* Lists */
+            .simple-list {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+            .simple-item {
+                display: flex;
+                gap: 10px;
+                align-items: center;
+            }
+            .dot {
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background: #c7d2fe;
+                flex: none;
+            }
+            .status-list {
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                display: flex;
+                flex-direction: column;
+                gap: 8px;
+            }
+            .status-item {
+                display: flex;
+                gap: 10px;
+                align-items: center;
+            }
+            .status-bar {
+                height: 8px;
+                background: #eef3ff;
+                border-radius: 999px;
+                overflow: hidden;
+                flex: 1;
+            }
+            .status-bar > span {
+                display: block;
+                height: 100%;
+            }
+			.filter-top{
+				position: relative;
+				width: 100%;
+			}
+			#monthPicker {
+				position: fixed;
+				right: 12px;
+				top: 19px;
+				z-index: 999;
+			}
+        </style>
+        <script>
+            (function () {
+                // ====== Cấu hình nhanh ======
+                const API_BASE = "https://wttbe.metapress.ai/"; // đổi theo môi trường của bạn
+                const LOGIN_PAGE = "/login.html"; // đường dẫn trang đăng nhập
+                const REQUIRE_AUTH = true; // trang này bắt buộc đăng nhập
+                // Những API không chen Bearer / không redirect (login, register...)
+                const SKIP_PATHS = ["/api/login", "/api/register", "/api/password/forgot"];
+
+                // ====== Tiện ích ======
+                const nativeFetch = window.fetch.bind(window);
+                const isLoginPage = () => location.pathname.endsWith(LOGIN_PAGE);
+                const getToken = () => {
+                    try {
+                        return localStorage.getItem("auth_token") || "";
+                    } catch {
+                        return "";
+                    }
+                };
+                const clearToken = () => {
+                    try {
+                        localStorage.removeItem("auth_token");
+                    } catch {}
+                };
+
+                function urlToAbsolute(u) {
+                    try {
+                        return new URL(u, location.origin);
+                    } catch {
+                        return null;
+                    }
+                }
+                function apiOrigin() {
+                    try {
+                        return new URL(API_BASE).origin;
+                    } catch {
+                        return location.origin;
+                    }
+                }
+                function isSameApi(u) {
+                    const abs = urlToAbsolute(u);
+                    return abs && abs.origin === apiOrigin();
+                }
+                function shouldSkip(u) {
+                    const abs = urlToAbsolute(u) || new URL(API_BASE);
+                    return SKIP_PATHS.some((p) => abs.pathname.endsWith(p));
+                }
+
+                // ====== Guard ngay khi vào trang ======
+                if (REQUIRE_AUTH && !isLoginPage()) {
+                    const token = getToken();
+                    if (!token) {
+                        // Không có token -> về login luôn
+                        location.href = LOGIN_PAGE;
+                    }
+                }
+
+                // ====== Patch fetch ======
+                window.fetch = async (input, init = {}) => {
+                    const url = typeof input === "string" ? input : input.url;
+                    const token = getToken();
+
+                    // Nếu gọi vào API của mình và không thuộc danh sách bỏ qua
+                    if (isSameApi(url) && !shouldSkip(url)) {
+                        // Không có token -> về login luôn và chặn request
+                        if (!token && !isLoginPage()) {
+                            location.href = LOGIN_PAGE;
+                            // Trả về Response 401 giả để code phía dưới không bị lỗi
+                            return new Response(null, { status: 401, statusText: "Unauthorized (No token)" });
+                        }
+                    }
+
+                    // Gắn Bearer nếu có token và chưa set thủ công
+                    const headers = new Headers(init.headers || (typeof input !== "string" ? input.headers : undefined));
+                    if (token && !headers.has("Authorization") && isSameApi(url) && !shouldSkip(url)) {
+                        headers.set("Authorization", `Bearer ${token}`);
+                    }
+
+                    const res = await nativeFetch(input, { ...init, headers });
+
+                    // Token hết hạn / không hợp lệ -> xoá token + về login
+                    if ([401, 403, 419].includes(res.status)) {
+                        clearToken();
+                        if (!isLoginPage()) location.href = LOGIN_PAGE;
+                    }
+                    return res;
+                };
+
+                // Đồng bộ logout giữa các tab
+                window.addEventListener("storage", (e) => {
+                    if (e.key === "auth_token" && !e.newValue && !isLoginPage()) {
+                        location.href = LOGIN_PAGE;
+                    }
+                });
+            })();
+        </script>
+    </head>
+    <body>
+        <div class="cms-content">
+            <div class="sidebar-placeholder"></div>
+            <div class="sidebar">
+                <!-- Header -->
+                <div class="sidebar__header">
+                    <div class="sidebar__logo">
+                       <img src="/images/logo.svg" onerror="this.onerror=null; this.src='/images/logo.png';" alt="Logo" onclick="window.location.href='./';">
+                    </div>
+                </div>
+                <!-- Primary Action -->
+                <div class="sidebar__primary-action">
+                    <button class="btn btn--primary btn-icon" type="button" onclick="window.location.href='content.html'">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none">
+                            <path
+                                d="M21 22H3c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h18c.41 0 .75.34.75.75s-.34.75-.75.75ZM19.02 3.482c-1.94-1.94-3.84-1.99-5.83 0l-1.21 1.21c-.1.1-.14.26-.1.4a8.129 8.129 0 0 0 5.53 5.53.4.4 0 0 0 .41-.1l1.2-1.21c.99-.98 1.47-1.93 1.47-2.89.01-.99-.47-1.95-1.47-2.94ZM15.61 11.53c-.29-.14-.57-.28-.84-.44a8.8 8.8 0 0 1-.64-.42c-.17-.11-.37-.27-.56-.43a1.22 1.22 0 0 1-.17-.15c-.33-.28-.7-.64-1.03-1.04-.03-.02-.08-.09-.15-.18-.1-.12-.27-.32-.42-.55a5.49 5.49 0 0 1-.39-.59c-.16-.27-.3-.54-.44-.82a6.88 6.88 0 0 1-.061-.135c-.148-.333-.583-.43-.84-.173L4.34 12.331c-.13.13-.25.38-.28.55l-.54 3.83c-.1.68.09 1.32.51 1.75.36.35.86.54 1.4.54.12 0 .24-.01.36-.03l3.84-.54c.18-.03.43-.15.55-.28l5.722-5.721c.26-.26.161-.705-.176-.85a26.852 26.852 0 0 1-.116-.05Z"
+                                fill="#ffffff"
+                            ></path>
+                        </svg>
+                        <span> Nội dung </span>
+                    </button>
+                </div>
+                <!-- Menu Section -->
+                <div class="sidebar__section">
+                    <div class="sidebar__section-title">Danh mục</div>
+                    <a class="sidebar__menu-item" href="dashboard.html">Dashboard</a>
+                    <!--<a class="sidebar__menu-item" href="templates.html">Bộ Taxonomy</a>
+                    <a class="sidebar__menu-item" href="manage.html">Quản lý tài khoản</a>-->
+                    <!--<a class="sidebar__menu-item" href="chat.html">
+							Chat <span class="badge badge--beta">Beta</span>
+						</a>-->
+                    <a class="sidebar__menu-item" href="#" onclick="openSetting()">Cài đặt</a>
+                </div>
+                <div class="sidebar__divider"></div>
+                <!-- History Section -->
+                <div class="sidebar__section" id="chat-history">
+					<div class="sidebar__section-title">LỊCH SỬ</div>
+				</div>
+                <!-- User Info -->
+                <div class="sidebar__user-info">
+                    <div class="sidebar__user-avatar"></div>
+                    <div class="sidebar__user-details">
+                        <span class="sidebar__user-name" id="userName">Admin</span>
+                    </div>
+                    <div class="logout-icon">
+                        <img id="sidebarLogout" src="/images/logout.svg">
+                    </div>
+                </div>
+            </div>
+            <div class="content-wrapper">
+                <div class="smart-paragraph-container">
+                    <div class="smart-paragraph-icon-wrapper">
+                        <div class="smart-paragraph-icon">
+                            <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M16.25 6.75L15.0083 7.99167L12.5083 5.49167L13.75 4.25C14.1 3.9 14.55 3.73333 15 3.73333C15.45 3.73333 15.9 3.9 16.25 4.25C16.9417 4.94167 16.9417 6.05833 16.25 6.75Z"
+                                    fill="url(#paint0_linear_6_1026)"
+                                />
+                                <path d="M14.425 8.58333L5.41667 17.5833C4.725 18.275 3.60834 18.275 2.91667 17.5833C2.225 16.8917 2.225 15.775 2.91667 15.0833L11.925 6.08333L14.425 8.58333Z" fill="url(#paint1_linear_6_1026)" />
+                                <path
+                                    d="M8.29167 3.41667L8.63334 2.25833C8.66667 2.15 8.63334 2.03333 8.55834 1.95C8.48334 1.86667 8.35 1.83333 8.24167 1.86667L7.08334 2.20833L5.925 1.86667C5.81667 1.83333 5.7 1.86667 5.61667 1.94167C5.53334 2.025 5.50834 2.14167 5.54167 2.25L5.875 3.41667L5.53334 4.575C5.5 4.68333 5.53334 4.8 5.60834 4.88333C5.69167 4.96667 5.80834 4.99167 5.91667 4.95833L7.08334 4.625L8.24167 4.96667C8.275 4.975 8.3 4.98333 8.33334 4.98333C8.41667 4.98333 8.49167 4.95 8.55834 4.89167C8.64167 4.80833 8.66667 4.69167 8.63334 4.58333L8.29167 3.41667Z"
+                                    fill="url(#paint2_linear_6_1026)"
+                                />
+                                <path
+                                    d="M4.95833 8.41667L5.29999 7.25833C5.33333 7.15 5.29999 7.03333 5.22499 6.95C5.14166 6.86667 5.02499 6.84167 4.91666 6.875L3.74999 7.20833L2.59166 6.86667C2.48333 6.83333 2.36666 6.86667 2.28333 6.94167C2.19999 7.025 2.17499 7.14167 2.20833 7.25L2.54166 8.41667L2.19999 9.575C2.16666 9.68333 2.19999 9.8 2.27499 9.88333C2.35833 9.96667 2.47499 9.99167 2.58333 9.95833L3.74166 9.61667L4.89999 9.95833C4.92499 9.96667 4.95833 9.96667 4.99166 9.96667C5.07499 9.96667 5.14999 9.93333 5.21666 9.875C5.29999 9.79167 5.32499 9.675 5.29166 9.56667L4.95833 8.41667Z"
+                                    fill="url(#paint3_linear_6_1026)"
+                                />
+                                <path
+                                    d="M17.4583 12.5833L17.8 11.425C17.8333 11.3167 17.8 11.2 17.725 11.1167C17.6417 11.0333 17.525 11.0083 17.4167 11.0417L16.2583 11.3833L15.1 11.0417C14.9917 11.0083 14.875 11.0417 14.7917 11.1167C14.7083 11.2 14.6833 11.3167 14.7167 11.425L15.0583 12.5833L14.7167 13.7417C14.6833 13.85 14.7167 13.9667 14.7917 14.05C14.875 14.1333 14.9917 14.1583 15.1 14.125L16.2583 13.7833L17.4167 14.125C17.4417 14.1333 17.475 14.1333 17.5083 14.1333C17.5917 14.1333 17.6667 14.1 17.7333 14.0417C17.8167 13.9583 17.8417 13.8417 17.8083 13.7333L17.4583 12.5833Z"
+                                    fill="url(#paint4_linear_6_1026)"
+                                />
+                                <defs>
+                                    <linearGradient id="paint0_linear_6_1026" x1="14.6385" y1="3.73333" x2="14.6385" y2="7.99167" gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#E91FCF" />
+                                        <stop offset="1" stop-color="#FF8CF0" />
+                                    </linearGradient>
+                                    <linearGradient id="paint1_linear_6_1026" x1="8.41146" y1="6.08333" x2="8.41146" y2="18.1021" gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#E91FCF" />
+                                        <stop offset="1" stop-color="#FF8CF0" />
+                                    </linearGradient>
+                                    <linearGradient id="paint2_linear_6_1026" x1="7.08402" y1="1.85375" x2="7.08402" y2="4.98333" gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#E91FCF" />
+                                        <stop offset="1" stop-color="#FF8CF0" />
+                                    </linearGradient>
+                                    <linearGradient id="paint3_linear_6_1026" x1="3.74999" y1="6.85374" x2="3.74999" y2="9.97262" gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#E91FCF" />
+                                        <stop offset="1" stop-color="#FF8CF0" />
+                                    </linearGradient>
+                                    <linearGradient id="paint4_linear_6_1026" x1="16.2625" y1="11.0274" x2="16.2625" y2="14.1393" gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#E91FCF" />
+                                        <stop offset="1" stop-color="#FF8CF0" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="smart-paragraph-content">
+                        <span class="smart-paragraph-title">Thông tin tổng quan</span>
+                        <span class="smart-paragraph-description">Thông tin về lượng token và người dùng</span>
+                    </div>
+                </div>
+				<div class="filter-top">
+					<div class="monthpicker" id="monthPicker">
+                        	<button id="mpToggle" class="month-btn" type="button"><span id="mpLabel"></span><span aria-hidden="true">▾</span></button>
+							<div id="mpPanel" class="month-panel" hidden>
+									<div class="mp-header">
+										<button id="mpPrev" class="mp-nav" type="button" aria-label="Năm trước">‹</button>
+										<div id="mpYear" class="mp-year"></div>
+										<button id="mpNext" class="mp-nav" type="button" aria-label="Năm sau">›</button>
+									</div>
+									<div id="mpGrid" class="mp-grid"></div>
+							</div>
+                    </div>
+				</div>
+                <!-- KPIs -->
+                <section class="grid grid--kpis" aria-label="Chỉ số tổng quan">
+                    <div class="card kpi">
+                        <div class="kpi__title">Tổng tiền đã dùng (tháng)</div>
+                        <div id="kpiMoney" class="kpi__value mono">—</div>
+                        <div id="kpiMoneyHint" class="kpi__delta">—</div>
+                    </div>
+                    <div class="card kpi">
+                        <div class="kpi__title">Tổng token đã dùng</div>
+                        <div id="kpiTokens" class="kpi__value mono">—</div>
+                        <div id="kpiTokensAvg" class="kpi__delta">— token/ngày</div>
+                    </div>
+                    <div class="card kpi">
+                        <div class="kpi__title">Số lượng bài viết tạo ra</div>
+                        <div id="kpiPosts" class="kpi__value mono">—</div>
+                        <div class="kpi__delta">Tính trong tháng được chọn</div>
+                    </div>
+                </section>
+
+                <!-- Main chart -->
+                <section class="card" aria-label="Biểu đồ token theo ngày">
+                    <div class="row" style="margin-bottom: 8px;">
+                        <h2 class="title">Biểu đồ token <span id="titleMonth"></span></h2>
+                        <span class="grow"></span>
+                        <span id="totalTokensLabel" class="muted mono"></span>
+                    </div>
+                    <div class="chart-wrap"><canvas id="tokenChart" role="img" aria-label="Token per day chart"></canvas></div>
+                </section>
+
+                <!-- Lists -->
+                <section class="grid grid--two" aria-label="Phân tích bổ sung">
+                    <div class="card">
+                        <div class="row" style="margin-bottom: 8px;">
+                            <h2 class="title">Bài viết mới tạo</h2>
+                            <span class="grow"></span><span class="muted" style="font-size: 12px;">Top 8 gần nhất</span>
+                        </div>
+                        <ul id="recentPostList" class="simple-list"></ul>
+                    </div>
+                    <div class="card">
+                        <div class="row" style="margin-bottom: 8px;">
+                            <h2 class="title">Trạng thái bài viết (tháng)</h2>
+                            <span class="grow"></span>
+                        </div>
+                        <ul id="postStatusList" class="status-list"></ul>
+                    </div>
+                </section>
+
+                <!-- Extra charts -->
+                <section class="grid grid--two" aria-label="Biểu đồ bổ sung 1">
+                    <div class="card">
+                        <div class="row" style="margin-bottom: 8px;">
+                            <h2 class="title">Tổng token theo tuần</h2>
+                            <span class="grow"></span>
+                        </div>
+                        <div class="chart-wrap-sm"><canvas id="weeklyChart"></canvas></div>
+                    </div>
+                    <div class="card">
+                        <div class="row" style="margin-bottom: 8px;">
+                            <h2 class="title">Chi phí tích lũy trong tháng</h2>
+                            <span class="grow"></span>
+                        </div>
+                        <div class="chart-wrap-sm"><canvas id="cumCostChart"></canvas></div>
+                    </div>
+                </section>
+
+                <section class="grid grid--two" aria-label="Biểu đồ bổ sung 2">
+                    <div class="card">
+                        <div class="row" style="margin-bottom: 8px;">
+                            <h2 class="title">Tỷ lệ trạng thái bài viết</h2>
+                            <span class="grow"></span>
+                        </div>
+                        <div class="chart-wrap-sm"><canvas id="statusDonut"></canvas></div>
+                    </div>
+                    <div class="card">
+                        <div class="row" style="margin-bottom: 8px;">
+                            <h2 class="title">Phân bố độ dài bài viết</h2>
+                            <span class="grow"></span>
+                        </div>
+                        <div class="chart-wrap-sm"><canvas id="wordHistChart"></canvas></div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </body>
+    <script src="/scripts/menu-mobile.js"></script>
+    <script src="/scripts/history.js"></script>
+    <script>
+        // ===== Config & Data =====
+        var pricing = { costPer1KTokensUSD: 0.005, usdToVnd: 25000 };
+        var nowTs = Date.now();
+        var recentPosts = [
+            { title: "AI tối ưu SEO bài viết du lịch", author: "Nguyễn An", words: 1280, status: "Published", createdAt: nowTs - 1 * 60 * 60 * 1000 },
+            { title: "So sánh Qdrant vs FAISS cho 5M vector", author: "Trần Bình", words: 980, status: "Draft", createdAt: nowTs - 3 * 60 * 60 * 1000 },
+            { title: "Hướng dẫn tích hợp n8n với Laravel", author: "Lê Chi", words: 1560, status: "Published", createdAt: nowTs - 5 * 60 * 60 * 1000 },
+            { title: "Case Study: HRM + Moodle Headless", author: "Hoàng Hà", words: 1320, status: "Queued", createdAt: nowTs - 8 * 60 * 60 * 1000 },
+            { title: "Workflow Long Polling tránh timeout", author: "Phạm Dũng", words: 740, status: "Published", createdAt: nowTs - 26 * 60 * 60 * 1000 },
+            { title: "Checklist Clean Code cho Laravel", author: "Vũ Em", words: 1100, status: "Published", createdAt: nowTs - 28 * 60 * 60 * 1000 },
+            { title: "KPI → BSC: Tiến trình & Mapping", author: "Đỗ Giang", words: 870, status: "Draft", createdAt: nowTs - 36 * 60 * 60 * 1000 },
+            { title: "AI Agent giám sát Hummingbot", author: "Đặng Ý", words: 900, status: "Published", createdAt: nowTs - 48 * 60 * 60 * 1000 },
+        ];
+        let payloadDaily;
+        function generateDailyTokens(year, monthIndex0) {
+            var days = new Date(year, monthIndex0 + 1, 0).getDate();
+            var arr = [];
+            for (var d = 1; d <= days; d++) {
+                var base = Math.sin((d + 1) * 1.3 + monthIndex0) + 1.2; // ~0.2..2.2
+                var value = Math.round(base * 1200 + (d % 5) * 300 + (monthIndex0 + 1) * 40);
+                arr.push(Math.max(150, value));
+            }
+            return arr;
+        }
+
+        // ===== Helpers =====
+        function fmtVND(v) {
+            return new Intl.NumberFormat("vi-VN", { style: "currency", currency: "VND", maximumFractionDigits: 0 }).format(v);
+        }
+        function fmtInt(v) {
+            return new Intl.NumberFormat("vi-VN").format(v);
+        }
+        function computeMoneyFromTokensConfig(totalTokens) {
+            return (totalTokens / 1000) * pricing.costPer1KTokensUSD * pricing.usdToVnd;
+        }
+        function timeAgo(ts) {
+            var diff = Date.now() - ts;
+            var s = Math.max(0, Math.floor(diff / 1000));
+            if (s < 30) return "Vừa xong";
+            var m = Math.floor(s / 60);
+            if (m < 60) return m + " phút trước";
+            var h = Math.floor(m / 60);
+            if (h < 24) return h + " giờ trước";
+            var d = Math.floor(h / 24);
+            if (d < 30) return d + " ngày trước";
+            return "30+ ngày";
+        }
+        function monthLabel(year, month0) {
+            const m = String(month0 + 1).padStart(2, "0"); // month0 là 0-based
+  			return `${m}/${year}`;
+        }
+        // ===== Month picker state =====
+        var titleMonth = document.getElementById("titleMonth");
+        var kpiMoney = document.getElementById("kpiMoney");
+        var kpiMoneyHint = document.getElementById("kpiMoneyHint");
+        var kpiTokens = document.getElementById("kpiTokens");
+        var kpiTokensAvg = document.getElementById("kpiTokensAvg");
+        var kpiPosts = document.getElementById("kpiPosts");
+        var totalTokensLabel = document.getElementById("totalTokensLabel");
+
+        const entries = [
+            ["Draft", 10],
+            ["Published", 20],
+            ["Pending", 5],
+        ];
+        const total = 35;
+        var mp = {
+            container: document.getElementById("monthPicker"),
+            btn: document.getElementById("mpToggle"),
+            panel: document.getElementById("mpPanel"),
+            label: document.getElementById("mpLabel"),
+            yearEl: document.getElementById("mpYear"),
+            grid: document.getElementById("mpGrid"),
+            prev: document.getElementById("mpPrev"),
+            next: document.getElementById("mpNext"),
+        };
+
+        var TODAY = new Date();
+        var selYear = TODAY.getFullYear();
+        var selMonth0 = TODAY.getMonth();
+        var panelYear = selYear;
+
+        function updateMonthLabel() {
+            mp.label.textContent = monthLabel(selYear, selMonth0);
+        }
+
+        function buildMonthGrid() {
+            mp.yearEl.textContent = panelYear;
+            mp.grid.innerHTML = "";
+            var names = ["Thg 1", "Thg 2", "Thg 3", "Thg 4", "Thg 5", "Thg 6", "Thg 7", "Thg 8", "Thg 9", "Thg 10", "Thg 11", "Thg 12"];
+            for (var i = 0; i < 12; i++) {
+                var b = document.createElement("button");
+                b.type = "button";
+                b.className = "mp-month" + (i === selMonth0 && panelYear === selYear ? " selected" : "");
+                b.textContent = names[i];
+                (function (idx) {
+                    b.addEventListener("click", function () {
+                        selMonth0 = idx;
+                        selYear = panelYear;
+                        updateMonthLabel();
+                        mp.panel.hidden = true;
+                        refresh();
+                    });
+                })(i);
+                mp.grid.appendChild(b);
+            }
+        }
+
+        mp.btn.addEventListener("click", function () {
+            mp.panel.hidden = !mp.panel.hidden;
+            if (!mp.panel.hidden) {
+                panelYear = selYear;
+                buildMonthGrid();
+            }
+        });
+        mp.prev.addEventListener("click", function () {
+            panelYear--;
+            buildMonthGrid();
+        });
+        mp.next.addEventListener("click", function () {
+            panelYear++;
+            buildMonthGrid();
+        });
+        document.addEventListener("click", function (e) {
+            if (!mp.container.contains(e.target)) mp.panel.hidden = true;
+        });
+
+        // ===== Charts =====
+        var tokenChart, weeklyChart, cumCostChart, statusDonutChart, wordHistChart;
+
+        function renderTokenChart(labels, data) {
+            if (typeof window.Chart === "undefined") {
+                console.warn("Chart.js not loaded");
+                return;
+            }
+            var ctx = document.getElementById("tokenChart").getContext("2d");
+            if (tokenChart) {
+                tokenChart.destroy();
+            }
+            tokenChart = new Chart(ctx, {
+                type: "bar",
+                data: { labels: labels, datasets: [{ label: "Token", data: data, borderWidth: 1, backgroundColor: "#3e61ff", borderColor: "#2947e6" }] },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: { grid: { display: false } },
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function (v) {
+                                    return v >= 1000 ? v / 1000 + "k" : v;
+                                },
+                            },
+                        },
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function (ctx) {
+                                    return fmtInt(ctx.parsed.y) + " token";
+                                },
+                            },
+                        },
+                    },
+                },
+            });
+        }
+
+        function renderWeeklyChart(daily) {
+            if (typeof window.Chart === "undefined") {
+                return;
+            }
+            var weeks = [];
+            for (var i = 0; i < daily.length; i++) {
+                var w = Math.floor(i / 7);
+                weeks[w] = (weeks[w] || 0) + daily[i];
+            }
+            var labels = weeks.map(function (_, i) {
+                return "Tuần " + (i + 1);
+            });
+            var ctx = document.getElementById("weeklyChart").getContext("2d");
+            if (weeklyChart) {
+                weeklyChart.destroy();
+            }
+            weeklyChart = new Chart(ctx, {
+                type: "line",
+                data: { labels: labels, datasets: [{ label: "Token/tuần", data: weeks, fill: false, borderWidth: 2 }] },
+                options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } },
+            });
+        }
+
+        function renderCumulativeCostChart(daily) {
+            // Exit if Chart.js is not available
+            if (typeof window.Chart === "undefined") {
+                console.error("Chart.js is not available");
+                return;
+            }
+
+            // Validate input
+            if (!Array.isArray(daily)) {
+                console.error("daily is not defined or not an array");
+                return;
+            }
+
+            // Get the canvas context
+            const canvas = document.getElementById("cumCostChart");
+            if (!canvas || !canvas.getContext) {
+                console.error('Canvas with ID "cumCostChart" not found or context unavailable');
+                return;
+            }
+            const ctx = canvas.getContext("2d");
+
+            // Check if computeMoneyFromTokensConfig and fmtVND exist
+            if (typeof computeMoneyFromTokensConfig !== "function") {
+                console.error("computeMoneyFromTokensConfig function is not defined");
+                return;
+            }
+            if (typeof fmtVND !== "function") {
+                console.warn("fmtVND function is not defined; falling back to string values");
+            }
+
+            // Calculate cumulative sums and money
+            let sum = 0;
+            const cum = daily.map(function (v) {
+                sum += v;
+                return sum;
+            });
+            const money = cum.map(function (t) {
+                return computeMoneyFromTokensConfig(t);
+            });
+            const labels = daily.map(function (_, i) {
+                return String(i + 1);
+            });
+
+            // Destroy previous chart instance if it exists
+            if (cumCostChart) {
+                cumCostChart.destroy();
+            }
+
+            // Create new chart instance
+            cumCostChart = new Chart(ctx, {
+                type: "line",
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: "Chi phí tích lũy (VND)",
+                            data: money, // Fixed: Use money instead of undefined moneyNumeric
+                            fill: false,
+                            borderWidth: 2,
+                            borderColor: "#a5b4fc", // Added for visibility
+                            tension: 0.1, // Added for smoother line
+                        },
+                    ],
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function (context) {
+                                    const y = context.parsed && typeof context.parsed.y !== "undefined" ? context.parsed.y : context.raw;
+                                    return typeof fmtVND === "function" ? fmtVND(y) : String(y);
+                                },
+                            },
+                        },
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function (value) {
+                                    return typeof fmtVND === "function" ? fmtVND(value) : String(value);
+                                },
+                            },
+                        },
+                        x: { ticks: { autoSkip: true, maxTicksLimit: 12 } },
+                    },
+                },
+            });
+        }
+
+        function getPostStatusCounts() {
+            var map = {};
+            for (var i = 0; i < recentPosts.length; i++) {
+                var s = recentPosts[i].status;
+                map[s] = (map[s] || 0) + 1;
+            }
+            return map;
+        }
+
+        function renderStatusDonut() {
+            if (typeof window.Chart === "undefined") {
+                return;
+            }
+            var counts = getPostStatusCounts();
+            var labels = Object.keys(counts);
+            var data = Object.values(counts);
+            var ctx = document.getElementById("statusDonut").getContext("2d");
+            if (statusDonutChart) {
+                statusDonutChart.destroy();
+            }
+            statusDonutChart = new Chart(ctx, { type: "doughnut", data: { labels: labels, datasets: [{ data: data }] }, options: { maintainAspectRatio: false, plugins: { legend: { position: "bottom" } } } });
+        }
+
+        function renderWordHistogram() {
+            if (typeof window.Chart === "undefined") {
+                return;
+            }
+            var buckets = [0, 0, 0, 0];
+            for (var i = 0; i < recentPosts.length; i++) {
+                var w = recentPosts[i].words;
+                if (w < 800) buckets[0]++;
+                else if (w < 1200) buckets[1]++;
+                else if (w < 1600) buckets[2]++;
+                else buckets[3]++;
+            }
+            var labels = ["<800", "800–1199", "1200–1599", "1600+"];
+            var ctx = document.getElementById("wordHistChart").getContext("2d");
+            if (wordHistChart) {
+                wordHistChart.destroy();
+            }
+            wordHistChart = new Chart(ctx, {
+                type: "bar",
+                data: { labels: labels, datasets: [{ label: "Số bài", data: buckets }] },
+                options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } },
+            });
+        }
+        // Function to render recent posts
+        function renderRecentPosts() {
+            // Get the DOM element for recent posts
+            const recentPostList = document.getElementById("recentPostList");
+            if (!recentPostList) {
+                console.error('Element with ID "recentPostList" not found');
+                return;
+            }
+
+            // Check if recentPosts is defined and is an array
+            if (!Array.isArray(recentPosts)) {
+                console.error("recentPosts is not defined or not an array");
+                recentPostList.innerHTML = "";
+                return;
+            }
+
+            // Check if timeAgo function exists
+            if (typeof timeAgo !== "function") {
+                console.error("timeAgo function is not defined");
+                recentPostList.innerHTML = "";
+                return;
+            }
+
+            // Render up to 8 recent posts
+            const recentHtml = recentPosts
+                .slice(0, 8)
+                .map(function (p) {
+                    return `
+			<li class="simple-item">
+				<span class="dot"></span>
+				<div class="grow">
+				<div style="font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${p.title || "Untitled"}</div>
+				<div class="muted" style="font-size:12px">${p.author || "Unknown"} · ${p.status || "N/A"} · ${p.words || 0} từ · ${timeAgo(p.createdAt)}</div>
+				</div>
+			</li>
+			`;
+                })
+                .join("");
+            recentPostList.innerHTML = recentHtml;
+
+            // Get the DOM element for post status list
+            const postStatusList = document.getElementById("postStatusList");
+            if (!postStatusList) {
+                console.error('Element with ID "postStatusList" not found');
+                return;
+            }
+
+            // Check if entries and total are defined
+            if (!Array.isArray(entries)) {
+                console.error("entries is not defined or not an array");
+                postStatusList.innerHTML = "";
+                return;
+            }
+            if (typeof total !== "number" || total <= 0) {
+                console.error("total is not defined or invalid");
+                postStatusList.innerHTML = "";
+                return;
+            }
+
+            // Render status list
+            const statusHtml = entries
+                .map(function (kv) {
+                    const k = kv[0],
+                        v = kv[1];
+                    const pct = Math.round((v / total) * 100);
+                    return `
+			<li class="status-item">
+				<div style="width:80px" class="muted">${k}</div>
+				<div class="status-bar">
+				<span style="width:${pct}%;background:#a5b4fc"></span>
+				</div>
+				<div class="mono" style="width:60px;text-align:right">${v}</div>
+			</li>
+			`;
+                })
+                .join("");
+            postStatusList.innerHTML = statusHtml;
+        }
+
+
+		function renderKPIsFromApi(payload) {
+			window.recentPosts = Array(payload.total_posts).fill(0);       // giả lập số bài để kpiPosts hoạt động
+
+			window.pricing = payload.pricing || { costPer1KTokensUSD: 0 }; // để kpiMoneyHint hiển thị
+			renderKPIs(payload.daily);
+		}
+		
+		async function fetchAndRenderKPIs() {
+			const API_BASE = "https://wttbe.metapress.ai/";
+			const year = window.selYear;          // ví dụ: 2025
+			const month0 = window.selMonth0;      // 0..11
+			if (typeof year !== 'number' || typeof month0 !== 'number') {
+				throw new Error('Thiếu selYear / selMonth0');
+			}
+
+			const month = month0 + 1;             // 1..12
+			const url = new URL(API_BASE + 'api/user/kpis');
+			url.searchParams.set('year', String(year));
+			url.searchParams.set('month', String(month));
+
+			const token = localStorage.getItem('auth_token') || '';
+			const res = await fetch(url.toString(), {
+				method: 'GET',
+				headers: {
+                            Accept: "application/json",
+                            Authorization: "Bearer " + token,
+                        },
+				// credentials: 'include' // nếu dùng session cookie cùng domain
+			});
+
+			if (!res.ok) {
+				const data = await res.json().catch(() => ({}));
+				throw new Error(data.message || 'Không thể tải KPI');
+			}
+			const data = await res.json();
+
+            const daily = generateDailyTokens(year, month0);
+
+            const labels = daily.map(function (_, i) {
+                return String(i + 1);
+            });
+
+
+			renderKPIsFromApi(data); // giữ nguyên adapter cũ
+            renderTokenChart(labels, data.daily);
+            renderWeeklyChart(data.daily);
+            renderCumulativeCostChart(data.daily);
+		}
+
+        function renderKPIs(daily) {
+            var totalTokens = daily.reduce(function (a, b) {
+                return a + b;
+            }, 0);
+            var money = computeMoneyFromTokensConfig(totalTokens);
+            var avg = Math.round(totalTokens / (daily.length || 1));
+            var totalPosts = recentPosts.length;
+
+            kpiMoney.textContent = pricing.costPer1KTokensUSD+"$";
+            kpiMoneyHint.textContent = "";
+            kpiTokens.textContent = fmtInt(totalTokens);
+            kpiTokensAvg.textContent = fmtInt(avg) + " token/ngày (trung bình)";
+            kpiPosts.textContent = fmtInt(totalPosts);
+            totalTokensLabel.textContent = "Tổng tháng: " + fmtInt(totalTokens) + " token";
+        }
+
+        function refresh() {
+            var year = selYear;
+            var month0 = selMonth0;
+            titleMonth.textContent = monthLabel(year, month0);
+			fetchAndRenderKPIs();
+            renderRecentPosts();
+            renderStatusDonut();
+            renderWordHistogram();
+        }
+
+        // Init
+        updateMonthLabel();
+        refresh();
+    </script>
+    <script src="/scripts/user-setting.js"></script>
+    <script>
+        const getUser = () => {
+            const user = localStorage.getItem("auth_user");
+            return JSON.parse(user);
+        };
+        const userAuth = getUser();
+        if (userAuth.name) {
+            document.getElementById("userName").textContent = userAuth.name;
+        }
+    </script>
+    <script>
+        (function () {
+            const API_BASE = "https://wttbe.metapress.ai/"; // đổi theo môi trường của bạn
+            const LOGIN_PAGE = "/login.html";
+            document.getElementById("sidebarLogout")?.addEventListener("click", function (e) {
+                e.preventDefault();
+
+                // Lấy token hiện tại (nếu có)
+                let token = "";
+                try {
+                    token = localStorage.getItem("auth_token") || "";
+                } catch {}
+
+                // (Tùy chọn) Gọi API logout để revoke token ở server, nếu bạn có route /api/logout
+                if (token) {
+                    fetch(API_BASE + "/api/logout", {
+                        method: "POST",
+                        headers: {
+                            Accept: "application/json",
+                            Authorization: "Bearer " + token,
+                        },
+                    }).catch(() => {
+                        /* bỏ qua lỗi */
+                    });
+                }
+
+                // Xóa token local và chuyển về login
+                try {
+                    localStorage.removeItem("auth_token");
+                    localStorage.removeItem("auth_user");
+                } catch {}
+
+                location.href = LOGIN_PAGE;
+            });
+        })();
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</html>

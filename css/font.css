@@ -1,0 +1,72 @@
+@font-face {
+			font-family: "Inter Display";
+			src: url("/fonts/InterDisplay-Light.ttf") format("truetype");
+			font-weight: 300;
+			font-style: normal;
+			}
+			@font-face {
+			font-family: "Inter Display";
+			src: url("/fonts/InterDisplay-LightItalic.ttf") format("truetype");
+			font-weight: 300;
+			font-style: italic;
+			}
+			@font-face {
+			font-family: "Inter Display";
+			src: url("/fonts/InterDisplay-Regular.ttf") format("truetype");
+			font-weight: 400;
+			font-style: normal;
+			}
+			@font-face {
+			font-family: "Inter Display";
+			src: url("/fonts/InterDisplay-Italic.ttf") format("truetype");
+			font-weight: 400;
+			font-style: italic;
+			}
+			@font-face {
+			font-family: "Inter Display";
+			src: url("/fonts/InterDisplay-Medium.ttf") format("truetype");
+			font-weight: 500;
+			font-style: normal;
+			}
+			@font-face {
+			font-family: "Inter Display";
+			src: url("/fonts/InterDisplay-MediumItalic.ttf") format("truetype");
+			font-weight: 500;
+			font-style: italic;
+			}
+			@font-face {
+			font-family: "Inter Display";
+			src: url("/fonts/InterDisplay-SemiBold.ttf") format("truetype");
+			font-weight: 600;
+			font-style: normal;
+			}
+			@font-face {
+			font-family: "Inter Display";
+			src: url("/fonts/InterDisplay-SemiBoldItalic.ttf") format("truetype");
+			font-weight: 600;
+			font-style: italic;
+			}
+			@font-face {
+			font-family: "Inter Display";
+			src: url("/fonts/InterDisplay-Bold.ttf") format("truetype");
+			font-weight: 700;
+			font-style: normal;
+			}
+			@font-face {
+			font-family: "Inter Display";
+			src: url("/fonts/InterDisplay-BoldItalic.ttf") format("truetype");
+			font-weight: 700;
+			font-style: italic;
+			}
+			@font-face {
+			font-family: "Inter Display";
+			src: url("/fonts/InterDisplay-ExtraBold.ttf") format("truetype");
+			font-weight: 800;
+			font-style: normal;
+			}
+			@font-face {
+			font-family: "Inter Display";
+			src: url("/fonts/InterDisplay-ExtraBoldItalic.ttf") format("truetype");
+			font-weight: 800;
+			font-style: italic;
+			}

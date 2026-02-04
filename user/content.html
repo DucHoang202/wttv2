@@ -1,0 +1,1918 @@
+<!DOCTYPE html>
+<html lang="vi">
+	<head>
+		<meta charset="UTF-8">
+		<title>Content Creator</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<link rel="stylesheet" href="/css/modal-form.css" />
+        <link rel="stylesheet" href="/scripts/simple-modal/simple-modal.css">
+		<link rel="stylesheet" href="/css/font.css" />
+		<link rel="stylesheet" href="/css/style.css" />
+		<link rel="stylesheet" href="/css/responsive.css" />
+		<link rel="stylesheet" href="/scripts/toast/toast.css" />
+		<script src="/scripts/toast/toast.js"></script>
+		<!-- Side Bar -->
+		<style>
+			.content-wrapper {
+			background-color: #f9fbff;
+			border-left: 1px solid #f0eeee;
+			display: flex;
+			min-width: 335px;
+			padding: 0px 16px;
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 20px;
+			flex: 1 0 0;
+			align-self: stretch;
+			min-height: 100vh;
+			}
+			#formWrapper{
+			display: flex;
+			min-width: 335px;
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 20px;
+			flex: 1 0 0;
+			align-self: stretch;
+			}
+			.tab-bar {
+			display: flex;
+			gap: 16px;
+			border-bottom: 1px solid #e4e4e4;
+			width: 100%;
+			}
+			.tab {
+			font-size: 14px;
+			font-weight: 500;
+			text-align: center;
+			color: #666;
+			padding: 5px 12px;
+			cursor: pointer;
+			}
+			.tab--active {
+			color: #3e61ff;
+			border-bottom: 1px solid #3e61ff;
+			}
+			.form-group {
+			display: flex;
+			flex-direction: column;
+			gap: 10px;
+			width: 100%;
+			}
+			.form-row {
+			display: flex;
+			gap: 16px;
+			width: 100%;
+			}
+			.form-label {
+			font-size: 14px;
+			font-weight: 500;
+			color: #333;
+			}
+			.select-box,
+			.input-box {
+			display: flex;
+			align-items: center;
+			position: relative;
+			justify-content: space-between;
+			font-size: 14px;
+			}
+			.select-placeholder,
+			.input-placeholder {
+			font-size: 14px;
+			color: #666;
+			flex-grow: 1;
+			}
+			.textarea-placeholder {
+			font-size: 14px;
+			color: #666;
+			}
+			.icon-placeholder {
+			width: 20px;
+			height: 20px;
+			background: gray;
+			}
+			.footer-actions {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			background-color: #fff;
+			padding: 12px 16px;
+			border-top: 1px solid #f0eeee;
+			width: 100%;
+			position: sticky;
+			left: 0px;
+			bottom: 0px;
+			margin-left: -16px;
+			width: 100%;
+			margin-top: auto;
+			}
+			.footer-actions__left {
+			display: flex;
+			align-items: center;
+			}
+			.btn-text {
+			font-size: 14px;
+			font-weight: 500;
+			cursor: pointer;
+			}
+			.btn-clear {
+			color: #888;
+			}
+			.footer-actions__right {
+			display: flex;
+			gap: 16px;
+			}
+			.btn-outline {
+			padding: 10px 24px;
+			border: 1px solid #e4e4e4;
+			border-radius: 8px;
+			font-size: 14px;
+			font-weight: 500;
+			cursor: pointer;
+			color: #000;
+			}
+			.btn-primary {
+			background: linear-gradient(to bottom, #fd3de3, #c845b7);
+			color: #fff;
+			padding: 10px 24px;
+			border-radius: 8px;
+			font-size: 14px;
+			font-weight: 500;
+			cursor: pointer;
+			display: flex;
+			gap: 10px;
+			align-items: center;
+			}
+			.btn-primary.disabled {
+			opacity: 0.6;
+			}
+			.select-wrapper {
+			position: relative;
+			display: inline-block;
+			width: 100%;
+			}
+			.custom-select {
+			width: 100%;
+			padding: 10px 35px 10px 10px;
+			border: 1px solid #ccc;
+			border-radius: 6px;
+			appearance: none;
+			background-color: #fff;
+			font-size: 14px;
+			}
+			.select-icon {
+			position: absolute;
+			right: 10px;
+			top: 50%;
+			pointer-events: none;
+			transform: translateY(-50%);
+			display: flex;
+			}
+			.textarea {
+			height: 100px;
+			background-color: #fff;
+			padding: 12px;
+			border: 1px solid #e4e4e4;
+			border-radius: 10px;
+			resize: none;
+			width: calc(100% - 27px);
+			}
+			input::placeholder {
+			color: #666;
+			/* màu placeholder */
+			}
+			.input-number {
+			height: 38px;
+			background-color: #fff;
+			padding: 0px 50px 0px 12px;
+			border: 1px solid #e4e4e4;
+			border-radius: 10px;
+			}
+			.input-suffix {
+			font-size: 14px;
+			color: #292d32;
+			flex-shrink: 0;
+			position: absolute;
+			right: 12px;
+			}
+			input {
+			color: #3E61FF;
+			border: none;
+			width: 100%;
+			font-size: 14px;
+			}
+			/* Nếu người dùng đã chọn một option có value khác rỗng */
+			select {
+			color: #666;
+			/* màu placeholder */
+			}
+			select:valid {
+			/*color: #3E61FF;*/
+			/* áp dụng cho text trong dropdown */
+			}
+			input[type=number]::-webkit-inner-spin-button,
+			input[type=number]::-webkit-outer-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+			}
+			/* Firefox */
+			input[type=number] {
+			-moz-appearance: textfield;
+			}
+			.smart-paragraph-container {
+			width: 100%;
+			display: flex;
+			align-items: center;
+			gap: 14px;
+			/* tương đương 3.5 * 4px */
+			background-color: white;
+			padding: 16px;
+			border-bottom: 1px solid #f0eeee;
+			margin-left: -16px;
+			position: sticky;
+			top: 0px;
+			z-index: 10;
+			}
+			.smart-paragraph-icon-wrapper {
+			width: 42px;
+			height: 42px;
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			background-color: #ffe8fc;
+			border-radius: 8px;
+			}
+			.smart-paragraph-icon {
+			width: 20px;
+			height: 20px;
+			/* Bạn có thể chèn SVG hoặc icon font ở đây */
+			}
+			.smart-paragraph-content {
+			display: flex;
+			flex-direction: column;
+			gap: 7px;
+			flex-grow: 1;
+			line-height: 1.2;
+			}
+			.smart-paragraph-title {
+			font-weight: bold;
+			font-size: 16px;
+			color: #000000;
+			}
+			.smart-paragraph-description {
+			font-weight: normal;
+			font-size: 14px;
+			color: #6b7280;
+			/* tương đương text-gray-500 */
+			}
+		</style>
+		<!-- Output Container-->
+		<style>
+			.output-container {
+			display: flex;
+			min-width: 335px;
+			padding: 16px;
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 20px;
+			flex: 1 0 0;
+			align-self: stretch;
+			border-left: 1px solid #f0eeee;
+			}
+			.output-header {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			width: 100%;
+			}
+			.output-title span {
+			font-weight: bold;
+			font-size: 16px;
+			color: black;
+			}
+			.output-actions {
+			display: flex;
+			flex-wrap: wrap;
+			column-gap: 12px;
+			row-gap: 20px;
+			}
+			.output-delete-placeholder {
+			display: flex;
+			justify-content: center;
+			}
+			.output-delete-placeholder span {
+			font-size: 16px;
+			text-align: center;
+			color: gray;
+			opacity: 0;
+			/* Ẩn dòng chữ "Xoá" */
+			}
+			.output-content {
+			display: flex;
+			padding: 24px 0px;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			gap: 12px;
+			flex: 1 0 0;
+			align-self: stretch;
+			}
+			.output-image-wrapper {
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			width: 100%;
+			gap: 10px;
+			}
+			.output-image-placeholder {
+			width: 140px;
+			height: 88px;
+			}
+			.output-message span {
+			font-size: 14px;
+			color: #475467;
+			text-align: center;
+			}
+			.ai-generate-content {
+			display: flex;
+			min-width: 335px;
+			padding: 16px;
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 16px;
+			align-self: stretch;
+			border-radius: 6px;
+			border: 1px solid #E4E4E4;
+			background: #FFFFFF;
+			}
+			#addGenerateContent .ai-generate-content:first-child {
+			background: #F0FFF0;
+			}
+			.ai-generate-content>section>* {
+			display: none;
+			}
+			.ai-generate-content>section>h1 {
+			color: #374151;
+			font-family: "Inter Display";
+			font-size: 14px;
+			font-style: normal;
+			font-weight: 600;
+			line-height: 145%;
+			/* 20.3px */
+			letter-spacing: -0.14px;
+			}
+			.ai-generate-content > section > p{
+			color: #374151;
+			font-family: "Inter Display";
+			font-size: 14px;
+			font-style: normal;
+			font-weight: 400;
+			line-height: 145%;
+			/* 20.3px */
+			}
+			.ai-generate-content > section > h1:first-child {
+			display: block;
+			}
+			.ai-generate-content > section > h2:first-of-type {
+			display: block;
+			color: #374151;
+			font-family: "Inter Display";
+			font-size: 14px;
+			font-style: normal;
+			font-weight: 600;
+			line-height: 145%;
+			/* 20.3px */
+			letter-spacing: -0.14px;
+			}
+			.ai-generate-content.none-edit > section  > h2{
+			display: none;
+			}
+			.ai-generate-content>section>p:first-of-type {
+			display: block;
+			}
+			#addGenerateContent {
+			justify-content: flex-start;
+			}
+			.button-wrapper {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			width: 100%;
+			}
+			.button-wrapper .wrapper-action--left span {
+			color: #3E61FF;
+			text-align: center;
+			font-family: "Inter Display";
+			font-size: 14px;
+			font-style: normal;
+			font-weight: 600;
+			line-height: normal;
+			cursor: pointer;
+			}
+			.button-wrapper .wrapper-action-right {
+			display: flex;
+			gap: 12px;
+			}
+			.button-wrapper .wrapper-action-right span {
+			color: #000;
+			text-align: center;
+			font-family: "Inter Display";
+			font-size: 14px;
+			font-style: normal;
+			font-weight: 500;
+			line-height: normal;
+			cursor: pointer;
+			}
+			.loading-bar-container {
+			width: 100%;
+			height: 8px;
+			border-radius: 50px;
+			background: #D2E5FF;
+			overflow: hidden;
+			position: relative;
+			min-width: 300px
+			}
+			.loading-spinner {
+			display: none;
+			padding: 14px;
+			flex-direction: column;
+			align-items: flex-start;
+			gap: 20px;
+			border-radius: 8px;
+			border: 1px solid #3E61FF;
+			background: #F8FBFF;
+			}
+			.loading-spinner.show {
+			display: flex;
+			}
+			.loading-bar {
+			height: 100%;
+			width: 30px;
+			background: linear-gradient(90deg,
+			#3e61ff 0%,
+			#6f83ff 50%,
+			#3e61ff 100%);
+			background-size: 200% 100%;
+			animation: shimmer 1.2s linear infinite;
+			transition: width 1s ease;
+			}
+			@keyframes shimmer {
+			0% {
+			background-position: 200% 0;
+			}
+			100% {
+			background-position: -200% 0;
+			}
+			}
+		</style>
+		<!--Modal CSS-->
+		<style>
+			:root {
+			--bs-modal-zindex: 1050;
+			--bs-modal-width: 500px;
+			--bs-modal-padding: 1rem;
+			--bs-modal-margin: 1.75rem;
+			--bs-modal-color: #000;
+			--bs-modal-bg: #fff;
+			--bs-modal-border-color: rgba(0, 0, 0, .2);
+			--bs-modal-border-width: 1px;
+			--bs-modal-border-radius: 0.3rem;
+			--bs-modal-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, .15);
+			--bs-modal-inner-border-radius: 0.3rem;
+			--bs-modal-header-padding: 1rem 1rem;
+			--bs-modal-header-border-color: #dee2e6;
+			--bs-modal-header-border-width: 1px;
+			--bs-modal-title-line-height: 1.5;
+			--bs-modal-footer-gap: 0.5rem;
+			--bs-modal-footer-bg: transparent;
+			--bs-modal-footer-border-color: #dee2e6;
+			--bs-modal-footer-border-width: 1px;
+			}
+			.modal {
+			position: fixed;
+			top: 0;
+			left: 0;
+			z-index: var(--bs-modal-zindex);
+			display: none;
+			width: 100%;
+			height: 100%;
+			overflow-x: hidden;
+			overflow-y: auto;
+			outline: 0;
+			}
+			.modal-dialog {
+			position: relative;
+			width: auto;
+			margin: var(--bs-modal-margin);
+			pointer-events: none;
+			}
+			.modal.fade .modal-dialog {
+			transition: transform 0.3s ease-out;
+			transform: translate(0, -50px);
+			}
+			.modal.show .modal-dialog {
+			transform: translate(0, 0);
+			}
+			.modal.modal-static .modal-dialog {
+			transform: scale(1.02);
+			}
+			.modal-dialog-scrollable {
+			height: calc(100% - var(--bs-modal-margin) * 2);
+			}
+			.modal-dialog-scrollable .modal-content {
+			max-height: 100%;
+			overflow: hidden;
+			}
+			.modal-dialog-scrollable .modal-body {
+			overflow-y: auto;
+			}
+			.modal-dialog-centered {
+			display: flex;
+			align-items: center;
+			min-height: calc(100% - var(--bs-modal-margin) * 2);
+			}
+			.modal-content {
+			position: relative;
+			display: flex;
+			flex-direction: column;
+			width: 100%;
+			color: var(--bs-modal-color);
+			pointer-events: auto;
+			background-color: var(--bs-modal-bg);
+			background-clip: padding-box;
+			border: var(--bs-modal-border-width) solid var(--bs-modal-border-color);
+			border-radius: var(--bs-modal-border-radius);
+			box-shadow: var(--bs-modal-box-shadow);
+			outline: 0;
+			}
+			.modal-backdrop {
+			z-index: 2040;
+			background-color: rgba(0, 0, 0, 0.5);
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100vw;
+			height: 100vh;
+			}
+			.modal-header {
+			display: flex;
+			padding: 14px 16px;
+			justify-content: space-between;
+			align-items: center;
+			align-self: stretch;
+			border-top-left-radius: var(--bs-modal-inner-border-radius);
+			border-top-right-radius: var(--bs-modal-inner-border-radius);
+			}
+			.modal-header .btn-close {
+			padding: calc(var(--bs-modal-header-padding) / 2);
+			margin: auto;
+			}
+			.modal-title {
+			margin-bottom: 0;
+			color: var(--Secondary-600, #131825);
+			text-align: justify;
+			font-family: "Inter Display";
+			font-size: 16px;
+			font-style: normal;
+			font-weight: 700;
+			line-height: 150%;
+			/* 24px */
+			letter-spacing: -0.08px;
+			}
+			.modal-body {
+			position: relative;
+			flex: 1 1 auto;
+			}
+			.modal-footer {
+			display: flex;
+			flex-shrink: 0;
+			flex-wrap: wrap;
+			align-items: center;
+			justify-content: space-between;
+			padding: 14px;
+			border-top: var(--bs-modal-footer-border-width) solid var(--bs-modal-footer-border-color);
+			border-bottom-left-radius: var(--bs-modal-inner-border-radius);
+			border-bottom-right-radius: var(--bs-modal-inner-border-radius);
+			}
+			@media (min-width: 576px) {
+			.modal {
+			--bs-modal-margin: 1.75rem;
+			--bs-modal-box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, .15);
+			}
+			.modal-dialog {
+			max-width: var(--bs-modal-width);
+			margin-right: auto;
+			margin-left: auto;
+			}
+			.modal-sm {
+			--bs-modal-width: 300px;
+			}
+			}
+			@media (min-width: 992px) {
+			.modal-lg,
+			.modal-xl {
+			--bs-modal-width: 800px;
+			}
+			}
+			@media (min-width: 1200px) {
+			.modal-xl {
+			--bs-modal-width: 1140px;
+			}
+			}
+			/* Modal fullscreen responsive */
+			.modal-fullscreen,
+			.modal-fullscreen-sm-down,
+			.modal-fullscreen-md-down,
+			.modal-fullscreen-lg-down,
+			.modal-fullscreen-xl-down,
+			.modal-fullscreen-xxl-down {
+			width: 100vw;
+			max-width: none;
+			height: 100%;
+			margin: 0;
+			}
+			.modal-fullscreen .modal-content,
+			.modal-fullscreen-sm-down .modal-content,
+			.modal-fullscreen-md-down .modal-content,
+			.modal-fullscreen-lg-down .modal-content,
+			.modal-fullscreen-xl-down .modal-content,
+			.modal-fullscreen-xxl-down .modal-content {
+			height: 100%;
+			border: 0;
+			border-radius: 0;
+			}
+			.modal-fullscreen .modal-header,
+			.modal-fullscreen .modal-footer,
+			.modal-fullscreen-sm-down .modal-header,
+			.modal-fullscreen-sm-down .modal-footer,
+			.modal-fullscreen-md-down .modal-header,
+			.modal-fullscreen-md-down .modal-footer,
+			.modal-fullscreen-lg-down .modal-header,
+			.modal-fullscreen-lg-down .modal-footer,
+			.modal-fullscreen-xl-down .modal-header,
+			.modal-fullscreen-xl-down .modal-footer,
+			.modal-fullscreen-xxl-down .modal-header,
+			.modal-fullscreen-xxl-down .modal-footer {
+			border-radius: 0;
+			}
+			.modal-fullscreen .modal-body,
+			.modal-fullscreen-sm-down .modal-body,
+			.modal-fullscreen-md-down .modal-body,
+			.modal-fullscreen-lg-down .modal-body,
+			.modal-fullscreen-xl-down .modal-body,
+			.modal-fullscreen-xxl-down .modal-body {
+			overflow-y: auto;
+			}
+			.ck.ck-reset_all {
+			position: sticky !important;
+			top: 0px !important;
+			border-bottom: 1px solid var(--ck-color-base-border) !important;
+			}
+			.ck.ck-editor__main>.ck-editor__editable:not(.ck-focused) {
+			border-color: transparent !important;
+			}
+			.wrapper-right,.wrapper-left{
+			display: flex;
+			gap: 16px;
+			align-items: center;
+			}
+			.wrapper-right svg, .wrapper-left svg{
+			cursor: pointer;
+			}
+			.copy-content{
+			cursor: pointer;
+			display: flex;
+			padding: 9px 24px;
+			justify-content: center;
+			align-items: center;
+			gap: 8px;
+			border-radius: 6px;
+			background: var(--Blue-400, #5062FE);
+			color: #FFF;
+			text-align: center;
+			font-family: "Inter Display";
+			font-size: 12px;
+			font-style: normal;
+			font-weight: 600;
+			line-height: 160%; /* 19.2px */
+			letter-spacing: -0.24px;
+			}
+			
+		</style>
+		<!--Template CSS-->
+		<style>
+			#templates{
+				display: flex;
+				flex-direction: column;
+				gap: 15px;
+				width: 100%;
+			}
+            .template-search {
+                width: 374px;
+                height: 41px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                background-color: #ffffff;
+                padding: 0 12px;
+                border-radius: 10px;
+                border: 1px solid #dde8ff;
+                box-sizing: border-box;
+            }
+
+            .template-search__icon {
+                width: 16px;
+                height: 16px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .template-search__svg {
+                width: 100%;
+                height: 100%;
+                fill: #666666;
+            }
+
+            .template-search__input {
+                flex: 1;
+                border: none;
+                outline: none;
+                background: transparent;
+                font-size: 14px;
+                font-weight: 400;
+                color: #666666;
+                min-width: 0; /* tránh tràn layout trong flex */
+            }
+
+            .template-search__input::placeholder {
+                color: #666666;
+                opacity: 1;
+            }
+			
+            .templates-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+                gap: 12px;
+                width: 100%;
+            }
+            /* Card theo mẫu */
+            .template-card {
+                display: flex;
+                flex-direction: column;
+                gap: 14px;
+                flex-grow: 1;
+                background-color: #ffffff;
+                padding: 16px;
+                border-radius: 10px;
+                border: 1px solid #dde8ff;
+                box-sizing: border-box;
+            }
+            .template-card.active{
+                border: 1px solid #3e61ff;
+            }
+            .template-card__title {
+                font-size: 16px;
+                line-height: 24px;
+                font-weight: 600;
+                color: #000000;
+                margin: 0;
+
+                display: -webkit-box;
+                -webkit-line-clamp: 1; /* clamp 1 dòng */
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                text-overflow: ellipsis;
+
+                min-height: 24px; /* giữ layout đều nhau */
+                max-height: 24px; /* không vượt quá 1 dòng */
+
+                position: relative;
+            }
+
+            /* Desc: tối đa 2 dòng + ellipsis + min-height */
+            .template-card__desc {
+                font-size: 14px;
+                line-height: 20px;
+                font-weight: 400;
+                color: #666666;
+                margin: 0;
+
+                display: -webkit-box;
+                -webkit-line-clamp: 2; /* clamp 2 dòng */
+                -webkit-box-orient: vertical;
+                overflow: hidden;
+                text-overflow: ellipsis;
+
+                min-height: 40px; /* 2 dòng * 20px */
+                max-height: 40px;
+            }
+
+            /* Fallback cơ bản cho trình duyệt không hỗ trợ line-clamp */
+            @supports not (-webkit-line-clamp: 1) {
+                .template-card__title {
+                    white-space: nowrap;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    height: 24px;
+                }
+                .template-card__desc {
+                    max-height: 40px;
+                    overflow: hidden;
+                }
+            }
+
+            .template-card__badge {
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                gap: 10px;
+                background: #f8fafc; /* tương đương bg-slate-50 */
+                padding: 4px;
+                border-radius: 3px;
+                font-weight: 500;
+                font-size: 13px;
+                color: #111111;
+                width: fit-content;
+            }
+
+            .template-card__divider {
+                height: 1px;
+                background: #dde8ff;
+                width: 100%;
+            }
+
+            .template-card__group {
+                display: flex;
+                flex-direction: column;
+                gap: 10px; /* ~2.5 */
+                width: 100%;
+            }
+
+            .template-card__row {
+                display: flex;
+                align-items: center;
+                gap: 14px; /* ~3.5 */
+                width: 100%;
+            }
+
+            .template-card__label {
+                font-weight: 500;
+                font-size: 14px;
+                color: #666666;
+                white-space: nowrap;
+            }
+
+            .template-card__chip {
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                gap: 10px;
+                background: #f8fafc;
+                padding: 4px;
+                border-radius: 3px;
+                font-weight: 500;
+                font-size: 14px;
+                color: #111111;
+                width: fit-content;
+            }
+
+            .template-card__footer {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                width: 100%;
+            }
+
+            .template-card__meta {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .template-card__meta .template-card__author {
+                font-weight: 500;
+                font-size: 13px;
+                color: #666666;
+            }
+
+            .template-card__meta .template-card__date {
+                font-weight: 400;
+                font-size: 13px;
+                color: #666666;
+            }
+
+            .template-card__btn {
+                display: inline-flex;
+                justify-content: center;
+                align-items: center;
+                gap: 5px;
+                background: #3e61ff;
+                padding: 10px 24px; /* py-2.5 px-6 */
+                border-radius: 6px;
+                border: none;
+                cursor: pointer;
+                font-weight: 600;
+                font-size: 14px;
+                color: #ffffff;
+            }
+            .template-card-set-default__btn {
+                border-radius: 6px;
+                border: 1px solid #C3D4E9;
+                background: #FFFFFF;
+                display: flex;
+                padding: 10px 24px;
+                align-items: center;
+                gap: 10px;
+                cursor: pointer;
+            }
+             .template-card-set-default__btn.active {
+                color: #3e61ff;
+                font-weight: 600;
+            }
+            /* Trạng thái */
+            .templates-list-loading,
+            .templates-list-error,
+            .templates-list-empty {
+                border: 1px dashed #dde8ff;
+                border-radius: 10px;
+                padding: 12px;
+                background: #fff;
+                color: #666666;
+                font-size: 14px;
+            }
+            .template-card__btn-group{
+                display: flex;
+                gap: 10px;
+            }
+		</style>
+		<script src="/scripts/simple-modal/simple-modal.js"></script>
+        <script src="/scripts/user-setting.js"></script>
+		<script>
+			(function () {
+			// ====== Cấu hình nhanh ======
+			const API_BASE = 'https://wttbe.metapress.ai/';   // đổi theo môi trường của bạn
+			const LOGIN_PAGE = '/login.html';            // đường dẫn trang đăng nhập
+			const REQUIRE_AUTH = true;                   // trang này bắt buộc đăng nhập
+			// Những API không chen Bearer / không redirect (login, register...)
+			const SKIP_PATHS = ['/api/login', '/api/register', '/api/password/forgot'];
+			
+			// ====== Tiện ích ======
+			const nativeFetch = window.fetch.bind(window);
+			const isLoginPage = () => location.pathname.endsWith(LOGIN_PAGE);
+			const getToken = () => { try { return localStorage.getItem('auth_token') || ''; } catch { return ''; } };
+			const clearToken = () => { try { localStorage.removeItem('auth_token'); } catch {} };
+			
+			function urlToAbsolute(u) {
+				try { return new URL(u, location.origin); } catch { return null; }
+			}
+			function apiOrigin() {
+				try { return new URL(API_BASE).origin; } catch { return location.origin; }
+			}
+			function isSameApi(u) {
+				const abs = urlToAbsolute(u);
+				return abs && abs.origin === apiOrigin();
+			}
+			function shouldSkip(u) {
+				const abs = urlToAbsolute(u) || new URL(API_BASE);
+				return SKIP_PATHS.some(p => abs.pathname.endsWith(p));
+			}
+			
+			// ====== Guard ngay khi vào trang ======
+			if (REQUIRE_AUTH && !isLoginPage()) {
+				const token = getToken();
+				if (!token) {
+				// Không có token -> về login luôn
+				location.href = LOGIN_PAGE;
+				}
+			}
+			
+			// ====== Patch fetch ======
+			window.fetch = async (input, init = {}) => {
+				const url = typeof input === 'string' ? input : input.url;
+				const token = getToken();
+			
+				// Nếu gọi vào API của mình và không thuộc danh sách bỏ qua
+				if (isSameApi(url) && !shouldSkip(url)) {
+				// Không có token -> về login luôn và chặn request
+				if (!token && !isLoginPage()) {
+					location.href = LOGIN_PAGE;
+					// Trả về Response 401 giả để code phía dưới không bị lỗi
+					return new Response(null, { status: 401, statusText: 'Unauthorized (No token)' });
+				}
+				}
+			
+				// Gắn Bearer nếu có token và chưa set thủ công
+				const headers = new Headers(init.headers || (typeof input !== 'string' ? input.headers : undefined));
+				if (token && !headers.has('Authorization') && isSameApi(url) && !shouldSkip(url)) {
+				headers.set('Authorization', `Bearer ${token}`);
+				}
+			
+				const res = await nativeFetch(input, { ...init, headers });
+			
+				// Token hết hạn / không hợp lệ -> xoá token + về login
+				if ([401, 403, 419].includes(res.status)) {
+				clearToken();
+				if (!isLoginPage()) location.href = LOGIN_PAGE;
+				}
+				return res;
+			};
+			
+			// Đồng bộ logout giữa các tab
+			window.addEventListener('storage', (e) => {
+				if (e.key === 'auth_token' && !e.newValue && !isLoginPage()) {
+				location.href = LOGIN_PAGE;
+				}
+			});
+			})();
+		</script>
+	</head>
+	<body>
+		<div class="cms-content">
+			<div class="sidebar-placeholder"></div>
+			<div class="sidebar">
+				<!-- Header -->
+				<div class="sidebar__header">
+					<div class="sidebar__logo">
+						<img src="/images/logo.svg" onerror="this.onerror=null; this.src='/images/logo.png';" alt="Logo" onclick="window.location.href='./';">
+					</div>
+				</div>
+				<!-- Primary Action -->
+				<div class="sidebar__primary-action">
+					<button class="btn btn--primary btn-icon" type="button" onclick="window.location.href='content.html'">
+						<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M21 22H3c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h18c.41 0 .75.34.75.75s-.34.75-.75.75ZM19.02 3.482c-1.94-1.94-3.84-1.99-5.83 0l-1.21 1.21c-.1.1-.14.26-.1.4a8.129 8.129 0 0 0 5.53 5.53.4.4 0 0 0 .41-.1l1.2-1.21c.99-.98 1.47-1.93 1.47-2.89.01-.99-.47-1.95-1.47-2.94ZM15.61 11.53c-.29-.14-.57-.28-.84-.44a8.8 8.8 0 0 1-.64-.42c-.17-.11-.37-.27-.56-.43a1.22 1.22 0 0 1-.17-.15c-.33-.28-.7-.64-1.03-1.04-.03-.02-.08-.09-.15-.18-.1-.12-.27-.32-.42-.55a5.49 5.49 0 0 1-.39-.59c-.16-.27-.3-.54-.44-.82a6.88 6.88 0 0 1-.061-.135c-.148-.333-.583-.43-.84-.173L4.34 12.331c-.13.13-.25.38-.28.55l-.54 3.83c-.1.68.09 1.32.51 1.75.36.35.86.54 1.4.54.12 0 .24-.01.36-.03l3.84-.54c.18-.03.43-.15.55-.28l5.722-5.721c.26-.26.161-.705-.176-.85a26.852 26.852 0 0 1-.116-.05Z" fill="#ffffff"></path></svg>
+						<span> Nội dung </span>
+					</button>
+				</div>
+				<!-- Menu Section -->
+				<div class="sidebar__section">
+					<div class="sidebar__section-title">Danh mục</div>
+					<a class="sidebar__menu-item" href="dashboard.html">Dashboard</a>
+					<a class="sidebar__menu-item mobile-hidden" href="#" onclick="openSetting()" >Cài đặt</a>
+				</div>
+				<div class="sidebar__divider"></div>
+				<div class="sidebar__section" id="chat-history">
+					<div class="sidebar__section-title">LỊCH SỬ</div>
+				</div> 
+				<div class="sidebar__user-info">
+					<div class="sidebar__user-avatar"></div>
+					<div class="sidebar__user-details">
+						<span class="sidebar__user-name" id="userName">Admin</span>
+						<span class="sidebar__user-plan"></span>
+					</div>
+					<div class="logout-icon">
+                        <img id="sidebarLogout" src="/images/logout.svg">
+                    </div>
+				</div>
+			</div>
+			<div class="content-wrapper">
+				<div class="smart-paragraph-container">
+					<div class="smart-paragraph-icon-wrapper">
+						<div class="smart-paragraph-icon">
+							<svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path d="M16.25 6.75L15.0083 7.99167L12.5083 5.49167L13.75 4.25C14.1 3.9 14.55 3.73333 15 3.73333C15.45 3.73333 15.9 3.9 16.25 4.25C16.9417 4.94167 16.9417 6.05833 16.25 6.75Z" fill="url(#paint0_linear_6_1026)" />
+								<path d="M14.425 8.58333L5.41667 17.5833C4.725 18.275 3.60834 18.275 2.91667 17.5833C2.225 16.8917 2.225 15.775 2.91667 15.0833L11.925 6.08333L14.425 8.58333Z" fill="url(#paint1_linear_6_1026)" />
+								<path d="M8.29167 3.41667L8.63334 2.25833C8.66667 2.15 8.63334 2.03333 8.55834 1.95C8.48334 1.86667 8.35 1.83333 8.24167 1.86667L7.08334 2.20833L5.925 1.86667C5.81667 1.83333 5.7 1.86667 5.61667 1.94167C5.53334 2.025 5.50834 2.14167 5.54167 2.25L5.875 3.41667L5.53334 4.575C5.5 4.68333 5.53334 4.8 5.60834 4.88333C5.69167 4.96667 5.80834 4.99167 5.91667 4.95833L7.08334 4.625L8.24167 4.96667C8.275 4.975 8.3 4.98333 8.33334 4.98333C8.41667 4.98333 8.49167 4.95 8.55834 4.89167C8.64167 4.80833 8.66667 4.69167 8.63334 4.58333L8.29167 3.41667Z" fill="url(#paint2_linear_6_1026)" />
+								<path d="M4.95833 8.41667L5.29999 7.25833C5.33333 7.15 5.29999 7.03333 5.22499 6.95C5.14166 6.86667 5.02499 6.84167 4.91666 6.875L3.74999 7.20833L2.59166 6.86667C2.48333 6.83333 2.36666 6.86667 2.28333 6.94167C2.19999 7.025 2.17499 7.14167 2.20833 7.25L2.54166 8.41667L2.19999 9.575C2.16666 9.68333 2.19999 9.8 2.27499 9.88333C2.35833 9.96667 2.47499 9.99167 2.58333 9.95833L3.74166 9.61667L4.89999 9.95833C4.92499 9.96667 4.95833 9.96667 4.99166 9.96667C5.07499 9.96667 5.14999 9.93333 5.21666 9.875C5.29999 9.79167 5.32499 9.675 5.29166 9.56667L4.95833 8.41667Z" fill="url(#paint3_linear_6_1026)" />
+								<path d="M17.4583 12.5833L17.8 11.425C17.8333 11.3167 17.8 11.2 17.725 11.1167C17.6417 11.0333 17.525 11.0083 17.4167 11.0417L16.2583 11.3833L15.1 11.0417C14.9917 11.0083 14.875 11.0417 14.7917 11.1167C14.7083 11.2 14.6833 11.3167 14.7167 11.425L15.0583 12.5833L14.7167 13.7417C14.6833 13.85 14.7167 13.9667 14.7917 14.05C14.875 14.1333 14.9917 14.1583 15.1 14.125L16.2583 13.7833L17.4167 14.125C17.4417 14.1333 17.475 14.1333 17.5083 14.1333C17.5917 14.1333 17.6667 14.1 17.7333 14.0417C17.8167 13.9583 17.8417 13.8417 17.8083 13.7333L17.4583 12.5833Z" fill="url(#paint4_linear_6_1026)" />
+								<defs>
+									<linearGradient id="paint0_linear_6_1026" x1="14.6385" y1="3.73333" x2="14.6385" y2="7.99167" gradientUnits="userSpaceOnUse">
+										<stop stop-color="#E91FCF" />
+										<stop offset="1" stop-color="#FF8CF0" />
+									</linearGradient>
+									<linearGradient id="paint1_linear_6_1026" x1="8.41146" y1="6.08333" x2="8.41146" y2="18.1021" gradientUnits="userSpaceOnUse">
+										<stop stop-color="#E91FCF" />
+										<stop offset="1" stop-color="#FF8CF0" />
+									</linearGradient>
+									<linearGradient id="paint2_linear_6_1026" x1="7.08402" y1="1.85375" x2="7.08402" y2="4.98333" gradientUnits="userSpaceOnUse">
+										<stop stop-color="#E91FCF" />
+										<stop offset="1" stop-color="#FF8CF0" />
+									</linearGradient>
+									<linearGradient id="paint3_linear_6_1026" x1="3.74999" y1="6.85374" x2="3.74999" y2="9.97262" gradientUnits="userSpaceOnUse">
+										<stop stop-color="#E91FCF" />
+										<stop offset="1" stop-color="#FF8CF0" />
+									</linearGradient>
+									<linearGradient id="paint4_linear_6_1026" x1="16.2625" y1="11.0274" x2="16.2625" y2="14.1393" gradientUnits="userSpaceOnUse">
+										<stop stop-color="#E91FCF" />
+										<stop offset="1" stop-color="#FF8CF0" />
+									</linearGradient>
+								</defs>
+							</svg>
+						</div>
+					</div>
+					<div class="smart-paragraph-content">
+						<span class="smart-paragraph-title">Smart Paragraph</span>
+						<span class="smart-paragraph-description"> Generate paragraphs that will captivate your readers. </span>
+					</div>
+				</div>
+				<div class="tab-bar">
+					<div class="tab tab--active" data-trigger="formWrapper">Tạo mới</div>
+  					<div class="tab" data-trigger="templates">Templates</div>
+				</div>
+				<div id="templates" style="display:none;">Danh sách template</div>
+				<div id="formWrapper">
+				</div>
+				<!-- Footer -->
+				<div class="footer-actions">
+					<div class="footer-actions__left">
+						<span id="btnClear" class="btn-text btn-clear">Clear</span>
+					</div>
+					<div class="footer-actions__right">
+						<div class="btn-outline" onclick="openTemplateModal()" id="submitSaveTemplate">Lưu template</div>
+						<div id="submitPromptBtn" class="btn-primary">
+							<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<path d="M16.25 6.25007L15.0084 7.49173L12.5084 4.99173L13.75 3.75007C14.1 3.40007 14.55 3.2334 15 3.2334C15.45 3.2334 15.9 3.40007 16.25 3.75007C16.9417 4.44173 16.9417 5.5584 16.25 6.25007Z" fill="white" />
+								<path d="M14.425 8.08325L5.4167 17.0833C4.72503 17.7749 3.60837 17.7749 2.9167 17.0833C2.22503 16.3916 2.22503 15.2749 2.9167 14.5833L11.925 5.58325L14.425 8.08325Z" fill="white" />
+								<path d="M8.2917 2.91668L8.63337 1.75835C8.6667 1.65001 8.63337 1.53335 8.55837 1.45001C8.48337 1.36668 8.35003 1.33335 8.2417 1.36668L7.08337 1.70835L5.92503 1.36668C5.8167 1.33335 5.70003 1.36668 5.6167 1.44168C5.53337 1.52501 5.50837 1.64168 5.5417 1.75001L5.87503 2.91668L5.53337 4.07501C5.50003 4.18335 5.53337 4.30001 5.60837 4.38335C5.6917 4.46668 5.80837 4.49168 5.9167 4.45835L7.08337 4.12501L8.2417 4.46668C8.27503 4.47501 8.30003 4.48335 8.33337 4.48335C8.4167 4.48335 8.4917 4.45001 8.55837 4.39168C8.6417 4.30835 8.6667 4.19168 8.63337 4.08335L8.2917 2.91668Z" fill="white" />
+								<path d="M4.95833 7.91668L5.29999 6.75835C5.33333 6.65001 5.29999 6.53335 5.22499 6.45001C5.14166 6.36668 5.02499 6.34168 4.91666 6.37501L3.74999 6.70835L2.59166 6.36668C2.48333 6.33335 2.36666 6.36668 2.28333 6.44168C2.19999 6.52501 2.17499 6.64168 2.20833 6.75001L2.54166 7.91668L2.19999 9.07501C2.16666 9.18335 2.19999 9.30001 2.27499 9.38335C2.35833 9.46668 2.47499 9.49168 2.58333 9.45835L3.74166 9.11668L4.89999 9.45835C4.92499 9.46668 4.95833 9.46668 4.99166 9.46668C5.07499 9.46668 5.14999 9.43335 5.21666 9.37501C5.29999 9.29168 5.32499 9.17501 5.29166 9.06668L4.95833 7.91668Z" fill="white" />
+								<path d="M17.4583 12.0833L17.8 10.925C17.8333 10.8166 17.8 10.7 17.725 10.6166C17.6417 10.5333 17.525 10.5083 17.4167 10.5416L16.2583 10.8833L15.1 10.5416C14.9917 10.5083 14.875 10.5416 14.7917 10.6166C14.7083 10.7 14.6833 10.8166 14.7167 10.925L15.0583 12.0833L14.7167 13.2416C14.6833 13.35 14.7167 13.4666 14.7917 13.55C14.875 13.6333 14.9917 13.6583 15.1 13.625L16.2583 13.2833L17.4167 13.625C17.4417 13.6333 17.475 13.6333 17.5083 13.6333C17.5917 13.6333 17.6667 13.6 17.7333 13.5416C17.8167 13.4583 17.8417 13.3416 17.8083 13.2333L17.4583 12.0833Z" fill="white" />
+							</svg>
+							Generate
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="output-container">
+				<div class="output-header">
+					<div class="output-title">
+						<span>Outputs</span>
+					</div>
+					<div class="output-actions">
+						<div class="output-delete-placeholder">
+							<span>Xoá</span>
+						</div>
+					</div>
+				</div>
+				<div class="output-content output-empty">
+					<div class="output-image-wrapper">
+						<div class="output-image-placeholder">
+							<svg width="141" height="89" viewBox="0 0 141 89" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<g clip-path="url(#clip0_6_2146)">
+									<g filter="url(#filter0_dddd_6_2146)">
+										<path d="M36.75 8.5H94.25L100 12.9444L105.75 17.3889V88.5H36.75V8.5Z" fill="#EEF2FF" />
+										<line x1="46.812" y1="25.2778" x2="95.687" y2="25.2778" stroke="#4D8AFF" stroke-width="2" />
+										<line x1="46.812" y1="34.1667" x2="95.687" y2="34.1667" stroke="#4D8AFF" stroke-width="2" />
+										<line x1="46.812" y1="43.0557" x2="95.687" y2="43.0557" stroke="#4D8AFF" stroke-width="2" />
+										<line x1="46.812" y1="51.9443" x2="95.687" y2="51.9443" stroke="#4D8AFF" stroke-width="2" />
+										<line x1="46.812" y1="60.8333" x2="95.687" y2="60.8333" stroke="#4D8AFF" stroke-width="2" />
+										<line x1="46.812" y1="69.7222" x2="95.687" y2="69.7222" stroke="#4D8AFF" stroke-width="2" />
+									</g>
+								</g>
+								<defs>
+									<filter id="filter0_dddd_6_2146" x="20.75" y="5.5" width="101" height="140" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+										<feFlood flood-opacity="0" result="BackgroundImageFix" />
+										<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+										<feOffset dy="3" />
+										<feGaussianBlur stdDeviation="3" />
+										<feColorMatrix type="matrix" values="0 0 0 0 0.294118 0 0 0 0 0.533333 0 0 0 0 1 0 0 0 0.1 0" />
+										<feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_6_2146" />
+										<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+										<feOffset dy="10" />
+										<feGaussianBlur stdDeviation="5" />
+										<feColorMatrix type="matrix" values="0 0 0 0 0.294118 0 0 0 0 0.533333 0 0 0 0 1 0 0 0 0.09 0" />
+										<feBlend mode="normal" in2="effect1_dropShadow_6_2146" result="effect2_dropShadow_6_2146" />
+										<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+										<feOffset dy="23" />
+										<feGaussianBlur stdDeviation="7" />
+										<feColorMatrix type="matrix" values="0 0 0 0 0.294118 0 0 0 0 0.533333 0 0 0 0 1 0 0 0 0.05 0" />
+										<feBlend mode="normal" in2="effect2_dropShadow_6_2146" result="effect3_dropShadow_6_2146" />
+										<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+										<feOffset dy="41" />
+										<feGaussianBlur stdDeviation="8" />
+										<feColorMatrix type="matrix" values="0 0 0 0 0.294118 0 0 0 0 0.533333 0 0 0 0 1 0 0 0 0.01 0" />
+										<feBlend mode="normal" in2="effect3_dropShadow_6_2146" result="effect4_dropShadow_6_2146" />
+										<feBlend mode="normal" in="SourceGraphic" in2="effect4_dropShadow_6_2146" result="shape" />
+									</filter>
+									<clipPath id="clip0_6_2146">
+										<rect width="140" height="88" fill="white" transform="translate(0.75 0.5)" />
+									</clipPath>
+								</defs>
+							</svg>
+						</div>
+					</div>
+					<div class="output-message">
+						<span>Nội dung sẽ được tạo ra ở đây</span>
+					</div>
+				</div>
+				<div id="loadingSpiner" class="loading-spinner">
+					<div class="loading-text">Đang tạo nội dung...</div>
+					<div class="loading-bar-container">
+						<div class="loading-bar" id="loadingBar"></div>
+					</div>
+				</div>
+				<div id="addGenerateContent" class="output-content add-content"></div>
+			</div>
+		</div>
+		<!-- Modal -->
+		<div class="modal fade" id="ckeditorModal" tabindex="-1" aria-labelledby="ckeditorModalLabel" aria-hidden="true">
+			<div class="modal-dialog modal-lg modal-dialog-scrollable">
+				<div class="modal-content">
+					<div class="modal-header">
+						<span class="modal-title" id="ckeditorModalLabel">Chi tiết bài viết</span>
+						<svg style="cursor: pointer;" data-bs-dismiss="modal" aria-label="Đóng" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<rect width="32" height="32" rx="16" fill="#F3F5F7" />
+							<path d="M10.7507 10.75L21.25 21.2493" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+							<path d="M10.75 21.2493L21.2493 10.75" stroke="#292D32" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+						</svg>
+					</div>
+					<div class="modal-body">
+						<textarea id="editor"></textarea>
+					</div>
+					<div class="modal-footer">
+						<div class="wrapper-left">
+							<div id="closeModal" data-bs-dismiss="modal" style="display: none;" >
+							</div>
+							<svg  data-bs-dismiss="modal"  aria-label="Đóng" width="77" height="37" viewBox="0 0 77 37" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<rect x="0.5" y="0.5" width="76" height="36" rx="5.5" fill="white"/>
+								<rect x="0.5" y="0.5" width="76" height="36" rx="5.5" stroke="#C3D4E9"/>
+								<path d="M27.9674 23H25.0202V14.2695H28.0319C28.8991 14.2695 29.6471 14.4473 30.276 14.8027C30.9049 15.1543 31.3893 15.6562 31.7291 16.3086C32.069 16.957 32.2389 17.7285 32.2389 18.623C32.2389 19.5254 32.069 20.3047 31.7291 20.9609C31.3893 21.6133 30.8991 22.1172 30.2584 22.4727C29.6217 22.8242 28.858 23 27.9674 23ZM26.567 21.6758H27.8854C28.8346 21.6758 29.5358 21.4102 29.9889 20.8789C30.4459 20.3438 30.6745 19.5918 30.6745 18.623C30.6745 17.6621 30.4479 16.918 29.9948 16.3906C29.5416 15.8594 28.8541 15.5938 27.9323 15.5938H26.567V21.6758ZM24.3698 19.168V18.1016H29.5202V19.168H24.3698ZM35.8427 23.1406C35.2333 23.1406 34.7001 23.0059 34.243 22.7363C33.786 22.4629 33.4286 22.084 33.1708 21.5996C32.9169 21.1152 32.7899 20.5527 32.7899 19.9121C32.7899 19.2715 32.9169 18.709 33.1708 18.2246C33.4286 17.7363 33.786 17.3555 34.243 17.082C34.7001 16.8086 35.2333 16.6719 35.8427 16.6719C36.4481 16.6719 36.9794 16.8086 37.4364 17.082C37.8973 17.3555 38.2548 17.7363 38.5087 18.2246C38.7665 18.709 38.8954 19.2715 38.8954 19.9121C38.8954 20.5527 38.7665 21.1152 38.5087 21.5996C38.2548 22.084 37.8973 22.4629 37.4364 22.7363C36.9794 23.0059 36.4481 23.1406 35.8427 23.1406ZM35.8427 21.9043C36.3153 21.9043 36.6923 21.7266 36.9735 21.3711C37.2548 21.0156 37.3954 20.5293 37.3954 19.9121C37.3954 19.2949 37.2548 18.8066 36.9735 18.4473C36.6923 18.0879 36.3153 17.9082 35.8427 17.9082C35.3661 17.9082 34.9872 18.0879 34.7059 18.4473C34.4247 18.8027 34.2841 19.291 34.2841 19.9121C34.2841 20.5293 34.4247 21.0156 34.7059 21.3711C34.9872 21.7266 35.3661 21.9043 35.8427 21.9043ZM35.2333 16.0391L36.1825 14.2344H37.6884L36.3231 16.0391H35.2333ZM41.1573 19.502V23H39.6808V16.8125H41.1339V17.7617C41.5636 17.0469 42.1964 16.6895 43.0323 16.6895C43.6808 16.6895 44.2101 16.8984 44.6202 17.3164C45.0343 17.7344 45.2413 18.3398 45.2413 19.1328V23H43.7589V19.3672C43.7589 18.9141 43.6495 18.5703 43.4308 18.3359C43.212 18.1016 42.9054 17.9844 42.5109 17.9844C42.1241 17.9844 41.8019 18.1055 41.5441 18.3477C41.2863 18.5898 41.1573 18.9746 41.1573 19.502ZM49.1263 25.5312C48.3099 25.5312 47.6615 25.3555 47.181 25.0039C46.7005 24.6523 46.4193 24.1758 46.3373 23.5742H47.7845C47.8548 23.8398 48.0091 24.041 48.2474 24.1777C48.4857 24.3184 48.7787 24.3887 49.1263 24.3887C49.5873 24.3887 49.9447 24.2637 50.1986 24.0137C50.4564 23.7637 50.5853 23.4023 50.5853 22.9297V21.9863H50.5795C50.3802 22.3496 50.1205 22.6172 49.8002 22.7891C49.4798 22.957 49.1166 23.041 48.7103 23.041C48.1712 23.041 47.7005 22.9062 47.2982 22.6367C46.8959 22.3672 46.5834 21.9961 46.3607 21.5234C46.142 21.0469 46.0326 20.498 46.0326 19.877C46.0326 19.252 46.1439 18.6992 46.3666 18.2188C46.5892 17.7383 46.9017 17.3633 47.3041 17.0938C47.7064 16.8242 48.1712 16.6895 48.6986 16.6895C49.1009 16.6895 49.4642 16.7754 49.7884 16.9473C50.1166 17.1152 50.3822 17.377 50.5853 17.7324H50.5912V16.8125H52.0502V22.8418C52.0502 23.4785 51.9232 23.9941 51.6693 24.3887C51.4154 24.7871 51.0677 25.0762 50.6263 25.2559C50.1849 25.4395 49.6849 25.5312 49.1263 25.5312ZM49.056 21.8223C49.5404 21.8223 49.9271 21.6445 50.2162 21.2891C50.5091 20.9297 50.6556 20.4531 50.6556 19.8594C50.6556 19.2656 50.5091 18.791 50.2162 18.4355C49.9271 18.0762 49.5404 17.8965 49.056 17.8965C48.599 17.8965 48.2298 18.0664 47.9486 18.4062C47.6673 18.7461 47.5267 19.2305 47.5267 19.8594C47.5267 20.4922 47.6673 20.9785 47.9486 21.3184C48.2298 21.6543 48.599 21.8223 49.056 21.8223Z" fill="#363F5E"/>
+							</svg>
+						</div>
+						<div class="wrapper-right">
+							<svg id="saveContent" width="69" height="37" viewBox="0 0 69 37" fill="none" xmlns="http://www.w3.org/2000/svg">
+								<rect width="69" height="37" rx="6" fill="#303454"/>
+								<path d="M24.949 23V14.2695H26.4959V21.6582H30.5447V23H24.949ZM33.4395 23.123C32.791 23.123 32.2617 22.9141 31.8516 22.4961C31.4414 22.0781 31.2363 21.4727 31.2363 20.6797V16.8125H32.7129V20.4453C32.7129 20.8984 32.8223 21.2422 33.041 21.4766C33.2598 21.7109 33.5664 21.8281 33.9609 21.8281C34.3516 21.8281 34.6738 21.707 34.9277 21.4648C35.1855 21.2227 35.3145 20.8379 35.3145 20.3105V16.8125H36.4336C36.5625 16.8125 36.627 16.748 36.627 16.6191V15.4062H37.8574V16.666C37.8574 17.0176 37.7637 17.2812 37.5762 17.457C37.3887 17.6328 37.1289 17.7305 36.7969 17.75V23H35.3438V22.0508C34.9102 22.7656 34.2754 23.123 33.4395 23.123ZM40.758 23.123C40.1096 23.123 39.5803 22.9141 39.1702 22.4961C38.76 22.0781 38.5549 21.4727 38.5549 20.6797V16.8125H40.0315V20.4453C40.0315 20.8984 40.1409 21.2422 40.3596 21.4766C40.5784 21.7109 40.885 21.8281 41.2795 21.8281C41.6702 21.8281 41.9924 21.707 42.2463 21.4648C42.5041 21.2227 42.633 20.8379 42.633 20.3105V16.8125H44.1155V23H42.6623V22.0508C42.2288 22.7656 41.594 23.123 40.758 23.123Z" fill="white"/>
+							</svg>
+							<div id="modalCopyContent" class="copy-content">
+								Copy
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script src="/scripts/menu-mobile.js"></script>
+	<script src="/scripts/history.js"></script>
+	<script src="/scripts/template.js"></script>
+	<script src="/scripts/image-generation.js"></script>
+	<script>
+		//var storeGenerateContent= [];
+		const buttonSubmit = document.getElementById("submitPromptBtn");
+		var storeGenerateContent; //= JSON.parse(localStorage.getItem('generateContentData')) || [];
+		const formWrapper = document.getElementById('formWrapper');
+		let schemaGlobal;
+		var articleCode;
+		var templateCache;
+		var templateId;
+
+		function renderForm(data) {
+		          const formWrapper = document.getElementById('formWrapper');
+		          const schema = data.schema;
+				  schema.attributes.forEach(field => {
+							// 1. Tạo các thẻ wrapper chính
+							const formRow = document.createElement('div');
+							formRow.className = 'form-row';
+							const formGroup = document.createElement('div');
+							formGroup.className = 'form-group';
+							// 2. Tạo label
+							const label = document.createElement('label');
+							label.className = 'form-label';
+							label.setAttribute('for', field.id);
+							label.textContent = field.label + (field.required ? ' *' : '');
+							formGroup.appendChild(label);
+							// 3. Dùng switch để tạo input tương ứng với cấu trúc mong muốn
+							switch (field.type) {
+								case 'textarea': {
+									const textareaBox = document.createElement('div');
+									textareaBox.className = 'textarea-box';
+									
+									const textarea = document.createElement('textarea');
+									textarea.id = field.id;
+									textarea.name = field.code;
+									textarea.className = 'textarea';
+									textarea.placeholder = field.meta.description || 'Nhập nội dung...';
+									textarea.required = field.required;
+									textarea.value = field.defaultValue || '';
+									
+									textareaBox.appendChild(textarea);
+									formGroup.appendChild(textareaBox);
+									break;
+								}
+								case 'number': {
+									const inputBox = document.createElement('div');
+									inputBox.className = 'input-box';
+				
+									const input = document.createElement('input');
+									input.id = field.id;
+									input.name = field.code;
+									input.className = 'input input-number';
+									input.type = 'number';
+									input.placeholder = field.meta.description || 'Nhập số...';
+									input.required = field.required;
+									input.value = field.defaultValue || '';
+				
+									inputBox.appendChild(input);
+								if(field.code == 'length'){
+									const suffix = document.createElement('span');
+										suffix.className = 'input-suffix';
+										suffix.textContent = 'từ';
+										inputBox.appendChild(suffix);
+								}
+									if (field.meta.suffix) {
+									
+										const suffix = document.createElement('span');
+										suffix.className = 'input-suffix';
+										suffix.textContent = field.meta.suffix;
+										inputBox.appendChild(suffix);
+									}
+									
+									formGroup.appendChild(inputBox);
+									break;
+								}
+								case 'select': {
+									const selectWrapper = document.createElement('div');
+									selectWrapper.className = 'select-wrapper';
+				
+									const select = document.createElement('select');
+									select.id = field.id;
+									select.name = field.code;
+									select.className = 'custom-select';
+									select.required = field.required;
+									
+									// Thêm option mặc định
+									const defaultOption = document.createElement('option');
+									defaultOption.value = "";
+									defaultOption.textContent = "Chọn";
+									if (!field.defaultValue) {
+										defaultOption.selected = true;
+									}
+									select.appendChild(defaultOption);
+				
+									// Thêm các option từ JSON
+									field.options.forEach(opt => {
+										const option = document.createElement('option');
+										option.value = opt.value;
+										option.textContent = opt.label;
+										if (opt.value === field.defaultValue) {
+											option.selected = true;
+										}
+										select.appendChild(option);
+									});
+				
+									selectWrapper.appendChild(select);
+									
+									// Thêm icon SVG
+									const selectIcon = document.createElement('div');
+									selectIcon.className = 'select-icon';
+									selectIcon.innerHTML = `<svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.50001 11.7C8.03335 11.7 7.56668 11.52 7.21335 11.1667L2.86668 6.82C2.67335 6.62667 2.67335 6.30667 2.86668 6.11334C3.06001 5.92 3.38001 5.92 3.57335 6.11334L7.92001 10.46C8.24001 10.78 8.76001 10.78 9.08001 10.46L13.4267 6.11334C13.62 5.92 13.94 5.92 14.1333 6.11334C14.3267 6.30667 14.3267 6.62667 14.1333 6.82L9.78668 11.1667C9.43335 11.52 8.96668 11.7 8.50001 11.7Z" fill="#292D32" /></svg>`;
+									selectWrapper.appendChild(selectIcon);
+				
+									formGroup.appendChild(selectWrapper);
+									break;
+								}
+							}
+						formRow.appendChild(formGroup);
+						formWrapper.appendChild(formRow);
+				  })
+		}
+
+		async function init() {
+			let templateSlug  = getParam('id', '');
+			if(templateSlug == ""){
+				templateSlug = "";
+			}
+			const url = 'https://wttbe.metapress.ai/api/schema/content';
+			const payload = { slug: templateSlug };
+
+			const formWrapper = document.getElementById('formWrapper');
+			const templateRow = document.createElement('div');
+			templateRow.className = 'form-row';
+			formWrapper.append(templateRow);
+			//const formWrapper = document.getElementById('formWrapper');
+
+
+
+			try {
+				const response = await fetch(url,{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+						'Accept': 'application/json',
+						// 'Authorization': `Bearer ${token}`, // nếu cần
+					},
+					body: JSON.stringify(payload),
+				});
+				if (!response.ok) {
+					throw new Error(`Không kết nối được`);
+				}
+				const data = await response.json();
+				renderForm(data);
+				schemaGlobal = data.schema;
+				console.log(data.schema);
+			}
+			catch (error) {
+				console.error('Khong the lay du lieu:', error);
+			}
+		}
+
+		function getQueryParams() {
+			const qs = new URLSearchParams(window.location.search);
+			const obj = {};
+			for (const [k, v] of qs.entries()) obj[k] = v;
+			return obj;
+		}
+
+		function getParam(key, fallback = null) {
+			const qs = new URLSearchParams(window.location.search);
+			return qs.get(key) ?? fallback;
+		}
+
+		const sendArticlePromptToN8n = async (schema) => {
+			const formWrapper = document.getElementById("formWrapper");
+			const listArticleElement = document.getElementById('addGenerateContent');
+			const loadingSpinerElement = document.getElementById('loadingSpiner');
+			const loadingSpinerBar = document.getElementById('loadingBar');
+			const buttonSubmit = document.getElementById("submitPromptBtn");
+			// ✅ Thu thập dữ liệu từ form theo schema
+			
+			const payload = {};
+			const errors = [];
+			
+			schema.attributes.forEach(field => {
+				const el = document.getElementById(field.id);
+				if (!el) return;
+		
+				let value;
+		
+				switch (field.type) {
+					case "select":
+						if (el.multiple) {
+							value = Array.from(el.selectedOptions).map(opt => opt.value);
+						} else {
+							value = el.value;
+						}
+						break;
+					case "number":
+						value = el.value ? Number(el.value) : null;
+						break;
+					case "textarea":
+					case "text":
+					default:
+						value = el.value.trim();
+						break;
+				}
+		
+				// Validation theo required
+				if (field.required && (!value || (Array.isArray(value) && value.length === 0))) {
+					errors.push(`Vui lòng nhập ${field.label}`);
+				}
+		
+				// ✅ Lưu cả label và value
+				payload[field.code] = {
+					label: field.label,
+					value: value
+				};
+			});
+			/**/
+			if (errors.length > 0) {
+				toast("Lỗi nhập liệu:\n" + errors.join("\n"),{type: "error"});
+				return;
+			}
+
+			// Loading UI
+			//listArticleElement.style.display = "none";
+			loadingSpinerElement.classList.add("show");
+			buttonSubmit.classList.add("disabled");
+
+			let progress = 0;
+			loadingSpinerBar.style.width = '10%';
+			const intervalBar = setInterval(() => {
+				if (progress >= 90) return;
+				progress += 3;
+				loadingSpinerBar.style.width = progress + '%';
+			}, 1200);
+
+			const token = localStorage.getItem('auth_token');
+			try {
+				// 1) Submit để lấy job_id (có Authorization)
+				const response = await fetch("https://wttbe.metapress.ai/api/article/submit", {
+					method: "POST",
+					headers: {
+						"Content-Type": "application/json",
+						"Authorization": "Bearer " + token
+					},
+					body: JSON.stringify(payload)
+				});
+				if (!response.ok) throw new Error("Bạn chưa đủ quyền để gọi chức năng này");
+				
+				const tempArticle = await response.json();
+				if (!tempArticle?.job_id) throw new Error("Không nhận được job_id");
+
+				// 2) Long polling: chỉ gọi tiếp khi response trước đã xong
+				let retryCount = 0;
+				const maxRetries = 10; // ~30 lần (mỗi lần server có thể giữ 60s)
+
+				const checkResult = async () => {
+					try {
+
+						const res = await fetch("https://wttbe.metapress.ai/api/article/result/" + tempArticle.job_id, {
+							method: "GET",
+							headers: {
+								"Content-Type": "application/json",
+								"Authorization": "Bearer " + token
+							},
+						});
+						templateId = getParam('template','');
+						const result = await res.json();
+						if (result.status === "success") {
+							clearInterval(intervalBar);
+							loadingSpinerBar.style.width = '100%';
+
+							// 3) Lấy nội dung từ result.data
+							let articleContent = (result.data?.text || "").replace(/\n/g, '');
+							articleContent = removeAllMarkdownLinks(articleContent);
+
+							const parser = new DOMParser();
+							const doc = parser.parseFromString(articleContent, "text/html");
+							const title = doc.querySelector("h1")?.textContent || "";
+
+							// 4) Ghi log usage (có Authorization)
+							const payloadUsage = { key: result.data?.ExecutionKey };
+							await fetch("https://wttbe.metapress.ai/api/log/usage", {
+								method: "POST",
+								headers: {
+									"Content-Type": "application/json",
+									"Authorization": "Bearer " + token
+								},
+								body: JSON.stringify(payloadUsage)
+							});
+
+							
+							// 5) Lưu article (có Authorization)
+							const payloadArticle = {
+								articleCode,
+								content_data: articleContent,
+								title,
+								generate_meta: JSON.stringify(payload),
+								template_id: templateId
+							};
+							const resultArticle = await fetch("https://wttbe.metapress.ai/api/generate/article", {
+								method: "POST",
+								headers: {
+									"Content-Type": "application/json",
+									"Authorization": "Bearer " + token
+								},
+								body: JSON.stringify(payloadArticle)
+							});
+							const dataArticle = await resultArticle.json();
+
+							
+							articleCode = dataArticle.article.id;
+							setPargraphTitle(dataArticle.article.title);
+							let newUrl = 'article.html?code=' + articleCode;
+							window.history.pushState({ articleCode: articleCode }, '', newUrl);
+
+							const versions = dataArticle?.article?.content_versions || [];
+							listArticleElement.innerHTML = "";
+							storeGenerateContent = versions;
+							versions.forEach((content, index) => {
+								const divContent = renderContent(content.content_data, index);
+								listArticleElement.append(divContent);
+							});
+
+							document.querySelector(".output-empty").style.display = "none";
+							listArticleElement.style.display = "flex";
+							loadingSpinerElement.classList.remove("show");
+							buttonSubmit.classList.remove("disabled");
+							return;
+						}
+
+						if (result.status === "error") {
+							clearInterval(intervalBar);
+							loadingSpinerElement.classList.remove("show");
+							buttonSubmit.classList.remove("disabled");
+							console.error("Lỗi:", result.message);
+							toast("Tạo nội dung thất bại, Bạn vui lòng liên hệ đội ngũ quản lý",{type: "error"});
+							return;
+						}
+
+						if (result.status === "continue") {
+							retryCount++;
+							if (retryCount >= maxRetries) {
+								clearInterval(intervalBar);
+								loadingSpinerElement.classList.remove("show");
+								buttonSubmit.classList.remove("disabled");
+								console.error("Quá số lần retry, dừng polling.");
+								return;
+							}
+							// đợi 1s rồi gọi lại
+							setTimeout(checkResult, 1000);
+							return;
+						}
+
+						// Trạng thái lạ
+						clearInterval(intervalBar);
+						loadingSpinerElement.classList.remove("show");
+						buttonSubmit.classList.remove("disabled");
+						console.warn("Trạng thái không xác định:", result);
+						toast("Đã xảy ra lỗi khi gửi dữ liệu",{type: "error"});
+					} catch (err) {
+						clearInterval(intervalBar);
+						loadingSpinerElement.classList.remove("show");
+						buttonSubmit.classList.remove("disabled");
+						console.error("Lỗi fetch:", err);
+						toast("Đã xảy ra lỗi khi gửi dữ liệu",{type: "error"});
+					}
+				};
+
+				// Gọi lần đầu
+				checkResult();
+			} catch (error) {
+				console.error(error);
+				clearInterval(intervalBar);
+				loadingSpinerElement.classList.remove("show");
+				buttonSubmit.classList.remove("disabled");
+				listArticleElement.style.display = "flex";
+				toast("Đã xảy ra lỗi khi gửi dữ liệu",{type: "error"});
+			}
+		}
+
+		function clearForm() {
+			schemaGlobal.attributes.forEach(field => {
+				const el = document.getElementById(field.id);
+				if (!el) return;
+		
+				switch (field.type) {
+					case "select":
+						// Reset về defaultValue nếu có, nếu không thì về option đầu tiên
+						if (field.defaultValue) {
+							Array.from(el.options).forEach(opt => {
+								opt.selected = (opt.value === field.defaultValue);
+							});
+						} else {
+							el.selectedIndex = 0;
+						}
+						break;
+		
+					case "number":
+					case "text":
+					case "textarea":
+						el.value = field.defaultValue || "";
+						break;
+		
+					default:
+						// Trường hợp khác (checkbox, radio, …) có thể bổ sung sau
+						el.value = field.defaultValue || "";
+						break;
+				}
+			});
+		}
+
+		function addDataAndSave(newData) {
+			let newLength = storeGenerateContent.push(newData);
+			return newLength - 1;
+		}
+
+		function removeDataByIndex(index) {
+			if (index < 0 || index >= storeGenerateContent.length) {
+				console.error("Index out of bounds");
+				return false;
+			}
+			storeGenerateContent.splice(index, 1);
+			renderListContent(storeGenerateContent);
+			if (storeGenerateContent.length <= 0) {
+				document.querySelector(".output-empty").style.display = "flex";
+			}
+			return true;
+		}
+
+		document.getElementById("btnClear").addEventListener("click",clearForm);
+
+		buttonSubmit.addEventListener("click", async () => {
+			if (buttonSubmit.classList.contains("disabled")) return;
+			sendArticlePromptToN8n(schemaGlobal);
+		})
+
+		function renderListContent(storeGenerateContent) {
+			const listArticleElement = document.getElementById('addGenerateContent');
+			listArticleElement.style.display = "flex";
+			listArticleElement.innerHTML = "";
+			storeGenerateContent.forEach((item, index) => {
+				let divContent = renderContent(item.content_data, index)
+				listArticleElement.prepend(divContent);
+			});
+		}
+
+		function renderContent(content, index) {
+			const newDiv = document.createElement('div');
+			newDiv.classList.add('ai-generate-content');
+			let articleContent = content;
+			articleContent = articleContent.replace(/\n/g, '');
+			const article_content_id = storeGenerateContent[index].id;
+			const buttonWrapper = document.createElement('div');
+			buttonWrapper.className = 'button-wrapper';
+			buttonWrapper.innerHTML = `
+			<div class="wrapper-action--left" style="display:flex;gap:15px;">
+				<span onClick="openModalCK(${index})">Xem chi tiết</span>
+				<span onClick="openGenerateModal(${article_content_id})">Ảnh minh họa</span>
+			</div>
+			<div class="wrapper-action-right">
+				<span onClick="copyContentEle(${index},this)">Copy</span>
+				<span onClick="openModalCK(${index})">Sửa</span>
+				<span onClick="removeDataByIndex(${index})">Xóa</span>
+			</div>
+			`;
+			newDiv.innerHTML = articleContent;
+			newDiv.appendChild(buttonWrapper);
+			return newDiv;
+		}
+
+		function removeAllMarkdownLinks(text) {
+			// Bước 1: xóa markdown link
+			text = text.replace(/\[[^\]]+\]\([^)]+\)/g, '');
+			text = text.replace(/\(\s*\)/g, '');
+			return text;
+		}
+
+		init();
+
+		document.querySelectorAll('.tab-bar .tab').forEach(tab => {
+			tab.addEventListener('click',async function() {
+				// remove active ở tất cả tab
+				document.querySelectorAll('.tab-bar .tab').forEach(t => t.classList.remove('tab--active'));
+				// set active cho tab được click
+				this.classList.add('tab--active');
+
+				// ẩn tất cả nội dung
+				document.querySelectorAll('#formWrapper, #templates').forEach(c => c.style.display = 'none');
+
+				// hiển thị nội dung tương ứng bằng flex
+				const targetId = this.getAttribute('data-trigger');
+				const targetEl = document.getElementById(targetId);
+				if (targetEl) {
+					targetEl.style.display = 'flex';
+					if (targetId === "templates") {
+						await renderTemplateList();
+					}
+				}
+			});
+		});
+		function setPargraphTitle(text = "Tạo nội dung mới"){
+			const titleElement = document.getElementsByClassName('smart-paragraph-title')[0];
+			titleElement.innerHTML = text;
+		}
+		
+		setPargraphTitle();
+		
+	</script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+	<!-- CKEditor 5 Classic -->
+	<script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/classic/ckeditor.js"></script>
+	<script>
+		let myEditor = null;
+		var myModal = new bootstrap.Modal(document.getElementById('ckeditorModal'));
+
+		function openModalCK(index) {
+			myModal.show();
+			document.getElementById("saveContent").dataset.index = index;
+			const initialContent = storeGenerateContent[index].content_data;
+			if (!myEditor) {
+				ClassicEditor.create(document.querySelector('#editor')).then(editor => {
+					myEditor = editor;
+					myEditor.setData(initialContent);
+				}).catch(error => {
+					console.error(error);
+				});
+			} else {
+				myEditor.setData(initialContent);
+			}
+		}
+		
+		document.getElementById('modalCopyContent').addEventListener('click', () => {
+			const content = myEditor.getData();
+			copyContent(content);
+			document.getElementById('modalCopyContent').textContent = "Đã copy";
+			 setTimeout(() => {
+				document.getElementById('modalCopyContent').textContent = "Copy";
+			}, 3000);
+		});
+		
+		document.getElementById('saveContent').addEventListener('click', async () => {
+			const content = '<section>'+myEditor.getData()+'</section>';
+			const url = 'https://wttbe.metapress.ai/api/article/content';
+			let index = document.getElementById("saveContent").dataset.index;
+			const payload = { articleCode: articleCode,contentVersion: storeGenerateContent[index].id,contentUpdate: content };
+			const token = localStorage.getItem('auth_token') || '';
+			const response = await fetch(url,{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+					'Accept': 'application/json',
+					'Authorization': `Bearer ${token}`, // nếu cần
+				},
+				body: JSON.stringify(payload),
+			});
+			if (!response.ok) {
+				throw new Error(`Không kết nối được`);
+			}
+			const data = await response.json();
+			const versions = data.article.content_versions;
+			const listArticleElement = document.getElementById('addGenerateContent');
+			listArticleElement.style.display = "flex";
+			listArticleElement.innerHTML = "";
+			
+			storeGenerateContent = versions;
+			versions.forEach((content, index) => {
+				let divContent = renderContent(content.content_data, index);
+				listArticleElement.append(divContent);
+			});
+			document.getElementById("closeModal").click();
+			toast("Lưu bài viết thành công");
+		});
+		
+		function copyContent(htmlString) {
+			const tempElement = document.createElement("div");
+			tempElement.innerHTML = htmlString;
+			tempElement.style.position = "absolute";
+			tempElement.style.left = "-9999px";
+			document.body.appendChild(tempElement);
+		
+			const range = document.createRange();
+			range.selectNodeContents(tempElement);
+		
+			const selection = window.getSelection();
+			selection.removeAllRanges();
+			selection.addRange(range);
+		
+			try {
+				document.execCommand("copy");
+				console.log("Copied successfully");
+			} catch (err) {
+				console.error("Copy failed:", err);
+				toast("Không thể copy nội dung",{type: "error"});
+			}
+		
+			document.body.removeChild(tempElement);
+		}
+		
+		function copyContentEle(index,ele){
+			ele.textContent = "Đã Copy";
+			htmlString = storeGenerateContent[index].content_data;
+			const tempElement = document.createElement("div");
+			tempElement.innerHTML = htmlString;
+			tempElement.style.position = "absolute";
+			tempElement.style.left = "-9999px";
+			document.body.appendChild(tempElement);
+			const range = document.createRange();
+			range.selectNodeContents(tempElement);
+			const selection = window.getSelection();
+			selection.removeAllRanges();
+			selection.addRange(range);
+			try {
+				document.execCommand("copy");
+			} catch (err) {
+				console.error("Copy failed:", err);
+				toast("Không thể copy nội dung",{type: "error"});
+			}
+			setTimeout(() => {
+				ele.textContent = "Copy";
+			}, 3000);
+			document.body.removeChild(tempElement);
+		}
+
+	</script>
+	 <script>
+        const getUser = () => {
+            const user = localStorage.getItem('auth_user');
+            return JSON.parse(user);
+		};
+        const userAuth = getUser();
+        if(userAuth.name){
+            document.getElementById('userName').textContent = userAuth.name;
+        }
+    </script>
+	<script>
+		(function(){
+			const API_BASE = 'https://wttbe.metapress.ai/';   // đổi theo môi trường của bạn
+			const LOGIN_PAGE = '/login.html'; 
+			document.getElementById('sidebarLogout')?.addEventListener('click', function(e){
+				e.preventDefault();
+			
+				// Lấy token hiện tại (nếu có)
+				let token = '';
+				try { token = localStorage.getItem('auth_token') || ''; } catch {}
+			
+				// (Tùy chọn) Gọi API logout để revoke token ở server, nếu bạn có route /api/logout
+				if (token) {
+				fetch(API_BASE + '/api/logout', {
+					method: 'POST',
+					headers: {
+					'Accept': 'application/json',
+					'Authorization': 'Bearer ' + token
+					}
+				}).catch(()=>{ /* bỏ qua lỗi */ });
+				}
+			
+				// Xóa token local và chuyển về login
+				try {
+				localStorage.removeItem('auth_token');
+				localStorage.removeItem('auth_user');
+				} catch {}
+			
+				location.href = LOGIN_PAGE;
+			});
+		})();
+	</script>
+</html>

@@ -1,0 +1,171 @@
+/* ===== Overlay ===== */
+body.modal-open{
+  height: 100vh;
+  overflow: hidden;
+}
+.simple-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+.simple-overlay.show {
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 2030;
+}
+
+/* ===== Modal ===== */
+.simple-modal {
+    background: #fff;
+    border-radius: 8px;
+    width: 768px;
+    max-width: 90%;
+    max-height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform: translateY(-20px);
+    opacity: 0;
+    transition: all 0.25s ease;
+}
+
+.simple-overlay.show .simple-modal {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+/* Header */
+.simple-header {
+  flex: 0 0 auto;
+  padding: 12px 16px;
+  background: #fff;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #ddd;
+}
+.simple-header .header-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.simple-header .header-close-button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-size: 20px;
+}
+
+/* Body (scroll) */
+.simple-body {
+    flex: 1 1 auto;
+}
+
+/* Footer */
+.simple-footer {
+  flex: 0 0 auto;
+  padding: 12px 16px;
+  background: #f9f9f9;
+  border-top: 1px solid #ddd;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* Nút cơ bản */
+.simple-footer .btn-primary {
+  background: #3e61ff;
+  color: white;
+  padding: 6px 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.btn-primary:hover {
+  background: #324ecc;
+}
+.btn-cancel {
+  background: #ddd;
+  padding: 6px 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.btn-cancel:hover {
+  background: #bbb;
+}
+
+/* Position presets */
+.simple-overlay.top-right   { align-items: flex-start; justify-content: flex-end; padding: 20px; }
+.simple-overlay.top-left    { align-items: flex-start; justify-content: flex-start; padding: 20px; }
+.simple-overlay.bottom-right{ align-items: flex-end; justify-content: flex-end; padding: 20px; }
+.simple-overlay.bottom-left { align-items: flex-end; justify-content: flex-start; padding: 20px; }
+.simple-overlay.center      { align-items: center; justify-content: center; }
+.top-right .simple-modal{
+  height: 100%;
+}
+
+
+/*Setting Modal*/
+
+
+
+#setting {
+  display: flex;
+  gap: 0px;
+}
+
+#setting .col-3 {
+  flex: 3;
+}
+
+#setting .col-9 {
+  flex: 9;
+}
+
+.setting-sidebar {
+    border-radius: 10px;
+    padding: 16px;
+    background: #fafafa;
+    height: 100%;
+}
+
+.setting-item {
+    display: block;
+    width: 100%;
+    text-align: left;
+    padding: 10px 12px;
+    margin: 4px 0;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    background: none;
+    cursor: pointer;
+    margin: 0;
+    font-size: 14px;
+}
+
+.setting-content {
+    border-left: 1px solid #e5e7eb;
+    border-radius: 0;
+    padding: 16px;
+    background: #fff;
+    height: 100%;
+    box-sizing: border-box;
+}
+.setting-list { list-style: none; margin: 0; padding: 0; }
+.setting-item--active{
+  color: #3e61ff;
+  border: 1px solid #3e61ff;
+  background: #FFFFFF;
+}
+input[type=password]{
+  font-family: Arial, Helvetica, sans-serif;
+}

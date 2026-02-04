@@ -1,0 +1,1585 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Content Creator</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link rel="stylesheet" href="/scripts/toast/toast.css" />
+		<script src="/scripts/toast/toast.js"></script>
+        <link rel="stylesheet" href="/css/font.css" />
+		<link rel="stylesheet" href="/css/style.css" />
+        <link rel="stylesheet" href="/css/responsive.css" />
+       
+        <!-- Side Bar -->
+        <style>
+            .content-wrapper {
+                background-color: #f9fbff;
+                border-left: 1px solid #f0eeee;
+                display: flex;
+                min-width: 335px;
+                padding: 0px 16px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+                flex: 1 0 0;
+                align-self: stretch;
+
+                height: 100vh;
+            }
+
+            #formWrapper {
+                display: flex;
+                min-width: 335px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+                flex: 1 0 0;
+                align-self: stretch;
+                padding: 16px;
+            }
+
+            .tab-bar {
+                display: flex;
+                gap: 16px;
+                border-bottom: 1px solid #e4e4e4;
+                width: 100%;
+            }
+
+            .tab {
+                font-size: 14px;
+                font-weight: 500;
+                text-align: center;
+                color: #666;
+                padding: 5px 12px;
+                cursor: pointer;
+                padding-left: 0px;
+            }
+
+            .tab--active {
+                color: #3e61ff;
+                border-bottom: 1px solid #3e61ff;
+                padding-left: 0px;
+            }
+
+            .form-group {
+                display: flex;
+                flex-direction: column;
+                gap: 10px;
+                width: 100%;
+            }
+
+            .form-row {
+                display: flex;
+                gap: 16px;
+                width: 100%;
+            }
+
+            .form-label {
+                font-size: 14px;
+                font-weight: 500;
+                color: #333;
+            }
+
+            .select-box,
+            .input-box {
+                display: flex;
+                align-items: center;
+                position: relative;
+                justify-content: space-between;
+                font-size: 14px;
+            }
+
+            .select-placeholder,
+            .input-placeholder {
+                font-size: 14px;
+                color: #666;
+                flex-grow: 1;
+            }
+
+            .textarea-placeholder {
+                font-size: 14px;
+                color: #666;
+            }
+
+            .icon-placeholder {
+                width: 20px;
+                height: 20px;
+                background: gray;
+            }
+
+            .footer-actions {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                background-color: #fff;
+                padding: 12px 16px;
+                border-top: 1px solid #f0eeee;
+                width: 100%;
+                position: sticky;
+                left: 0px;
+                bottom: 0px;
+                margin-left: -16px;
+                width: 100%;
+                margin-top: auto;
+            }
+
+            .footer-actions__left {
+                display: flex;
+                align-items: center;
+            }
+
+            .btn-text {
+                font-size: 14px;
+                font-weight: 500;
+                cursor: pointer;
+            }
+
+            .btn-clear {
+                color: #888;
+            }
+
+            .footer-actions__right {
+                display: flex;
+                gap: 16px;
+            }
+
+            .btn-outline {
+                padding: 10px 24px;
+                border: 1px solid #e4e4e4;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: 500;
+                cursor: pointer;
+                color: #000;
+            }
+
+            .btn-primary {
+                background: linear-gradient(to bottom, #6f83ff 0%, #3e61ff 100%);
+                color: #fff;
+                padding: 10px 24px;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: 500;
+                cursor: pointer;
+                display: flex;
+                gap: 10px;
+                align-items: center;
+            }
+
+            .btn-primary.disabled {
+                opacity: 0.6;
+            }
+
+            .select-wrapper {
+                position: relative;
+                display: inline-block;
+                width: 100%;
+            }
+
+            .custom-select {
+                width: 100%;
+                padding: 10px 35px 10px 10px;
+                border: 1px solid #ccc;
+                border-radius: 6px;
+                appearance: none;
+                background-color: #fff;
+                font-size: 14px;
+            }
+
+            .select-icon {
+                position: absolute;
+                right: 10px;
+                top: 50%;
+                pointer-events: none;
+                transform: translateY(-50%);
+                display: flex;
+            }
+
+            .textarea {
+                height: 100px;
+                background-color: #fff;
+                padding: 12px;
+                border: 1px solid #e4e4e4;
+                border-radius: 10px;
+                resize: none;
+                width: calc(100% - 27px);
+            }
+
+            input::placeholder {
+                color: #666;
+                /* màu placeholder */
+            }
+
+            .input-number {
+                height: 38px;
+                background-color: #fff;
+                padding: 0px 50px 0px 12px;
+                border: 1px solid #e4e4e4;
+                border-radius: 10px;
+            }
+
+            .input-suffix {
+                font-size: 14px;
+                color: #292d32;
+                flex-shrink: 0;
+                position: absolute;
+                right: 12px;
+            }
+
+            input {
+                color: #3e61ff;
+                border: none;
+                width: 100%;
+                font-size: 14px;
+            }
+
+            /* Nếu người dùng đã chọn một option có value khác rỗng */
+            select {
+                color: #666;
+                /* màu placeholder */
+            }
+
+            select:valid {
+                /*color: #3E61FF;*/
+                /* áp dụng cho text trong dropdown */
+            }
+
+            input[type="number"]::-webkit-inner-spin-button,
+            input[type="number"]::-webkit-outer-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+
+            /* Firefox */
+            input[type="number"] {
+                -moz-appearance: textfield;
+            }
+
+            .smart-paragraph-container {
+                width: 100%;
+                display: flex;
+                align-items: center;
+                gap: 14px;
+                /* tương đương 3.5 * 4px */
+                background-color: white;
+                padding: 16px;
+                border-bottom: 1px solid #f0eeee;
+                margin-left: -16px;
+                position: sticky;
+                top: 0px;
+                z-index: 10;
+            }
+
+            .smart-paragraph-icon-wrapper {
+                width: 42px;
+                height: 42px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                background-color: #ffe8fc;
+                border-radius: 8px;
+            }
+
+            .smart-paragraph-icon {
+                width: 20px;
+                height: 20px;
+                /* Bạn có thể chèn SVG hoặc icon font ở đây */
+            }
+
+            .smart-paragraph-content {
+                display: flex;
+                flex-direction: column;
+                gap: 7px;
+                flex-grow: 1;
+                line-height: 1.2;
+            }
+
+            .smart-paragraph-title {
+                font-weight: bold;
+                font-size: 16px;
+                color: #000000;
+            }
+
+            .smart-paragraph-description {
+                font-weight: normal;
+                font-size: 14px;
+                color: #6b7280;
+                /* tương đương text-gray-500 */
+            }
+            .pw-icon {
+                position: absolute;
+                right: 16px;
+                cursor: pointer;
+                user-select: none;
+                display: flex;
+            }
+        </style>
+        <!-- Output Container-->
+        <style>
+            .output-container {
+                display: flex;
+                min-width: 335px;
+                padding: 16px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+                flex: 1 0 0;
+                align-self: stretch;
+                border-left: 1px solid #f0eeee;
+            }
+
+            .output-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                width: 100%;
+            }
+
+            .output-title span {
+                font-weight: bold;
+                font-size: 16px;
+                color: black;
+            }
+
+            .output-actions {
+                display: flex;
+                flex-wrap: wrap;
+                column-gap: 12px;
+                row-gap: 20px;
+            }
+
+            .output-delete-placeholder {
+                display: flex;
+                justify-content: center;
+            }
+
+            .output-delete-placeholder span {
+                font-size: 16px;
+                text-align: center;
+                color: gray;
+                opacity: 0;
+                /* Ẩn dòng chữ "Xoá" */
+            }
+
+            .output-content {
+                display: flex;
+                padding: 24px;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 12px;
+                flex: 1 0 0;
+                align-self: stretch;
+            }
+
+            .output-image-wrapper {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 100%;
+                gap: 10px;
+            }
+
+            .output-image-placeholder {
+                width: 140px;
+                height: 88px;
+            }
+
+            .output-message span {
+                font-size: 14px;
+                color: #475467;
+                text-align: center;
+            }
+
+            .ai-generate-content {
+                display: flex;
+                min-width: 335px;
+                padding: 16px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+                align-self: stretch;
+                border-radius: 6px;
+                border: 1px solid #e4e4e4;
+                background: #ffffff;
+            }
+
+            #addGenerateContent .ai-generate-content:first-child {
+                background: #f0fff0;
+            }
+
+            .ai-generate-content > section > * {
+                display: none;
+            }
+
+            .ai-generate-content > section > h1 {
+                color: #374151;
+                font-family: "Inter Display";
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 600;
+                line-height: 145%;
+                /* 20.3px */
+                letter-spacing: -0.14px;
+            }
+
+            .ai-generate-content > section > p {
+                color: #374151;
+                font-family: "Inter Display";
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 400;
+                line-height: 145%;
+                /* 20.3px */
+            }
+
+            .ai-generate-content > section > h1:first-child {
+                display: block;
+            }
+
+            .ai-generate-content > section > h2:first-of-type {
+                display: block;
+                color: #374151;
+                font-family: "Inter Display";
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 600;
+                line-height: 145%;
+                /* 20.3px */
+                letter-spacing: -0.14px;
+            }
+
+            .ai-generate-content.none-edit > section > h2 {
+                display: none;
+            }
+
+            .ai-generate-content > section > p:first-of-type {
+                display: block;
+            }
+
+            #addGenerateContent {
+                justify-content: flex-start;
+            }
+
+            .button-wrapper {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                width: 100%;
+            }
+
+            .button-wrapper .wrapper-action--left span {
+                color: #3e61ff;
+                text-align: center;
+                font-family: "Inter Display";
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 600;
+                line-height: normal;
+                cursor: pointer;
+            }
+
+            .button-wrapper .wrapper-action-right {
+                display: flex;
+                gap: 12px;
+            }
+
+            .button-wrapper .wrapper-action-right span {
+                color: #000;
+                text-align: center;
+                font-family: "Inter Display";
+                font-size: 14px;
+                font-style: normal;
+                font-weight: 500;
+                line-height: normal;
+                cursor: pointer;
+            }
+
+            .loading-bar-container {
+                width: 100%;
+                height: 8px;
+                border-radius: 50px;
+                background: #d2e5ff;
+                overflow: hidden;
+                position: relative;
+                min-width: 300px
+            }
+
+            .loading-spinner {
+                display: none;
+                padding: 14px;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 20px;
+                border-radius: 8px;
+                border: 1px solid #3e61ff;
+                background: #f8fbff;
+            }
+
+            .loading-spinner.show {
+                display: flex;
+            }
+
+            .loading-bar {
+                height: 100%;
+                width: 30px;
+                background: linear-gradient(90deg, #3e61ff 0%, #6f83ff 50%, #3e61ff 100%);
+                background-size: 200% 100%;
+                animation: shimmer 1.2s linear infinite;
+                transition: width 1s ease;
+            }
+
+            @keyframes shimmer {
+                0% {
+                    background-position: 200% 0;
+                }
+
+                100% {
+                    background-position: -200% 0;
+                }
+            }
+        </style>
+        <link rel="stylesheet" href="/css/modal-form.css" />
+        <link rel="stylesheet" href="/scripts/simple-modal/simple-modal.css">
+        <script src="/scripts/guard.js"></script>
+        <script src="/scripts/simple-modal/simple-modal.js"></script>
+        <script src="/scripts/setting.js"></script>
+        <script>
+            (function () {
+                // ====== Cấu hình nhanh ======
+                const API_BASE = "https://wttbe.metapress.ai/"; // đổi theo môi trường của bạn
+                const LOGIN_PAGE = "/login.html"; // đường dẫn trang đăng nhập
+                const REQUIRE_AUTH = true; // trang này bắt buộc đăng nhập
+                // Những API không chen Bearer / không redirect (login, register...)
+                const SKIP_PATHS = ["/api/login", "/api/register", "/api/password/forgot"];
+                // ====== Tiện ích ======
+                const nativeFetch = window.fetch.bind(window);
+                const isLoginPage = () => location.pathname.endsWith(LOGIN_PAGE);
+                const getToken = () => {
+                    try {
+                        return localStorage.getItem("auth_token") || "";
+                    } catch {
+                        return "";
+                    }
+                };
+                const clearToken = () => {
+                    try {
+                        localStorage.removeItem("auth_token");
+                    } catch {}
+                };
+
+                function urlToAbsolute(u) {
+                    try {
+                        return new URL(u, location.origin);
+                    } catch {
+                        return null;
+                    }
+                }
+
+                function apiOrigin() {
+                    try {
+                        return new URL(API_BASE).origin;
+                    } catch {
+                        return location.origin;
+                    }
+                }
+
+                function isSameApi(u) {
+                    const abs = urlToAbsolute(u);
+                    return abs && abs.origin === apiOrigin();
+                }
+
+                function shouldSkip(u) {
+                    const abs = urlToAbsolute(u) || new URL(API_BASE);
+                    return SKIP_PATHS.some((p) => abs.pathname.endsWith(p));
+                }
+                // ====== Guard ngay khi vào trang ======
+                if (REQUIRE_AUTH && !isLoginPage()) {
+                    const token = getToken();
+                    if (!token) {
+                        // Không có token -> về login luôn
+                        location.href = LOGIN_PAGE;
+                    }
+                }
+                // ====== Patch fetch ======
+                window.fetch = async (input, init = {}) => {
+                    const url = typeof input === "string" ? input : input.url;
+                    const token = getToken();
+                    // Nếu gọi vào API của mình và không thuộc danh sách bỏ qua
+                    if (isSameApi(url) && !shouldSkip(url)) {
+                        // Không có token -> về login luôn và chặn request
+                        if (!token && !isLoginPage()) {
+                            location.href = LOGIN_PAGE;
+                            // Trả về Response 401 giả để code phía dưới không bị lỗi
+                            return new Response(null, {
+                                status: 401,
+                                statusText: "Unauthorized (No token)",
+                            });
+                        }
+                    }
+                    // Gắn Bearer nếu có token và chưa set thủ công
+                    const headers = new Headers(init.headers || (typeof input !== "string" ? input.headers : undefined));
+                    if (token && !headers.has("Authorization") && isSameApi(url) && !shouldSkip(url)) {
+                        headers.set("Authorization", `Bearer ${token}`);
+                    }
+                    const res = await nativeFetch(input, {
+                        ...init,
+                        headers,
+                    });
+                    // Token hết hạn / không hợp lệ -> xoá token + về login
+                    if ([401, 403, 419].includes(res.status)) {
+                        clearToken();
+                        if (!isLoginPage()) location.href = LOGIN_PAGE;
+                    }
+                    return res;
+                };
+                // Đồng bộ logout giữa các tab
+                window.addEventListener("storage", (e) => {
+                    if (e.key === "auth_token" && !e.newValue && !isLoginPage()) {
+                        location.href = LOGIN_PAGE;
+                    }
+                });
+            })();
+        </script>
+    </head>
+    <body>
+        <div class="cms-content">
+            <div class="sidebar-placeholder"></div>
+            <div class="sidebar">
+                <!-- Header -->
+                <div class="sidebar__header">
+                    <div class="sidebar__logo">
+                        <img src="/images/logo.svg" onerror="this.onerror=null; this.src='/images/logo.png';" alt="Logo" onclick="window.location.href='./';">
+
+                    </div>
+                </div>
+                <!-- Primary Action -->
+                <div class="sidebar__primary-action">
+                   <button class="btn btn--primary btn-icon" type="button" onclick="window.location.href='content.html'">
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M21 22H3c-.41 0-.75-.34-.75-.75s.34-.75.75-.75h18c.41 0 .75.34.75.75s-.34.75-.75.75ZM19.02 3.482c-1.94-1.94-3.84-1.99-5.83 0l-1.21 1.21c-.1.1-.14.26-.1.4a8.129 8.129 0 0 0 5.53 5.53.4.4 0 0 0 .41-.1l1.2-1.21c.99-.98 1.47-1.93 1.47-2.89.01-.99-.47-1.95-1.47-2.94ZM15.61 11.53c-.29-.14-.57-.28-.84-.44a8.8 8.8 0 0 1-.64-.42c-.17-.11-.37-.27-.56-.43a1.22 1.22 0 0 1-.17-.15c-.33-.28-.7-.64-1.03-1.04-.03-.02-.08-.09-.15-.18-.1-.12-.27-.32-.42-.55a5.49 5.49 0 0 1-.39-.59c-.16-.27-.3-.54-.44-.82a6.88 6.88 0 0 1-.061-.135c-.148-.333-.583-.43-.84-.173L4.34 12.331c-.13.13-.25.38-.28.55l-.54 3.83c-.1.68.09 1.32.51 1.75.36.35.86.54 1.4.54.12 0 .24-.01.36-.03l3.84-.54c.18-.03.43-.15.55-.28l5.722-5.721c.26-.26.161-.705-.176-.85a26.852 26.852 0 0 1-.116-.05Z" fill="#ffffff"></path></svg>
+  <span> Nội dung </span>
+</button>
+                </div>
+                <!-- Menu Section -->
+                <div class="sidebar__section">
+                    <div class="sidebar__section-title">Danh mục</div>
+                    <a class="sidebar__menu-item" href="dashboard.html">Dashboard</a>
+                    <a class="sidebar__menu-item" href="taxonomy.html">Bộ Taxonomy</a>
+                    <a class="sidebar__menu-item" href="manage.html">Quản lý tài khoản</a>
+                    <a class="sidebar__menu-item" onclick="openSetting()" href="#">Cài đặt</a>
+                </div>
+                <div class="sidebar__divider"></div>
+                <div class="sidebar__section" id="chat-history">
+					<div class="sidebar__section-title">LỊCH SỬ</div>
+				</div> 
+                <div class="sidebar__user-info">
+                    <div class="sidebar__user-avatar"></div>
+                    <div class="sidebar__user-details">
+                        <span class="sidebar__user-name" id="userName"></span>
+                    </div>
+                    <div class="logout-icon">
+                        <img id="sidebarLogout" src="/images/logout.svg">
+                    </div>
+                </div>
+            </div>
+            <div class="content-wrapper">
+                <div class="smart-paragraph-container">
+                    <div class="smart-paragraph-icon-wrapper">
+                        <div class="smart-paragraph-icon">
+                            <svg width="20" height="21" viewBox="0 0 20 21" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path
+                                    d="M16.25 6.75L15.0083 7.99167L12.5083 5.49167L13.75 4.25C14.1 3.9 14.55 3.73333 15 3.73333C15.45 3.73333 15.9 3.9 16.25 4.25C16.9417 4.94167 16.9417 6.05833 16.25 6.75Z"
+                                    fill="url(#paint0_linear_6_1026)"
+                                />
+                                <path d="M14.425 8.58333L5.41667 17.5833C4.725 18.275 3.60834 18.275 2.91667 17.5833C2.225 16.8917 2.225 15.775 2.91667 15.0833L11.925 6.08333L14.425 8.58333Z" fill="url(#paint1_linear_6_1026)" />
+                                <path
+                                    d="M8.29167 3.41667L8.63334 2.25833C8.66667 2.15 8.63334 2.03333 8.55834 1.95C8.48334 1.86667 8.35 1.83333 8.24167 1.86667L7.08334 2.20833L5.925 1.86667C5.81667 1.83333 5.7 1.86667 5.61667 1.94167C5.53334 2.025 5.50834 2.14167 5.54167 2.25L5.875 3.41667L5.53334 4.575C5.5 4.68333 5.53334 4.8 5.60834 4.88333C5.69167 4.96667 5.80834 4.99167 5.91667 4.95833L7.08334 4.625L8.24167 4.96667C8.275 4.975 8.3 4.98333 8.33334 4.98333C8.41667 4.98333 8.49167 4.95 8.55834 4.89167C8.64167 4.80833 8.66667 4.69167 8.63334 4.58333L8.29167 3.41667Z"
+                                    fill="url(#paint2_linear_6_1026)"
+                                />
+                                <path
+                                    d="M4.95833 8.41667L5.29999 7.25833C5.33333 7.15 5.29999 7.03333 5.22499 6.95C5.14166 6.86667 5.02499 6.84167 4.91666 6.875L3.74999 7.20833L2.59166 6.86667C2.48333 6.83333 2.36666 6.86667 2.28333 6.94167C2.19999 7.025 2.17499 7.14167 2.20833 7.25L2.54166 8.41667L2.19999 9.575C2.16666 9.68333 2.19999 9.8 2.27499 9.88333C2.35833 9.96667 2.47499 9.99167 2.58333 9.95833L3.74166 9.61667L4.89999 9.95833C4.92499 9.96667 4.95833 9.96667 4.99166 9.96667C5.07499 9.96667 5.14999 9.93333 5.21666 9.875C5.29999 9.79167 5.32499 9.675 5.29166 9.56667L4.95833 8.41667Z"
+                                    fill="url(#paint3_linear_6_1026)"
+                                />
+                                <path
+                                    d="M17.4583 12.5833L17.8 11.425C17.8333 11.3167 17.8 11.2 17.725 11.1167C17.6417 11.0333 17.525 11.0083 17.4167 11.0417L16.2583 11.3833L15.1 11.0417C14.9917 11.0083 14.875 11.0417 14.7917 11.1167C14.7083 11.2 14.6833 11.3167 14.7167 11.425L15.0583 12.5833L14.7167 13.7417C14.6833 13.85 14.7167 13.9667 14.7917 14.05C14.875 14.1333 14.9917 14.1583 15.1 14.125L16.2583 13.7833L17.4167 14.125C17.4417 14.1333 17.475 14.1333 17.5083 14.1333C17.5917 14.1333 17.6667 14.1 17.7333 14.0417C17.8167 13.9583 17.8417 13.8417 17.8083 13.7333L17.4583 12.5833Z"
+                                    fill="url(#paint4_linear_6_1026)"
+                                />
+                                <defs>
+                                    <linearGradient id="paint0_linear_6_1026" x1="14.6385" y1="3.73333" x2="14.6385" y2="7.99167" gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#E91FCF" />
+                                        <stop offset="1" stop-color="#FF8CF0" />
+                                    </linearGradient>
+                                    <linearGradient id="paint1_linear_6_1026" x1="8.41146" y1="6.08333" x2="8.41146" y2="18.1021" gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#E91FCF" />
+                                        <stop offset="1" stop-color="#FF8CF0" />
+                                    </linearGradient>
+                                    <linearGradient id="paint2_linear_6_1026" x1="7.08402" y1="1.85375" x2="7.08402" y2="4.98333" gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#E91FCF" />
+                                        <stop offset="1" stop-color="#FF8CF0" />
+                                    </linearGradient>
+                                    <linearGradient id="paint3_linear_6_1026" x1="3.74999" y1="6.85374" x2="3.74999" y2="9.97262" gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#E91FCF" />
+                                        <stop offset="1" stop-color="#FF8CF0" />
+                                    </linearGradient>
+                                    <linearGradient id="paint4_linear_6_1026" x1="16.2625" y1="11.0274" x2="16.2625" y2="14.1393" gradientUnits="userSpaceOnUse">
+                                        <stop stop-color="#E91FCF" />
+                                        <stop offset="1" stop-color="#FF8CF0" />
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="smart-paragraph-content">
+                        <span class="smart-paragraph-title">Quản lý người dùng</span>
+                        <span class="smart-paragraph-description">Khóa, Mở khóa, Chỉnh sửa thông tin người dùng</span>
+                    </div>
+                </div>
+                <div class="tab-bar">
+                    <div class="tab tab--active" tab-id="listUserID">Danh sách người dùng</div>
+                </div>
+                <div class="content-datatable-wrapper">
+                    <button id="userAddButton" class="btn btn--primary user-add" style="width: auto;" type="button" >
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M5 10H15" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                            <path d="M10 15V5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                        Thêm mới
+                    </button>
+                    <div id="listUserID">
+                   
+                    </div>
+                   
+                </div>
+                
+                
+               
+            </div>
+        </div>
+    </body>
+    <script src="/scripts/menu-mobile.js"></script>
+    <script src="/scripts/history.js"></script>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.8/css/jquery.dataTables.min.css" />
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+    <style>
+        /* ===== DataTable Card ===== */
+        #listUserID {
+            width: 100%;
+            max-width: 100%;
+            align-self: stretch;
+            flex: 1 1 auto;
+        }
+        #listUserID .dataTables_wrapper,
+        #listUserID .dt-container {
+            background: #fff;
+            border: 1px solid #e4e4e4;
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 6px 16px rgba(3, 9, 36, 0.04);
+            font-family: "Inter Display", system-ui, sans-serif;
+            color: #374151;
+        }
+
+        /* Top controls layout */
+        #listUserID .dataTables_wrapper .dataTables_length,
+        #listUserID .dataTables_wrapper .dataTables_filter,
+        #listUserID .dt-length,
+        #listUserID .dt-search {
+            margin-bottom: 12px;
+        }
+
+        /* Search input + length select */
+        #listUserID .dataTables_wrapper .dataTables_filter input,
+        #listUserID .dataTables_wrapper .dataTables_length select,
+        #listUserID .dt-input {
+            border: 1px solid #e4e4e4;
+            border-radius: 10px;
+            padding: 8px 12px;
+            outline: none;
+            font-size: 14px;
+            transition: box-shadow 0.15s ease, border-color 0.15s ease;
+        }
+        #listUserID .dataTables_wrapper .dataTables_filter input:focus,
+        #listUserID .dataTables_wrapper .dataTables_length select:focus,
+        #listUserID .dt-input:focus {
+            border-color: #3e61ff;
+            box-shadow: 0 0 0 3px rgba(62, 97, 255, 0.15);
+        }
+        .dataTables_filter label {
+            display: flex;
+            align-items: center;
+        }
+        /* ===== Table ===== */
+        #usersTable.dataTable {
+            border-collapse: separate;
+            border-spacing: 0;
+            width: 100%;
+        }
+
+        #usersTable thead th {
+            background: #f5f8ff;
+            color: #131825;
+            font-weight: 600;
+            letter-spacing: -0.14px;
+            border-bottom: 1px solid #e9eef9 !important;
+            padding: 12px;
+        }
+        #usersTable thead th:first-child {
+            border-top-left-radius: 8px;
+        }
+        #usersTable thead th:last-child {
+            border-top-right-radius: 8px;
+        }
+
+        #usersTable tbody td {
+            padding: 12px;
+            border-top: 1px solid #f0eeee;
+            vertical-align: middle;
+        }
+
+        #usersTable tbody tr:hover {
+            background: #f8fbff;
+        }
+
+        /* Zebra (tuỳ chọn) */
+        #usersTable.dataTable tbody tr:nth-child(2n) {
+            background: #fcfdff;
+        }
+
+        /* ===== Info + Pagination ===== */
+        #listUserID .dataTables_wrapper .dataTables_info,
+        #listUserID .dt-info {
+            color: #6b7280;
+            padding-top: 10px;
+        }
+
+        #listUserID .dataTables_wrapper .dataTables_paginate,
+        #listUserID .dt-paging {
+            padding-top: 8px;
+        }
+
+        /* jQuery DT 1.13 */
+        #listUserID .dataTables_wrapper .dataTables_paginate .paginate_button {
+            border: 1px solid #e4e4e4 !important;
+            border-radius: 8px;
+            padding: 6px 10px;
+            margin: 0 4px;
+            background: #fff !important;
+            color: #374151 !important;
+            transition: all 0.15s ease;
+        }
+        #listUserID .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+            background: #f0f3ff !important;
+            border-color: #d5ddff !important;
+            color: #3e61ff !important;
+        }
+        #listUserID .dataTables_wrapper .dataTables_paginate .paginate_button.current {
+            background: #3e61ff !important;
+            border-color: #3e61ff !important;
+            color: #fff !important;
+            box-shadow: 0 0 0 3px rgba(62, 97, 255, 0.15);
+        }
+
+        /* DT 2.x (nếu sau này nâng cấp) */
+        #listUserID .dt-paging .dt-paging-button {
+            border: 1px solid #e4e4e4;
+            border-radius: 8px;
+            padding: 6px 10px;
+            margin: 0 4px;
+            background: #fff;
+            color: #374151;
+        }
+        #listUserID .dt-paging .dt-paging-button:hover:not(.disabled) {
+            background: #f0f3ff;
+            border-color: #d5ddff;
+            color: #3e61ff;
+        }
+        #listUserID .dt-paging .dt-paging-button.current {
+            background: #3e61ff;
+            border-color: #3e61ff;
+            color: #fff;
+            box-shadow: 0 0 0 3px rgba(62, 97, 255, 0.15);
+        }
+
+        /* ===== Buttons trong cột Hành động ===== */
+        #usersTable .btn-outline {
+            border: 1px solid #e4e4e4;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            line-height: 1;
+            background: #fff;
+            transition: all 0.15s ease;
+        }
+        #usersTable .btn-outline.btn-edit {
+            border-color: #dbe3ff;
+        }
+        #usersTable .btn-outline.btn-edit:hover {
+            background: #f0f3ff;
+            color: #3e61ff;
+        }
+        #usersTable .btn-outline.btn-disable {
+            border-color: #ffd9d9;
+        }
+        #usersTable .btn-outline.btn-disable:hover {
+            background: #ffefef;
+            color: #dd4444;
+        }
+
+        /* ===== Processing overlay (nếu dùng) ===== */
+        #listUserID .dataTables_wrapper .dataTables_processing,
+        #listUserID .dt-processing {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid #e4e4e4;
+            border-radius: 10px;
+            padding: 10px 14px;
+            box-shadow: 0 6px 16px rgba(3, 9, 36, 0.05);
+        }
+
+        /* ===== Mobile ===== */
+        @media (max-width: 640px) {
+            #listUserID .dataTables_wrapper,
+            #listUserID .dt-container {
+                padding: 12px;
+            }
+            #usersTable tbody td {
+                padding: 10px;
+            }
+        }
+        #usersTable_filter{
+            width: 350px;
+        }
+        #usersTable_length{
+            position: absolute;
+            bottom: 0px;
+        }
+        #usersTable_length select{
+            padding: 4px 12px;
+        }
+        .dataTables_wrapper .dataTables_filter{
+            float: left;
+            text-align: left;
+        }
+        .toast {
+                visibility: hidden;
+                min-width: 200px;
+                background-color: #4caf50;
+                color: white;
+                text-align: center;
+                border-radius: 8px;
+                padding: 12px 16px;
+                position: fixed;
+                z-index: 9999;
+                right: 30px;
+                top: 30px;
+                font-size: 16px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+                opacity: 0;
+                transition: opacity 0.5s ease-in-out, visibility 0s linear 0.5s;
+        }
+
+        .toast.show {
+                visibility: visible;
+                opacity: 1;
+                transition-delay: 0s;
+        }
+        
+        .content-datatable-wrapper {
+            position: relative;
+            width: 100%;
+        }
+        .btn.btn--primary.user-add {
+            position: absolute;
+            z-index: 1;
+            right: 18px;
+            top: 13px;
+        }
+        #usersTable_filter > label > input {
+            --h: 38px;                 /* chiều cao */
+            --pad-x: 10px;             /* padding ngang */
+            --icon-size: 18px;         /* kích thước icon */
+            --icon-gap: 8px;           /* khoảng cách icon - text */
+
+            height: var(--h);
+            width: 220px;
+            box-sizing: border-box;
+
+            padding: 0 calc(var(--pad-x)) 0 calc(var(--pad-x) + var(--icon-size) + var(--icon-gap));
+            border: 1px solid #d0d7e2;
+            border-radius: 8px;
+            outline: none;
+            font: 14px/1.2 system-ui, -apple-system, Segoe UI, Roboto, "Inter", Arial, sans-serif;
+
+            /* SVG icon bạn đưa (data URI) */
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 24 24' fill='none'%3E%3Cpath d='M11.5 21a9.5 9.5 0 1 0 0-19 9.5 9.5 0 0 0 0 19ZM22 22l-2-2' stroke='%23333333' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-size: var(--icon-size) var(--icon-size);
+            background-position: left calc(var(--pad-x)) center;
+            transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease;
+            padding-left: 35px !important;
+        }
+
+    </style>
+    <script>
+       (function () {
+  // ====== CONFIG ======
+  const API_BASE = "https://wttbe.metapress.ai";
+  const USERS_API = API_BASE + "/api/users";
+  const LOCK_API = API_BASE + "/api/users/lock";
+  const UNLOCK_API = API_BASE + "/api/users/unlock";
+  const token = localStorage.getItem("auth_token") || "";
+  // ====== TAB SWITCH ======
+  const bar = document.querySelector(".tab-bar");
+  if (!bar) return;
+
+  const tabs = Array.from(bar.querySelectorAll(".tab[tab-id]"));
+  const panels = tabs.map((t) => document.getElementById(t.getAttribute("tab-id"))).filter(Boolean);
+
+  panels.forEach((p) => {
+    const d = getComputedStyle(p).display;
+    p.dataset.display = d && d !== "none" ? d : "block";
+  });
+  const show = (p) => (p.style.display = p.dataset.display || "block");
+  const hide = (p) => (p.style.display = "none");
+
+  let dt = null; // DataTable instance
+
+  function ensureTableMarkup() {
+    const wrap = document.getElementById("listUserID");
+    if (!wrap.querySelector("#usersTable")) {
+      wrap.innerHTML = `
+        <div style="width:100%;">
+          <table id="usersTable" class="display" style="width:100%"></table>
+        </div>`;
+    }
+  }
+
+  function deriveStatus(u) {
+    if (!u || typeof u !== "object") return "—";
+    if (u.status === 1) return "Đang hoạt động";
+    if (u.status === 2) return "Bị khóa";
+    return "Không rõ";
+  }
+
+  function renderActions(row) {
+    let btns = `<button class="btn-outline btn-edit" data-id="${row.id}">Chỉnh sửa</button>`;
+    if (row.status === 1) {
+      btns += `<button class="btn-outline btn-lock" data-id="${row.id}">Khóa</button>`;
+    } else if (row.status === 2) {
+      btns += `<button class="btn-outline btn-unlock" data-id="${row.id}">Mở khóa</button>`;
+    }
+    return `<div style="display:flex; gap:8px;">${btns}</div>`;
+  }
+
+  function initOrReloadDT() {
+    ensureTableMarkup();
+    const $table = $("#usersTable");
+    if ($.fn.dataTable.isDataTable($table)) {
+      dt.ajax.reload(null, false);
+      return;
+    }
+    dt = $table.DataTable({
+      serverSide: true,
+      processing: true,
+      ajax: function (data, callback, settings) {
+        const page = Math.floor(data.start / data.length) + 1;
+        const perPage = data.length;
+
+        const params = new URLSearchParams();
+        params.set("page", page);
+        params.set("per_page", perPage);
+
+        // search
+        if (data.search && data.search.value) {
+          params.set("search", data.search.value);
+        }
+
+        // sort
+        if (data.order && data.order.length) {
+          const ord = data.order[0];
+          const sortBy = (data.columns[ord.column] && data.columns[ord.column].data) || "id";
+          params.set("sort_by", sortBy);
+          params.set("sort_dir", ord.dir);
+        }
+
+        fetch(`${USERS_API}?${params.toString()}`, { headers: { Accept: "application/json" } })
+          .then((res) => (res.ok ? res.json() : Promise.reject(res)))
+          .then((json) => {
+            const rows = Array.isArray(json) ? json : json.data || [];
+            const total = json.recordsTotal ?? json.total ?? rows.length;
+
+            callback({
+              draw: data.draw,
+              recordsTotal: total,
+              recordsFiltered: json.recordsFiltered ?? total,
+              data: rows,
+            });
+
+            const lengthWrapper = document.getElementById("usersTable_length");
+            if (lengthWrapper) {
+              let totalEl = document.getElementById("totalLength");
+              if (!totalEl) {
+                lengthWrapper.insertAdjacentHTML("beforeend", `<span id="totalLength"></span>`);
+                totalEl = document.getElementById("totalLength");
+              }
+              totalEl.textContent = ` / ${total} người dùng`;
+            }
+          })
+          .catch(async (errRes) => {
+            let msg = "Không tải được danh sách.";
+            try {
+              const d = await errRes.json();
+              if (d?.message) msg = d.message;
+            } catch {}
+            toast(msg, { type: "error" });
+            callback({ draw: data.draw, recordsTotal: 0, recordsFiltered: 0, data: [] });
+          });
+      },
+      columns: [
+        { title: "Tên", data: "name", defaultContent: "-" },
+        { title: "Email", data: "email", defaultContent: "-" },
+        { title: "Mã nhân viên", defaultContent: "-", orderable: false },
+        { title: "Số bài viết (tháng)", data: "article_count", defaultContent: "-", orderable: false },
+        { title: "Số lần dùng AI (tháng)", data: "use_ai_count", defaultContent: "-" },
+        {
+          title: "Chi phí",
+          data: "ai_cost",
+          defaultContent: "-",
+          orderable: false,
+          render: function (data, type, row) {
+            if (!data) return "-";
+            return data + "$";
+          },
+        },
+        { title: "Trạng thái", data: null, render: (_d, _t, row) => deriveStatus(row) },
+        { title: "Hành động", data: null, orderable: false, searchable: false, render: (_d, _t, row) => renderActions(row) },
+      ],
+      pageLength: 10,
+      responsive: true,
+      language: {
+        search: "",
+        searchPlaceholder: "Tìm kiếm ",
+        lengthMenu: "Hiển thị _MENU_",
+        info: "",
+        infoEmpty: "",
+        zeroRecords: "",
+        infoFiltered: "",
+        paginate: { first: "Đầu", previous: "Trước", next: "Sau", last: "Cuối" },
+      },
+      initComplete: function () {
+            // nếu bảng chưa có wrapper
+            if (!$('#usersTable').parent().hasClass('table-responsive')) {
+            $('#usersTable').wrap('<div class="table-responsive"></div>');
+            }
+        },
+    });
+  }
+
+  // ====== TAB HANDLERS ======
+  function activateTab(tabEl) {
+    const targetId = tabEl.getAttribute("tab-id");
+    tabs.forEach((t) => t.classList.toggle("tab--active", t === tabEl));
+    panels.forEach((p) => (p.id === targetId ? show(p) : hide(p)));
+    if (targetId === "listUserID") initOrReloadDT();
+  }
+
+  activateTab(tabs.find((t) => t.classList.contains("tab--active")) || tabs[0]);
+
+  bar.addEventListener("click", (e) => {
+    const tab = e.target.closest(".tab[tab-id]");
+    if (tab) activateTab(tab);
+  });
+
+  // ====== ACTION BUTTONS ======
+  document.getElementById("listUserID").addEventListener("click", async (e) => {
+    const btn = e.target.closest("button");
+    if (!btn) return;
+
+    const id = btn.dataset.id;
+    if (!id) return;
+
+    if (btn.classList.contains("btn-edit")) {
+      //console.log(id);
+      openEditUserModal(id);
+    }
+
+    if (btn.classList.contains("btn-lock") || btn.classList.contains("btn-unlock")) {
+      const isLock = btn.classList.contains("btn-lock");
+      const url = isLock ? LOCK_API : UNLOCK_API;
+      try {
+        const res = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({ id }),
+        });
+        if (!res.ok) throw res;
+        const json = await res.json();
+        toast(json.message || (isLock ? "Đã khóa user" : "Đã mở khóa user"), { type: "success" });
+        dt && dt.ajax.reload(null, false);
+      } catch (errRes) {
+        let msg = isLock ? "Không khóa được user." : "Không mở khóa được user.";
+        try {
+          const d = await errRes.json();
+          if (d?.message) msg = d.message;
+        } catch {}
+        toast(msg, { type: "error" });
+      }
+    }
+  });
+
+  // Hàm hiển thị/ẩn mật khẩu
+function togglePassword(id, el) {
+  const input = document.getElementById(id);
+  if (!input) return;
+  if (input.type === "password") {
+    input.type = "text";
+    el.classList.add("active");
+  } else {
+    input.type = "password";
+    el.classList.remove("active");
+  }
+}
+
+async function openEditUserModal(id) {
+  const formElement = document.createElement("form");
+  formElement.innerHTML = `
+    <div id="formWrapper">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Họ tên <span class="required">*</span></label>
+          <div class="input-box">
+            <input type="text" id="fullname" class="input input-number" placeholder="Nhập họ tên" required />
+          </div>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Vai trò <span class="required">*</span></label>
+            <div class="select-wrapper">
+                <select id="role" class="custom-select">
+                    <option value="admin">Quản trị viên</option>
+                    <option value="editor" selected>Biên tập viên</option>
+                </select>
+                <div class="select-icon">
+                    <svg width="17" height="17" viewBox="0 0 17 17" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8.50001 11.7C8.03335 11.7 7.56668 11.52 7.21335 11.1667L2.86668 6.82C2.67335 6.62667 2.67335 6.30667 2.86668 6.11334C3.06001 5.92 3.38001 5.92 3.57335 6.11334L7.92001 10.46C8.24001 10.78 8.76001 10.78 9.08001 10.46L13.4267 6.11334C13.62 5.92 13.94 5.92 14.1333 6.11334C14.3267 6.30667 14.3267 6.62667 14.1333 6.82L9.78668 11.1667C9.43335 11.52 8.96668 11.7 8.50001 11.7Z" fill="#292D32"></path></svg>
+                </div>
+            </div>
+        </div>
+      </div>
+      
+      <div class="form-row">
+        <div class="form-group full">
+          <label class="form-label">Mật khẩu mới</label>
+          <div class="input-box">
+            <input type="password" id="password" autocomplete="new-password" class="input input-number" placeholder="Nhập mật khẩu mới (nếu thay đổi)" />
+            <span class="pw-icon" onclick="togglePassword('password', this)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                <path d="M15.58 12c0 1.98-1.6 3.58-3.58 3.58S8.42 13.98 8.42 12s1.6-3.58 3.58-3.58 3.58 1.6 3.58 3.58Z" stroke="#374151" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                <path d="M12 20.27c3.53 0 6.82-2.08 9.11-5.68.9-1.41.9-3.78 0-5.19-2.29-3.6-5.58-5.68-9.11-5.68-3.53 0-6.82 2.08-9.11 5.68-.9 1.41-.9 3.78 0 5.19 2.29 3.6 5.58 5.68 9.11 5.68Z" stroke="#374151" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  `;
+  
+  const modal = new SimpleModal({
+    titleText: "Chỉnh sửa người dùng",
+    content: formElement,
+    position: "top-right",
+    height: "90vh",
+    footerButtons: [
+      { text: "Hủy", class: "btn-cancel", onClick: () => modal.closeModal() },
+      { text: "Cập nhật", class: "btn-primary", onClick: () => updateUser(id, modal) },
+    ],
+  });
+
+  modal.openModal();
+  try {
+    const response = await fetch(`${API_BASE}/api/user/load?id=${id}`, {
+      headers: {
+        "Accept": "application/json",
+        "Authorization": `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) throw new Error("Không thể tải thông tin người dùng");
+    const data = await response.json();
+
+    // 4. Điền dữ liệu vào form
+    if (data && data.user) {
+      document.getElementById('fullname').value = data.user.fullname || "";
+      document.getElementById('role').value = data.user.role || "editor";
+    }
+  }
+  catch (err) {
+    console.error(err);
+  }
+}
+
+// Hàm xử lý cập nhật người dùng
+async function updateUser(id, modal) {
+  const fullname = document.getElementById('fullname').value.trim();
+  const role = document.getElementById('role').value;
+  const password = document.getElementById('password').value;
+
+  if (!fullname || !role) {
+    toast('Vui lòng nhập đầy đủ thông tin bắt buộc', { type: 'error' });
+    return;
+  }
+
+  const payload = { id, fullname, role, password };
+
+  try {
+    await editUserDataToServer(payload);
+    toast('Cập nhật người dùng thành công', { type: 'success' });
+    modal.closeModal();
+
+    // (Tùy chọn) Refresh lại danh sách
+    // reloadUserList();
+  } catch (error) {
+    console.error(error);
+    toast('Đã xảy ra lỗi khi cập nhật người dùng', { type: 'error' });
+  }
+}
+
+async function editUserDataToServer(payload) {
+  const response = await fetch(`${API_BASE}/api/update/user`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      "Accept": "application/json",
+      "Authorization": `Bearer ${token}`,
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    throw new Error('Không thể kết nối máy chủ');
+  }
+
+  const result = await response.json();
+
+  if (result.status !== 'success') {
+    throw new Error(result.message || 'Cập nhật thất bại');
+  }
+
+  return result;
+}
+
+
+
+
+  
+})();
+
+    </script>
+
+    <script>
+(function () {
+  // ====== CONFIG ======
+  const ENDPOINT_BASE = "https://wttbe.metapress.ai/";
+  const CREATE_USER_URL = ENDPOINT_BASE.replace(/\/+$/, "") + "/api/user/create";
+
+  // ====== VALIDATION ======
+  function getErrors({ name, email, password, password_confirmation }) {
+    const errors = [];
+    if (!name?.trim()) errors.push("Họ tên không được để trống.");
+    if (!email?.trim()) {
+      errors.push("Email không được để trống.");
+    } else {
+      const ok = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      if (!ok) errors.push("Email không hợp lệ.");
+    }
+    if (!password || password.length < 6) errors.push("Mật khẩu tối thiểu 6 ký tự.");
+    if (password !== password_confirmation) errors.push("Mật khẩu nhập lại không khớp.");
+    return errors;
+  }
+
+  // ====== API CALL ======
+  async function sendUserDataToServer(modal) {
+    const formWrapper = document.getElementById("formWrapper");
+    const inputs = formWrapper.querySelectorAll("input");
+    if (inputs.length < 4) {
+      console.error("Không tìm thấy đủ input trong form.");
+      return;
+    }
+    const [fullNameInput, emailInput, passwordInput, confirmInput] = inputs;
+
+    const payload = {
+      name: fullNameInput.value || "",
+      email: emailInput.value || "",
+      password: passwordInput.value || "",
+      password_confirmation: confirmInput.value || "",
+    };
+
+    const errors = getErrors(payload);
+    if (errors.length) {
+      toast(errors.join(" "), { type: "error" });
+      return;
+    }
+
+    try {
+      const res = await fetch(CREATE_USER_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      let data = null;
+      try {
+        data = await res.json();
+      } catch {
+        /* có thể response rỗng */
+      }
+
+      if (!res.ok) {
+        const msg =
+          (data && data.message) ||
+          (data &&
+            typeof data === "object" &&
+            Object.values(data.errors || {})
+              .flat()
+              .join(" ")) ||
+          `Tạo user thất bại (HTTP ${res.status}).`;
+        toast(msg, { type: "error" });
+        return;
+      }
+
+      // Thành công
+      toast("Tạo user thành công.", { type: "success" });
+
+      // Clear form
+      fullNameInput.value = "";
+      emailInput.value = "";
+      passwordInput.value = "";
+      confirmInput.value = "";
+
+      modal.closeModal();
+    } catch (e) {
+      console.error(e);
+      toast("Không thể kết nối máy chủ. Vui lòng thử lại.", { type: "error" });
+    }
+  }
+
+  // ====== OPEN MODAL ======
+  document.getElementById("userAddButton").onclick = () => {
+    const formElement = document.createElement("form");
+    formElement.innerHTML = `
+      <div id="formWrapper">
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Họ tên <span class="required">*</span></label>
+            <div class="input-box">
+              <input type="text" class="input input-number" placeholder="Nhập thông tin" required />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email <span class="required">*</span></label>
+            <div class="input-box">
+              <input type="email" class="input input-number" placeholder="Nhập thông tin" required />
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label">Mật khẩu <span class="required">*</span></label>
+            <div class="input-box">
+              <input type="password" id="password" autocomplete="new-password" class="input input-number" placeholder="Nhập thông tin" required />
+              <span class="pw-icon" onclick="togglePassword('password', this)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M15.58 12c0 1.98-1.6 3.58-3.58 3.58S8.42 13.98 8.42 12s1.6-3.58 3.58-3.58 3.58 1.6 3.58 3.58Z" stroke="#374151" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                  <path d="M12 20.27c3.53 0 6.82-2.08 9.11-5.68.9-1.41.9-3.78 0-5.19-2.29-3.6-5.58-5.68-9.11-5.68-3.53 0-6.82 2.08-9.11 5.68-.9 1.41-.9 3.78 0 5.19 2.29 3.6 5.58 5.68 9.11 5.68Z" stroke="#374151" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Nhập lại mật khẩu <span class="required">*</span></label>
+            <div class="input-box">
+              <input id="confirm_password" type="password" class="input input-number" placeholder="Nhập lại mật khẩu" />
+              <span class="pw-icon" onclick="togglePassword('confirm_password', this)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M15.58 12c0 1.98-1.6 3.58-3.58 3.58S8.42 13.98 8.42 12s1.6-3.58 3.58-3.58 3.58 1.6 3.58 3.58Z" stroke="#374151" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                  <path d="M12 20.27c3.53 0 6.82-2.08 9.11-5.68.9-1.41.9-3.78 0-5.19-2.29-3.6-5.58-5.68-9.11-5.68-3.53 0-6.82 2.08-9.11 5.68-.9 1.41-.9 3.78 0 5.19 2.29 3.6 5.58 5.68 9.11 5.68Z" stroke="#374151" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                </svg>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>`;
+
+    const modal = new SimpleModal({
+      titleText: "Thêm mới người dùng",
+      content: formElement,
+      position: "top-right",
+      height: "90vh",
+      footerButtons: [
+        { text: "Hủy", class: "btn-cancel", onClick: () => modal.closeModal() },
+        { text: "Xác Nhận", class: "btn-primary", onClick: () => sendUserDataToServer(modal) },
+      ],
+    });
+    modal.openModal();
+  };
+  
+  
+
+})();
+
+
+
+
+
+</script>
+
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+   
+    <script>
+        const getUser = () => {
+            const user = localStorage.getItem("auth_user");
+            return JSON.parse(user);
+        };
+        const userAuth = getUser();
+        if (userAuth.name) {
+            document.getElementById("userName").textContent = userAuth.name;
+        }
+    </script>
+    <script>
+        (function () {
+            const API_BASE = "https://wttbe.metapress.ai/"; // đổi theo môi trường của bạn
+            const LOGIN_PAGE = "/login.html";
+            document.getElementById("sidebarLogout")?.addEventListener("click", function (e) {
+                e.preventDefault();
+                // Lấy token hiện tại (nếu có)
+                let token = "";
+                try {
+                    token = localStorage.getItem("auth_token") || "";
+                } catch {}
+                // (Tùy chọn) Gọi API logout để revoke token ở server, nếu bạn có route /api/logout
+                if (token) {
+                    fetch(API_BASE + "/api/logout", {
+                        method: "POST",
+                        headers: {
+                            Accept: "application/json",
+                            Authorization: "Bearer " + token,
+                        },
+                    }).catch(() => {
+                        /* Bỏ qua lỗi */
+                    });
+                }
+                // Xóa token local và chuyển về login
+                try {
+                    localStorage.removeItem("auth_token");
+                    localStorage.removeItem("auth_user");
+                } catch {}
+                location.href = LOGIN_PAGE;
+            });
+        })();
+       
+        
+    </script>
+    
+</html>

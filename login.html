@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="vi">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Đăng nhập</title>
+        <style>
+            @font-face {
+                font-family: "Inter Display";
+                src: url("/fonts/InterDisplay-Light.ttf") format("truetype");
+                font-weight: 300;
+                font-style: normal;
+            }
+
+            @font-face {
+                font-family: "Inter Display";
+                src: url("/fonts/InterDisplay-LightItalic.ttf") format("truetype");
+                font-weight: 300;
+                font-style: italic;
+            }
+
+            @font-face {
+                font-family: "Inter Display";
+                src: url("/fonts/InterDisplay-Regular.ttf") format("truetype");
+                font-weight: 400;
+                font-style: normal;
+            }
+
+            @font-face {
+                font-family: "Inter Display";
+                src: url("/fonts/InterDisplay-Italic.ttf") format("truetype");
+                font-weight: 400;
+                font-style: italic;
+            }
+
+            @font-face {
+                font-family: "Inter Display";
+                src: url("/fonts/InterDisplay-Medium.ttf") format("truetype");
+                font-weight: 500;
+                font-style: normal;
+            }
+
+            @font-face {
+                font-family: "Inter Display";
+                src: url("/fonts/InterDisplay-MediumItalic.ttf") format("truetype");
+                font-weight: 500;
+                font-style: italic;
+            }
+
+            @font-face {
+                font-family: "Inter Display";
+                src: url("/fonts/InterDisplay-SemiBold.ttf") format("truetype");
+                font-weight: 600;
+                font-style: normal;
+            }
+
+            @font-face {
+                font-family: "Inter Display";
+                src: url("/fonts/InterDisplay-SemiBoldItalic.ttf") format("truetype");
+                font-weight: 600;
+                font-style: italic;
+            }
+
+            @font-face {
+                font-family: "Inter Display";
+                src: url("/fonts/InterDisplay-Bold.ttf") format("truetype");
+                font-weight: 700;
+                font-style: normal;
+            }
+
+            @font-face {
+                font-family: "Inter Display";
+                src: url("/fonts/InterDisplay-BoldItalic.ttf") format("truetype");
+                font-weight: 700;
+                font-style: italic;
+            }
+
+            @font-face {
+                font-family: "Inter Display";
+                src: url("/fonts/InterDisplay-ExtraBold.ttf") format("truetype");
+                font-weight: 800;
+                font-style: normal;
+            }
+
+            @font-face {
+                font-family: "Inter Display";
+                src: url("/fonts/InterDisplay-ExtraBoldItalic.ttf") format("truetype");
+                font-weight: 800;
+                font-style: italic;
+            }
+        </style>
+        <style>
+            :root {
+                /* Đổi đường dẫn ảnh nền tại đây */
+                --bg-url: url("/images/background.png");
+                --bg-overlay: rgba(0, 0, 0, 0.35);
+
+                --surface: #ffffff;
+                --surface-2: #f4f5f7;
+                --text: #0f172a;
+                --muted: #64748b;
+                --primary: #111827;
+                --primary-contrast: #ffffff;
+                --danger: #dc2626;
+                --ring: rgba(2, 132, 199, 0.35);
+                --border: #e5e7eb;
+                --shadow: 0 10px 25px rgba(0, 0, 0, 0.08), 0 4px 10px rgba(0, 0, 0, 0.06);
+            }
+
+            * {
+                box-sizing: border-box;
+            }
+            html,
+            body {
+                height: 100%;
+                font-family: "Inter Display";
+            }
+            body {
+                margin: 0;
+                font-family: "Inter Display";
+                color: var(--text);
+                background: var(--surface-2);
+                line-height: 1.5;
+            }
+            input {
+                font-family: "Inter Display";
+            }
+            
+            .split {
+                display: flex;
+                min-height: 100vh;
+                
+            }
+
+            .split__media {
+                position: relative;
+                flex: 1 1 30%;
+                background-image: radial-gradient(1200px 800px at 20% 20%, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0) 60%), var(--bg-url), linear-gradient(135deg, #0f172a, #111827);
+                background-size: cover;
+                background-position: top center;
+                background-repeat: no-repeat;
+                overflow: hidden;
+                display: flex;
+                align-items: flex-end;
+                justify-content: flex-start;
+            }
+
+            .split__form {
+                flex: 1 1 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: clamp(24px, 6vw, 80px);
+                background: url("/images/metapress.webp") no-repeat center center / cover;
+            }
+
+            .card {
+                width: 100%;
+                max-width: 420px;
+                background: var(--surface);
+                border: 1px solid var(--border);
+                border-radius: 16px;
+                padding: 28px;
+                box-shadow: var(--shadow);
+            }
+
+            .brand {
+                font-weight: 600;
+                font-size: 22px;
+                margin-bottom: 6px;
+                letter-spacing: 0.2px;
+            }
+
+            .subtitle {
+                color: var(--muted);
+                font-size: 14px;
+                margin-bottom: 22px;
+            }
+
+            .control {
+                margin-bottom: 14px;
+            }
+
+            .control label {
+                display: block;
+                font-size: 13px;
+                margin-bottom: 8px;
+                color: var(--muted);
+            }
+
+            .input,
+            .button {
+                width: 100%;
+                border-radius: 10px;
+                padding: 12px 14px;
+                font-size: 15px;
+                border: 1px solid var(--border);
+                background: #fff;
+                outline: none;
+            }
+
+            .input:focus {
+                border-color: #0284c7;
+                box-shadow: 0 0 0 4px var(--ring);
+            }
+
+            .row {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 12px;
+                margin: 6px 0 18px;
+                font-size: 14px;
+            }
+
+            .checkbox {
+                display: inline-flex;
+                align-items: center;
+                gap: 8px;
+                user-select: none;
+                cursor: pointer;
+            }
+            .checkbox input {
+                width: 16px;
+                height: 16px;
+            }
+
+            .link {
+                color: #0369a1;
+                text-decoration: none;
+            }
+            .link:hover {
+                text-decoration: underline;
+            }
+
+            .button {
+                background-color: #3e61ff;
+                color: #fff;
+                border: none;
+                cursor: pointer;
+                width: 100%;
+                letter-spacing: -0.21px;
+            }
+            .button[disabled] {
+                opacity: 0.7;
+                cursor: not-allowed;
+            }
+
+            .muted {
+                color: var(--muted);
+                font-size: 14px;
+            }
+
+            .alert {
+                display: none;
+                margin-bottom: 14px;
+                border-radius: 10px;
+                padding: 10px 12px;
+                font-size: 14px;
+                line-height: 1.4;
+                border: 1px solid #fecaca;
+                background: #fee2e2;
+                color: #7f1d1d;
+            }
+
+            .password-row {
+                position: relative;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .toggle-pass {
+                width: 42px;
+                height: 42px;
+                border: 1px solid var(--border);
+                background: #fff;
+                border-radius: 10px;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0;
+                font-size: 0; /* ẩn text nếu có */
+                cursor: pointer;
+            }
+            .toggle-pass svg {
+                width: 20px;
+                height: 20px;
+                display: block;
+            }
+
+            .footer-note {
+                margin-top: 14px;
+                font-size: 12px;
+                color: var(--muted);
+            }
+            /* Logo area */
+            .logo-wrap {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                margin-bottom: 22px;
+            }
+            .logo {
+                height: 36px;
+            }
+            .pw-icon {
+            position: absolute;
+            right: 16px;
+            cursor: pointer;
+            user-select: none;
+            }
+            @media (max-width: 960px) {
+                .split {
+                    flex-direction: column;
+                }
+                .split__media {
+                    min-height: 32vh;
+                }
+                .split__form {
+                    padding-top: 20px;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <main class="split">
+            <section class="split__form">
+                <div class="card" role="form" aria-labelledby="formTitle">
+                    <div class="logo-wrap" id="formTitle">
+                       <img  src="/images/logo.svg" onerror="this.onerror=null; this.src='/images/logo.png';" style="max-width: 120px;" alt="Logo">
+                    </div>
+                    <div class="alert" id="formAlert" role="alert"></div>
+                    <form id="loginForm" autocomplete="on">
+                        <div class="control">
+                            <label for="email">Email</label>
+                            <input id="email" name="email"  type="email" class="input" placeholder="email@gmail.com" required />
+                        </div>
+                        <div class="control">
+                            <label for="password">Mật khẩu</label>
+                            <div class="password-row">
+                                <input id="password" value="" name="password" type="password" class="input" placeholder="" required />
+                                <span class="pw-icon" onclick="togglePassword('password', this)"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15.58 12c0 1.98-1.6 3.58-3.58 3.58S8.42 13.98 8.42 12s1.6-3.58 3.58-3.58 3.58 1.6 3.58 3.58Z" stroke="#374151" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 20.27c3.53 0 6.82-2.08 9.11-5.68.9-1.41.9-3.78 0-5.19-2.29-3.6-5.58-5.68-9.11-5.68-3.53 0-6.82 2.08-9.11 5.68-.9 1.41-.9 3.78 0 5.19 2.29 3.6 5.58 5.68 9.11 5.68Z" stroke="#374151" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+                            </div>
+                        </div>
+                        <button class="button" id="submitBtn" type="submit">Đăng nhập</button>
+                        <div class="row"></div>
+                    </form>
+                </div>
+            </section>
+        </main>
+        <script>
+            (function () {
+                // Cấu hình
+                const API_BASE = "https://wttbe.metapress.ai/";
+                const LOGIN_ENDPOINT = "api/login";
+                const DASHBOARD_PAGE = "/dashboard.html";
+                const REDIRECT_IF_AUTH = true; // có token thì rời trang login
+
+                // Helpers
+                const getToken = () => {
+                    try {
+                        return localStorage.getItem("auth_token") || "";
+                    } catch {
+                        return "";
+                    }
+                };
+                const getUser = () => {
+                    let userAuth;
+                    try {
+
+                        userAuth = JSON.parse(localStorage.getItem("auth_user"));
+
+                    }
+                    catch {
+
+                    }
+                    console.log(userAuth);
+                    return userAuth;
+                }
+                const setToken = (t) => {
+                    try {
+                        localStorage.setItem("auth_token", t || "");
+                    } catch {}
+                };
+                const saveUser = (u) => {
+                    try {
+                        localStorage.setItem("auth_user", JSON.stringify(u || null));
+                    } catch {}
+                };
+                const getRedirect = () => new URLSearchParams(location.search).get("redirect");
+                
+                // Nếu đã đăng nhập, rời trang login (tùy chọn)
+                if (REDIRECT_IF_AUTH && getToken()) {
+
+                    const redirect = getRedirect();
+                    const user = getUser();
+
+                    if (user.role === "admin") {
+                        location.href = "/admin/dashboard.html";
+                    }
+                    else {
+                        location.href = "/user/dashboard.html";
+                    }
+
+                    //location.href = redirect || DASHBOARD_PAGE;
+                    return;
+                }
+
+                // Prefill email đã nhớ
+                try {
+                    const saved = localStorage.getItem("remember_email");
+                    if (saved) {
+                        const emailEl = document.getElementById("email");
+                        if (emailEl) emailEl.value = saved;
+                    }
+                } catch {}
+
+                // Submit login
+                const form = document.getElementById("loginForm");
+                if (!form) return;
+
+                form.addEventListener("submit", async function (e) {
+                    e.preventDefault();
+                    const emailEl = document.getElementById("email");
+                    const passEl = document.getElementById("password");
+                    const rememberEl = document.getElementById("remember");
+                    const alertBox = document.getElementById("formAlert");
+                    const btn = form.querySelector('button[type="submit"]');
+
+                    const showAlert = (msg) => {
+                        if (alertBox) {
+                            alertBox.textContent = msg;
+                            alertBox.style.display = "block";
+                        }
+                    };
+                    const hideAlert = () => {
+                        if (alertBox) {
+                            alertBox.textContent = "";
+                            alertBox.style.display = "none";
+                        }
+                    };
+
+                    const payload = {
+                        email: String(emailEl?.value || "").trim(),
+                        password: String(passEl?.value || ""),
+                    };
+
+                    if (!payload.email || !payload.password) {
+                        showAlert("Vui lòng nhập đầy đủ email và mật khẩu.");
+                        return;
+                    }
+                    hideAlert();
+                    if (btn) btn.disabled = true;
+
+                    try {
+                        const res = await fetch(API_BASE + LOGIN_ENDPOINT, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json", Accept: "application/json" },
+                            body: JSON.stringify(payload),
+                        });
+
+                        const data = await res.json().catch(() => ({}));
+
+                        if (!res.ok) {
+                            showAlert(data?.message || "Thông tin đăng nhập không đúng");
+                            if (btn) btn.disabled = false;
+                            return;
+                        }
+
+                        // Laravel trả { user, token }
+                        const token = data?.token;
+                        if (!token) {
+                            showAlert("Không nhận được token từ máy chủ.");
+                            if (btn) btn.disabled = false;
+                            return;
+                        }
+
+                        setToken(token);
+                        saveUser(data?.user);
+                        // Nhớ email nếu tick
+                        try {
+                            if (rememberEl?.checked) localStorage.setItem("remember_email", payload.email);
+                            else localStorage.removeItem("remember_email");
+                        } catch {}
+                        // Điều hướng
+
+
+                        /*console.log(data?.user);
+                        const redirect = getRedirect();
+                        //location.href = redirect || DASHBOARD_PAGE;
+                        if (redirect) {
+                            //location.href = redirect;
+                        } 
+                        else {
+                           
+                        }*/
+                        if (data?.user?.role === "admin") {
+                            location.href = "/admin/dashboard.html";
+                        }
+                        else {
+                              location.href = "/user/dashboard.html";
+                        }
+                    } catch (err) {
+                        showAlert("Không thể kết nối máy chủ. Vui lòng thử lại.");
+                        if (btn) btn.disabled = false;
+                    }
+                });
+            })();
+            function togglePassword(inputId, el) {
+                const input = document.getElementById(inputId);
+                if (!input) return;
+                if (input.type === "password") {
+                    input.type = "text";
+                    el.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="m14.53 9.47-5.06 5.06a3.576 3.576 0 1 1 5.06-5.06Z" stroke="#374151" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M17.82 5.77C16.07 4.45 14.07 3.73 12 3.73c-3.53 0-6.82 2.08-9.11 5.68-.9 1.41-.9 3.78 0 5.19.79 1.24 1.71 2.31 2.71 3.17M8.42 19.53c1.14.48 2.35.74 3.58.74 3.53 0 6.82-2.08 9.11-5.68.9-1.41.9-3.78 0-5.19-.33-.52-.69-1.01-1.06-1.47" stroke="#374151" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M15.51 12.7a3.565 3.565 0 0 1-2.82 2.82M9.47 14.53 2 22M22 2l-7.47 7.47" stroke="#374151" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>`; 
+                } else {
+                    input.type = "password";
+                    el.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M15.58 12c0 1.98-1.6 3.58-3.58 3.58S8.42 13.98 8.42 12s1.6-3.58 3.58-3.58 3.58 1.6 3.58 3.58Z" stroke="#374151" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path><path d="M12 20.27c3.53 0 6.82-2.08 9.11-5.68.9-1.41.9-3.78 0-5.19-2.29-3.6-5.58-5.68-9.11-5.68-3.53 0-6.82 2.08-9.11 5.68-.9 1.41-.9 3.78 0 5.19 2.29 3.6 5.58 5.68 9.11 5.68Z" stroke="#374151" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>`; // đổi icon khi ẩn mật khẩu
+                }
+            }
+        </script>
+    </body>
+</html>
