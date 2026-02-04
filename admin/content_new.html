@@ -1832,7 +1832,7 @@
 
 	async function ensureEditor() {
 		if (editorInstance) return editorInstance;
-		editorInstance = await ClassicEditor.create(document.querySelector('#editorInline'));
+		editorInstance = await ClassicEditor.create(document.querySelector('#editor-root'));
 		return editorInstance;
 	}
 	// window.__EDITOR_DATA__ = {
@@ -1871,8 +1871,8 @@
 		renderEditorTools(toolSchema);
 		ensureToolStatsUI();      // ➕
 
-		// const ed = await ensureEditor();
-		// ed.setData(html);
+		const ed = await ensureEditor();
+		ed.setData(html);
 
 		bindEditorStatsOnce();    // ➕
 		updateToolStats();        // ➕
