@@ -1829,6 +1829,7 @@
 	}
 
 
+
 	async function ensureEditor() {
 		if (editorInstance) return editorInstance;
 		editorInstance = await ClassicEditor.create(document.querySelector('#editor-root'));
@@ -1842,13 +1843,16 @@
 	// };
 
 	function saveToCMS(data) {
-		console.log("Content:", data.content);
-		console.log("Stats:", data.stats);
-		document.getElementById('statBlocks').textContent = data.stats.blocks;
-		document.getElementById('statWords').textContent = data.stats.words;
-		document.getElementById('statChars').textContent = data.stats.characters;
-		window.__CMS_CONTENT__ = data.content;
-		console.log("Content:", window.__CMS_CONTENT__);
+		console.log("HTML gửi lên server:", data.content);
+
+		// fetch("/api/save-article", {
+		//     method: "POST",
+		//     headers: { "Content-Type": "application/json" },
+		//     body: JSON.stringify({
+		//         id: data.articleId,
+		//         content: data.html, // lưu html vào DB
+		//     }),
+		// });
 	}
 	function waitForEditor() {
 		return new Promise((resolve) => {
@@ -1860,12 +1864,6 @@
 		});
 	}
 
-	function renderStats() {
-		document.getElementById("stats").innerText =
-			`Blocks: ${window.__CMS_DATA__.stats.blocks} | Words: ${window.__CMS_DATA__.stats.words} | Characters: ${window.__CMS_DATA__.stats.characters}`;
-	}
-
-
 	async function loadToEditor(html) {
 		generatedHtml = html;
 		gotoStep(STEPS.EDITOR);
@@ -1873,8 +1871,8 @@
 		renderEditorTools(toolSchema);
 		ensureToolStatsUI();      // ➕
 
-		//const ed = await ensureEditor();
-		// ed.setData(html);
+		const ed = await ensureEditor();
+		ed.setData(html);
 
 		bindEditorStatsOnce();    // ➕
 		updateToolStats();        // ➕
@@ -1920,7 +1918,7 @@
 					let html = removeAllMarkdownLinks(result.data.text || '');
 
 					//Assign data here
-					loadToEditor(html);
+					editorInstance.setData(html);
 					hideSpinner(); // 🟢
 					return;
 				}
@@ -2077,7 +2075,7 @@
 			...toolPayload,
 			full_content: {
 				label: 'Nội dung hiện tại',
-				value: window.__CMS_CONTENT__ || ""
+				value: editorInstance.getData()
 			},
 			regenerate: {
 				label: 'Regenerate',
@@ -2294,8 +2292,8 @@
 		document.getElementById('linkedinContent').value = data.social.linkedin;
 	}
 	document.getElementById("btnToPublish").addEventListener("click", async () => {
-		//if (!editorInstance) return;
-		if (window.__CMS_CONTENT__ === null || window.__CMS_CONTENT__ === "") return;
+		if (!editorInstance) return;
+
 		const btn = document.getElementById("btnToPublish");
 		btn.classList.add("disabled");
 		btn.style.pointerEvents = "none";
@@ -2303,8 +2301,8 @@
 		showSpinner(); // 🔴 BẬT SPINNER Ở ĐÂY
 
 		try {
-			//finalHtml = editorInstance.getData();
-			finalHtml = window.__CMS_CONTENT__;
+			finalHtml = editorInstance.getData();
+
 			const step3Data = await generateStep3FromN8n(finalHtml);
 
 			fillStep3FromApi(step3Data);
@@ -2422,50 +2420,49 @@
 		if (!editorInstance || editorInstance.__statsBound) return;
 		editorInstance.__statsBound = true;
 
-		// editorInstance.model.document.on('change:data', () => {
-		// 	updateToolStats();
-		// });
+		editorInstance.model.document.on('change:data', () => {
+			updateToolStats();
+		});
 	}
-	console.log("Instance", document.getElementById("editor-root"))
 </script>
 <script>
 	/* ========= SPINNER (giữ nguyên) ========= */
 
 
 	/* ========= AI MENU SHOW/HIDE (giữ nguyên logic) ========= */
-	// const aiMenu = document.getElementById('ai-menu');
+	const aiMenu = document.getElementById('ai-menu');
 
-	// document.addEventListener('mouseup', () => {
-	// 	setTimeout(() => {
-	// 		// if (!editorInstance) return;
-	// 		if (!window.__CMS_CONTENT__) return;
-	// 		const selection = window.getSelection();
-	// 		if (!selection || selection.isCollapsed) {
-	// 			aiMenu.style.display = 'none';
-	// 			return;
-	// 		}
+	document.addEventListener('mouseup', () => {
+		setTimeout(() => {
+			if (!editorInstance) return;
 
-	// 		const range = selection.getRangeAt(0);
-	// 		let container = range.commonAncestorContainer;
+			const selection = window.getSelection();
+			if (!selection || selection.isCollapsed) {
+				aiMenu.style.display = 'none';
+				return;
+			}
 
-	// 		if (container.nodeType !== 1) container = container.parentElement;
+			const range = selection.getRangeAt(0);
+			let container = range.commonAncestorContainer;
 
-	// 		// chỉ hiện menu nếu bôi đen trong CKEditor
-	// 		if (!container.closest('.ck-content')) {
-	// 			aiMenu.style.display = 'none';
-	// 			return;
-	// 		}
+			if (container.nodeType !== 1) container = container.parentElement;
 
-	// 		const rect = range.getBoundingClientRect();
-	// 		aiMenu.style.display = 'block';
-	// 		aiMenu.style.top = `${rect.top + window.scrollY - aiMenu.offsetHeight - 8}px`;
-	// 		aiMenu.style.left = `${rect.left + window.scrollX}px`;
-	// 	});
-	// });
+			// chỉ hiện menu nếu bôi đen trong CKEditor
+			if (!container.closest('.ck-content')) {
+				aiMenu.style.display = 'none';
+				return;
+			}
 
-	// document.addEventListener('mousedown', e => {
-	// 	if (!aiMenu.contains(e.target)) aiMenu.style.display = 'none';
-	// });
+			const rect = range.getBoundingClientRect();
+			aiMenu.style.display = 'block';
+			aiMenu.style.top = `${rect.top + window.scrollY - aiMenu.offsetHeight - 8}px`;
+			aiMenu.style.left = `${rect.left + window.scrollX}px`;
+		});
+	});
+
+	document.addEventListener('mousedown', e => {
+		if (!aiMenu.contains(e.target)) aiMenu.style.display = 'none';
+	});
 
 	/* ========= HELPER: lấy selected text & full content ========= */
 	function getSelectedText() {
@@ -2512,8 +2509,7 @@
 	const N8N_WEBHOOK_URL = 'https://content.kongbot.net/webhook/ai-editor';
 
 	async function callAiViaN8n(action) {
-		// if (!editorInstance) return;
-		if (window.__CMS_CONTENT__ === null || window.__CMS_CONTENT__ === "") return;
+		if (!editorInstance) return;
 
 		const selected_text = getSelectedText();
 		if (!selected_text || !selected_text.trim()) {
