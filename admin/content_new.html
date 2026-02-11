@@ -12,7 +12,7 @@
 	<link rel="stylesheet" href="/css/responsive.css" />
 	<link rel="stylesheet" href="/scripts/toast/toast.css" />
 	<script src="/scripts/toast/toast.js"></script>
-	<link rel="stylesheet" href="./dist/assets/editor.css" />
+	<link rel="stylesheet" href="./dist/assets/style-Dbch5gKV.css" />
 	<script type="module" src="./dist/assets/editor.js"></script>
 
 	<!-- Side Bar -->
@@ -1534,7 +1534,7 @@
 		<div class="spinner"></div>
 	</div>
 	<!-- AI FLOATING MENU -->
-	<!-- <div id="ai-menu"
+	<div id="ai-menu"
 		style="position:absolute;display:none;background:#fff;border-radius:10px;padding:6px;box-shadow:0 10px 30px rgba(0,0,0,.15);z-index:99999;min-width:220px;font-family:system-ui;">
 		<div style="font-size:12px;color:#6b7280;padding:4px 8px;">
 			✨ Chỉnh sửa với AI
@@ -1543,10 +1543,10 @@
 		<button onclick="aiImprove()">✨ Cải thiện văn phong</button>
 		<button onclick="aiShorten()">✂️ Rút gọn</button>
 		<button onclick="aiExpand()">➕ Mở rộng</button>
-	</div> -->
+	</div>
 
 	<!-- Modal -->
-	<!-- <div class="modal fade" id="ckeditorModal" tabindex="-1" aria-labelledby="ckeditorModalLabel" aria-hidden="true">
+	<div class="modal fade" id="ckeditorModal" tabindex="-1" aria-labelledby="ckeditorModalLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg modal-dialog-scrollable">
 			<div class="modal-content">
 				<div class="modal-header">
@@ -1591,7 +1591,7 @@
 				</div>
 			</div>
 		</div>
-	</div> -->
+	</div>
 </body>
 <script src="/scripts/menu-mobile.js"></script>
 <script src="/scripts/history.js"></script>
@@ -2270,6 +2270,108 @@
 				container.appendChild(wrap);
 			});
 	}
+	function cleanBlockNoteHTML(html) {
+		// Tạo DOM ảo để xử lý
+		const container = document.createElement("div");
+		container.innerHTML = html;
+
+		// Các selector cần bóc bỏ wrapper
+		const wrappers = container.querySelectorAll(
+			".bn-block-group, .bn-block-outer, .bn-block, .bn-block-content, .bn-inline-content"
+		);
+
+		wrappers.forEach(el => {
+			// Thay thế phần tử bằng nội dung bên trong nó
+			el.replaceWith(...el.childNodes);
+		});
+
+		// Xóa toàn bộ attribute thừa
+		const allElements = container.querySelectorAll("*");
+
+		allElements.forEach(el => {
+			[...el.attributes].forEach(attr => {
+				if (
+					attr.name.startsWith("data-") ||
+					attr.name === "class" ||
+					attr.name === "style"
+				) {
+					el.removeAttribute(attr.name);
+				}
+			});
+		});
+
+		// Xóa thẻ rỗng không cần thiết
+		container.querySelectorAll("p, div, span").forEach(el => {
+			if (!el.textContent.trim() && el.children.length === 0) {
+				el.remove();
+			}
+		});
+
+		return container.innerHTML.trim();
+	}
+	function convertBlockNoteToCKEditorHTML(blockNoteHtml) {
+		const container = document.createElement("div");
+		container.innerHTML = blockNoteHtml;
+
+		// Bóc hết các wrapper của BlockNote
+		const selectors = [
+			".bn-block-group",
+			".bn-block-outer",
+			".bn-block",
+			".bn-block-content",
+			".bn-inline-content"
+		];
+
+		selectors.forEach(selector => {
+			container.querySelectorAll(selector).forEach(el => {
+				el.replaceWith(...el.childNodes);
+			});
+		});
+
+		// Chuẩn hóa heading theo data-level
+		container.querySelectorAll("[data-content-type='heading']").forEach(el => {
+			const level = el.getAttribute("data-level") || "1";
+			const h = document.createElement(`h${level}`);
+			h.innerHTML = el.innerHTML;
+			el.replaceWith(h);
+		});
+
+		// Chuẩn hóa paragraph
+		container.querySelectorAll("[data-content-type='paragraph']").forEach(el => {
+			const p = document.createElement("p");
+			p.innerHTML = el.innerHTML;
+			el.replaceWith(p);
+		});
+
+		// Chuẩn hóa quote
+		container.querySelectorAll("[data-content-type='quote']").forEach(el => {
+			const blockquote = document.createElement("blockquote");
+			blockquote.innerHTML = el.innerHTML.replace(/<br\s*\/?>/g, "").trim();
+			el.replaceWith(blockquote);
+		});
+
+		// Xóa toàn bộ attribute thừa
+		container.querySelectorAll("*").forEach(el => {
+			[...el.attributes].forEach(attr => {
+				if (
+					attr.name.startsWith("data-") ||
+					attr.name === "class" ||
+					attr.name === "style"
+				) {
+					el.removeAttribute(attr.name);
+				}
+			});
+		});
+
+		// Dọn thẻ rỗng
+		container.querySelectorAll("p, div, span").forEach(el => {
+			if (!el.textContent.trim() && el.children.length === 0) {
+				el.remove();
+			}
+		});
+
+		return container.innerHTML.trim();
+	}
 	/* ==========================
 	   STEP 2 → STEP 3
 	========================== */
@@ -2305,6 +2407,9 @@
 		try {
 			//finalHtml = editorInstance.getData();
 			finalHtml = window.__CMS_CONTENT__;
+			//finalHtml = convertBlockNoteToCKEditorHTML(finalHtml);
+			finalHtml = cleanBlockNoteHTML(finalHtml);
+			console.log(finalHtml);
 			const step3Data = await generateStep3FromN8n(finalHtml);
 
 			fillStep3FromApi(step3Data);
@@ -2484,7 +2589,8 @@
 	}
 
 	function getFullContentHtml() {
-		return editorInstance.getData(); // full HTML trong editor
+		//return editorInstance.getData(); // full HTML trong editor
+		return window.__CMS_CONTENT__;
 	}
 
 	// Nếu bạn muốn gửi plain text thay vì HTML, dùng cái này:
@@ -2507,6 +2613,7 @@
 
 		aiMenu.style.display = 'none';
 	}
+
 
 	/* ========= CALL N8N (MỚI) ========= */
 	const N8N_WEBHOOK_URL = 'https://content.kongbot.net/webhook/ai-editor';
