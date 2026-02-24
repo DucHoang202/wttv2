@@ -2193,7 +2193,7 @@
 					);
 
 					const result = await res.json();
-
+					console.log("Result nhận được từ API:", result);
 					if (result.status === "success") {
 						let html = result.data?.text || '';
 						html = removeAllMarkdownLinks(html);
