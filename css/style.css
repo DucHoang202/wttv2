@@ -73,7 +73,6 @@ select::-ms-ms-input-placeholder {
   padding: 0px 16px;
   flex-direction: column;
   align-items: flex-start;
-  gap: 20px;
   flex: 1 0 0;
   align-self: stretch;
   min-height: 100vh;

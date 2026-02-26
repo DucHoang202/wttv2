@@ -25,11 +25,10 @@
 			padding: 0px 16px;
 			flex-direction: column;
 			align-items: flex-start;
-			gap: 20px;
 			flex: 1 0 0;
 			align-self: stretch;
 			min-height: 100vh;
-			overflow-x: hidden;
+
 		}
 
 		#formWrapper {
@@ -40,13 +39,18 @@
 			gap: 20px;
 			flex: 1 0 0;
 			align-self: stretch;
+			margin-top: 20px;
 		}
 
 		.tab-bar {
 			display: flex;
 			gap: 16px;
-			border-bottom: 1px solid #e4e4e4;
+			border-radius: 14px;
+			background: #ECECF0;
+			padding: 3.5px 3px;
 			width: 100%;
+			margin-top: 20px;
+
 		}
 
 		.tab {
@@ -56,11 +60,25 @@
 			color: #666;
 			padding: 5px 12px;
 			cursor: pointer;
+			flex: 1;
+			border-radius: 14px;
+			background: #ECECF0;
 		}
 
 		.tab--active {
-			color: #3e61ff;
-			border-bottom: 1px solid #3e61ff;
+			border-radius: 14px;
+			border: 1px solid rgba(0, 0, 0, 0.00);
+			background: #FFF;
+			padding: 4px 8px;
+
+			color: #4F46E5;
+			text-align: center;
+			font-family: Inter;
+			font-size: 14px;
+			font-style: normal;
+			font-weight: 500;
+			line-height: 20px;
+			/* 142.857% */
 		}
 
 		.form-group {
@@ -148,16 +166,20 @@
 
 		.btn-outline {
 			padding: 10px 24px;
-			border: 1px solid #e4e4e4;
+			border: 1px solid #3E61FF;
 			border-radius: 8px;
+			color: #3E61FF;
+			text-align: center;
+			font-family: "Inter Display";
 			font-size: 14px;
+			font-style: normal;
 			font-weight: 500;
+			line-height: normal;
 			cursor: pointer;
-			color: #000;
 		}
 
 		.btn-primary {
-			background: linear-gradient(to bottom, #fd3de3, #c845b7);
+			background: #3E61FF;
 			color: #fff;
 			padding: 10px 24px;
 			border-radius: 8px;
@@ -854,10 +876,14 @@
 	<!--Step CSS-->
 	<style>
 		.step-progress {
+			width: 100%;
 			display: flex;
 			align-items: center;
-			width: 100%;
-			padding: 8px 0 16px;
+			gap: 14px;
+			background-color: white;
+			padding: 16px;
+			border-bottom: 1px solid #f0eeee;
+			margin-left: -16px;
 		}
 
 		.step-item {
@@ -1000,8 +1026,9 @@
 		}
 
 		.seo-title-item.active {
-			border-color: #3e61ff;
-			box-shadow: 0 0 0 2px rgba(62, 97, 255, .08);
+			border-radius: 14px;
+			border: 1px solid #4F46E5;
+			background: rgba(79, 70, 229, 0.05);
 		}
 
 		.seo-title-item small {
@@ -1014,19 +1041,34 @@
 			display: flex;
 			gap: 8px;
 			flex-wrap: wrap;
+			border-radius: 10px;
+			border: 1px solid #DDE8FF;
+			background: #FFF;
+			padding: 12px;
 		}
 
 		.seo-tag {
 			background: #f3f4f6;
 			border-radius: 999px;
 			padding: 6px 10px;
-			font-size: 13px;
+			color: #030213;
+			font-size: 12px;
+			font-style: normal;
+			font-weight: 500;
+			line-height: 16px;
+			/* 133.333% */
 		}
 
 		.social-card {
 			background: #fff;
 			border-radius: 12px;
-			padding: 14px;
+			padding: 24px 25px;
+			border: 1px solid rgba(0, 0, 0, 0.10);
+			gap: 24px;
+			display: flex;
+			flex-direction: column;
+			gap: 24px;
+
 		}
 
 		.social-card__header {
@@ -1037,7 +1079,13 @@
 		}
 
 		.social-card__title {
-			font-weight: 600;
+			color: #0A0A0A;
+			font-family: "Inter Display";
+			font-size: 16px;
+			font-style: normal;
+			font-weight: 500;
+			line-height: 24px;
+			/* 150% */
 		}
 
 		.social-card__actions {
@@ -1064,16 +1112,22 @@
 		}
 
 		.social-status {
-			font-size: 13px;
+			color: #0A0A0A;
+			font-family: "Inter Display";
+			font-size: 16px;
+			font-style: normal;
+			font-weight: 500;
+			line-height: 24px;
+			/* 150% */
 		}
 
-		.social-status.connected {
+		/* .social-status.connected {
 			color: #16a34a;
 		}
 
 		.social-status.disconnected {
 			color: #dc2626;
-		}
+		} */
 
 		.btn-outline.disabled {
 			opacity: .5;
@@ -1333,7 +1387,7 @@
     height: 100%;
     justify-content: space-between;
     flex-direction: column;">
-				<div style="display:flex;gap:16px;width:100%;">
+				<div style="display:flex;gap:16px;width:100%;margin-top: 24px;">
 					<!-- LEFT: EDITOR -->
 					<div style="flex:1;background: #fff;border:1px solid #dde8ff;border-radius:10px;padding:12px;">
 						<!-- <textarea id="editorInline"></textarea> -->
@@ -1342,9 +1396,14 @@
 					</div>
 
 					<!-- RIGHT: TOOL PANEL -->
-					<div id="editorTools" style="width:280px;background:#fff;border:1px solid #dde8ff; 
-							border-radius:10px;padding:12px;display:flex;
-							flex-direction:column;gap:14px;">
+					<div id="editorTools" style="width:280px;
+					background:#fff;
+					border:1px solid #dde8ff; 
+							border-radius:10px;
+							padding:12px;display:flex;
+							flex-direction:column;
+							gap:14px;
+							height: 504px;">
 						<h4 style="margin:0;font-size:14px;">Công cụ</h4>
 						<!-- Tool fields render here -->
 						<div id="toolFields"></div>
@@ -1379,10 +1438,13 @@
 			</div>
 			<!-- ================= STEP 3 ================= -->
 			<!-- ================= STEP 3 ================= -->
-			<div id="stepPublish" style="display:none;width:100%;     display: flex;
+			<div id="stepPublish" style="width:100%;    
+			 display: flex;
     flex-direction: column;
     justify-content: space-between;
     height: 100%;">
+
+
 				<!-- TAB HEADER: SEO / Social -->
 				<div class="tab-bar">
 					<div class="tab tab--active" data-step3-tab="seo">SEO</div>
@@ -1428,7 +1490,7 @@
 					</div>
 				</div>
 				<!-- ===== TAB SOCIAL MEDIA ===== -->
-				<div id="step3Social" class="step3-panel" style="display:none;">
+				<div id="step3Social" class="step3-panel" style="display:none; ">
 					<div class="social-card">
 						<div class="social-card__header">
 							<div class="social-card__title">Facebook</div>
@@ -1467,7 +1529,9 @@
 						<textarea id="fbContent" class="step3-publish" rows="6"></textarea>
 						<div class="social-card__footer">
 							<div id="fbStatus" class="social-status disconnected">🔴 Chưa kết nối</div>
-							<div class="btn-primary" id="btnPublishFb">Xuất bản Facebook</div>
+							<div class="btn-primary" id="btnPublishFb" style="border-radius: 8px;
+border: 1px solid #3E61FF;
+background: #FFF;color: #3E61FF;">Xuất bản Facebook</div>
 						</div>
 					</div>
 					<div class="social-card" style="margin-top:14px;">
@@ -1796,14 +1860,17 @@
 		currentStep = step;
 
 		// STEP 1
-		document.getElementById('formWrapper').style.display = (step === 1) ? 'flex' : 'none';
-		document.getElementById('stepPromptFooter').style.display = (step === 1) ? 'flex' : 'none';
+		//document.getElementById('formWrapper').style.display = (step === 1) ? 'flex' : 'none';
+		//document.getElementById('stepPromptFooter').style.display = (step === 1) ? 'flex' : 'none';
+		document.getElementById('formWrapper').style.display = (step === 3) ? 'flex' : 'none';
+		document.getElementById('stepPromptFooter').style.display = (step === 3) ? 'flex' : 'none';
 
 		// STEP 2
 		document.getElementById('stepEditor').style.display = (step === 2) ? 'block' : 'none';
 
 		// STEP 3
-		document.getElementById('stepPublish').style.display = (step === 3) ? 'block' : 'none';
+		//document.getElementById('stepPublish').style.display = (step === 3) ? 'flex' : 'none';
+		document.getElementById('stepPublish').style.display = (step === 1) ? 'flex' : 'none';
 
 		// Update progress bar
 		updateStepProgress(step);
@@ -1944,7 +2011,16 @@
 
 				const target = tab.dataset.step3Tab;
 				document.getElementById('step3Seo').style.display = (target === 'seo') ? 'block' : 'none';
-				document.getElementById('step3Social').style.display = (target === 'social') ? 'block' : 'none';
+				const el = document.getElementById('step3Social');
+
+				if (target === 'social') {
+					el.style.display = 'block';
+					el.style.background = 'none';
+					el.style.border = ' none';
+					el.style.padding = '0';
+				} else {
+					el.style.display = 'none';
+				}
 			});
 		});
 	}
@@ -1967,7 +2043,9 @@
 	async function generateStep3FromN8n(finalHtml) {
 		const token = localStorage.getItem('auth_token');
 
-		const res = await fetch("https://content.kongbot.net/webhook/social_create", {
+		//const res = await fetch("https://content.kongbot.net/webhook/social_create", {
+		const res = await fetch("http://localhost:3000/social_create", {
+
 			method: "POST",
 			headers: {
 				"Content-Type": "application/json",
@@ -2616,7 +2694,8 @@
 
 
 	/* ========= CALL N8N (MỚI) ========= */
-	const N8N_WEBHOOK_URL = 'https://content.kongbot.net/webhook/ai-editor';
+	//const N8N_WEBHOOK_URL = 'https://content.kongbot.net/webhook/ai-editor';
+	const N8N_WEBHOOK_URL = 'http://localhost:3000/ai';
 
 	async function callAiViaN8n(action) {
 		// if (!editorInstance) return;
