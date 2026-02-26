@@ -39,6 +39,9 @@
 			gap: 20px;
 			flex: 1 0 0;
 			align-self: stretch;
+			width: 100%;
+			margin: 0 auto;
+			max-width: 660px;
 			margin-top: 20px;
 		}
 
@@ -1860,17 +1863,15 @@ background: #FFF;color: #3E61FF;">Xuất bản Facebook</div>
 		currentStep = step;
 
 		// STEP 1
-		//document.getElementById('formWrapper').style.display = (step === 1) ? 'flex' : 'none';
-		//document.getElementById('stepPromptFooter').style.display = (step === 1) ? 'flex' : 'none';
-		document.getElementById('formWrapper').style.display = (step === 3) ? 'flex' : 'none';
-		document.getElementById('stepPromptFooter').style.display = (step === 3) ? 'flex' : 'none';
+		document.getElementById('formWrapper').style.display = (step === 1) ? 'flex' : 'none';
+		document.getElementById('stepPromptFooter').style.display = (step === 1) ? 'flex' : 'none';
+
 
 		// STEP 2
-		document.getElementById('stepEditor').style.display = (step === 2) ? 'block' : 'none';
+		document.getElementById('stepEditor').style.display = (step === 2) ? 'flex' : 'none';
 
 		// STEP 3
-		//document.getElementById('stepPublish').style.display = (step === 3) ? 'flex' : 'none';
-		document.getElementById('stepPublish').style.display = (step === 1) ? 'flex' : 'none';
+		document.getElementById('stepPublish').style.display = (step === 3) ? 'flex' : 'none';
 
 		// Update progress bar
 		updateStepProgress(step);
@@ -2043,8 +2044,8 @@ background: #FFF;color: #3E61FF;">Xuất bản Facebook</div>
 	async function generateStep3FromN8n(finalHtml) {
 		const token = localStorage.getItem('auth_token');
 
-		//const res = await fetch("https://content.kongbot.net/webhook/social_create", {
-		const res = await fetch("http://localhost:3000/social_create", {
+		const res = await fetch("https://content.kongbot.net/webhook/social_create", {
+			//const res = await fetch("http://localhost:3000/social_create", {
 
 			method: "POST",
 			headers: {
@@ -2694,8 +2695,7 @@ background: #FFF;color: #3E61FF;">Xuất bản Facebook</div>
 
 
 	/* ========= CALL N8N (MỚI) ========= */
-	//const N8N_WEBHOOK_URL = 'https://content.kongbot.net/webhook/ai-editor';
-	const N8N_WEBHOOK_URL = 'http://localhost:3000/ai';
+	const N8N_WEBHOOK_URL = 'https://content.kongbot.net/webhook/ai-editor';
 
 	async function callAiViaN8n(action) {
 		// if (!editorInstance) return;
