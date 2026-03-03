@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function () {
     btnMenu.addEventListener("click", function () {
       btnMenu.classList.toggle("active");
       sidebar.classList.toggle("open");
-       if (sidebar.classList.contains("open")) {
+      if (sidebar.classList.contains("open")) {
         document.body.classList.add("mobile-menu-open");
       } else {
         document.body.classList.remove("mobile-menu-open");
@@ -50,11 +50,11 @@ document.addEventListener("DOMContentLoaded", function () {
       window.location.href = "content.html";
     });
 
-   
+
   }
 
   function handleResize() {
-    if (window.innerWidth <= 768) {
+    if (window.innerWidth <= 1024) {
       createMobileMenu();
     } else {
       // Xóa menu nếu không ở mobile
