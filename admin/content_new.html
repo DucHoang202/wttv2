@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="vi">
 
 <head>
@@ -1755,6 +1755,32 @@ background: #FFF;color: #3E61FF;">Xuất bản Facebook</div>
 <!-- CKEditor 5 Classic -->
 <script src="https://cdn.ckeditor.com/ckeditor5/41.0.0/classic/ckeditor.js"></script>
 <script>
+	async function writeData(number) {
+		try {
+			const response = await fetch('./ui_step/step.json');
+			const data = await response.json();
+
+			data.currentStep = number; // đổi thành 1 hoặc 2 ở đây
+
+			console.log(data);
+		} catch (error) {
+			console.error("Lỗi load JSON:", error);
+		}
+	}
+	async function loadData() {
+		try {
+			const response = await fetch('./ui_step/step.json');
+			const data = await response.json();
+
+			console.log(data);
+			return data.currentStep;
+
+		} catch (error) {
+			console.error("Lỗi load JSON:", error);
+			return null;
+		}
+	}
+	loadData();
 	function showSpinner() {
 		document.getElementById('global-spinner').style.display = 'flex';
 	}
@@ -1830,7 +1856,7 @@ background: #FFF;color: #3E61FF;">Xuất bản Facebook</div>
 	// </svg >);
 	function renderForm(data) {
 		const schema = data.schema;
-
+		console.log(loadData());
 		schema.attributes.forEach(field => {
 			const formRow = document.createElement('div');
 			formRow.className = 'form-row';
@@ -1986,6 +2012,7 @@ background: #FFF;color: #3E61FF;">Xuất bản Facebook</div>
 
 	async function ensureEditor() {
 		if (editorInstance) return editorInstance;
+		console.log("Step 2");
 		editorInstance = await ClassicEditor.create(document.querySelector('#editor-root'));
 		return editorInstance;
 	}
@@ -2277,7 +2304,7 @@ background: #FFF;color: #3E61FF;">Xuất bản Facebook</div>
 		========================== */
 		const payload = {};
 		const errors = [];
-
+		writeData(10);
 		schema.attributes.forEach(field => {
 			const el = document.getElementById(field.id);
 			if (!el) return;
