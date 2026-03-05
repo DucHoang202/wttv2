@@ -218,7 +218,7 @@
 		}
 
 		.custom-select-number {
-			width: calc(100% - 47px);
+			width: 100%;
 			padding: 10px 35px 10px 10px;
 			border: 1px solid #ccc;
 			border-radius: 6px;
@@ -244,7 +244,7 @@
 			border: 1px solid #e4e4e4;
 			border-radius: 10px;
 			resize: none;
-			width: calc(100% - 27px);
+			width: 100%;
 		}
 
 		input::placeholder {
@@ -889,16 +889,19 @@
 			flex-direction: column;
 			gap: 14px;
 			height: 504px;
+			;
 		}
 
 		.right-wrapper {
-			position: relative;
+			position: sticky;
+			top: 10%;
+			align-self: flex-start;
 		}
 
 		@media (max-width:1024px) {
 
 			.right-wrapper {
-				position: absolute;
+				position: sticky;
 				right: 0;
 			}
 
@@ -990,6 +993,7 @@
 			border: 1px solid #dde8ff;
 			border-radius: 12px;
 			padding: 16px;
+			margin-bottom: 12px;
 		}
 
 		.step3-section {
@@ -1034,10 +1038,13 @@
 			display: flex;
 			padding: 8px 12px;
 			align-items: flex-start;
-			align-self: stretch;
 			border-radius: 8px;
 			border: 1px solid rgba(0, 0, 0, 0.00);
 			background: #F3F3F5;
+			height: auto;
+			resize: none;
+			overflow: hidden;
+			field-sizing: content;
 		}
 
 		.step3-meta-description {
@@ -1090,6 +1097,7 @@
 			border: 1px solid #DDE8FF;
 			background: #FFF;
 			padding: 12px;
+			cursor: pointer;
 		}
 
 		.seo-tag {
@@ -1451,7 +1459,7 @@ background: linear-gradient(180deg, #FD3DE3 0%, #C845B7 100%);">
     height: 100%;
     justify-content: space-between;
     flex-direction: column;">
-				<div style="display:flex;gap:16px;width:100%;margin-top: 24px;">
+				<div style="display:flex;gap:16px;width:100%;margin-top: 24px;margin-bottom: 12px;">
 					<!-- LEFT: EDITOR -->
 					<div style="flex:1;background: #fff;border:1px solid #dde8ff;border-radius:10px;padding:12px;">
 						<!-- <textarea id="editorInline"></textarea> -->
@@ -1976,12 +1984,12 @@ background: #FFF;color: #3E61FF;">Xuất bản Facebook</div>
 		currentStep = step;
 
 		// STEP 1
-		document.getElementById('formWrapper').style.display = (step === 1) ? 'flex' : 'none';
-		document.getElementById('stepPromptFooter').style.display = (step === 1) ? 'flex' : 'none';
+		document.getElementById('formWrapper').style.display = (step === 2) ? 'flex' : 'none';
+		document.getElementById('stepPromptFooter').style.display = (step === 2) ? 'flex' : 'none';
 
 
-		// STEP 2
-		document.getElementById('stepEditor').style.display = (step === 2) ? 'flex' : 'none';
+		// STEP 
+		document.getElementById('stepEditor').style.display = (step === 1) ? 'flex' : 'none';
 
 		// STEP 3
 		document.getElementById('stepPublish').style.display = (step === 3) ? 'flex' : 'none';
