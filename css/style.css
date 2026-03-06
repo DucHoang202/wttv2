@@ -795,3 +795,20 @@ input[type=number] {
 .clear-template-btn:hover {
   color: #e63946;
 }
+
+.circle {
+  width: 8px;
+  height: 8px;
+  aspect-ratio: 1/1;
+  margin: auto 0;
+}
+
+.green {
+  border-radius: 50px;
+  background: #57C325;
+}
+
+.red {
+  border-radius: 50px;
+  background: #FF6C67;
+}

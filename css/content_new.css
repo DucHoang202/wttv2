@@ -251,20 +251,21 @@
                           -moz-appearance: textfield;
                       }
 
-                      .smart-paragraph-container {
-                          width: 100%;
-                          display: flex;
-                          align-items: center;
-                          gap: 14px;
-                          /* tương đương 3.5 * 4px */
-                          background-color: white;
-                          padding: 16px;
-                          border-bottom: 1px solid #f0eeee;
-                          margin-left: -16px;
-                          position: sticky;
-                          top: 0px;
-                          z-index: 10;
-                      }
+                        .smart-paragraph-container {
+                            width: 100%;
+                            display: flex;
+                            align-items: center;
+                            gap: 14px;
+                            /* tương đương 3.5 * 4px */
+                            background-color: white;
+                            padding: 16px;
+                            border-bottom: 1px solid #f0eeee;
+                            margin-left: -16px;
+                            margin-right: -16px;
+                            position: sticky;
+                            top: 0px;
+                            z-index: 10;
+                        }
 
                       .smart-paragraph-icon-wrapper {
                           width: 42px;

@@ -181,6 +181,7 @@
     .smart-paragraph-container {
 
         position: relative !important;
+        margin-top: 50px;
     }
 
     .sidebar__user-info {
